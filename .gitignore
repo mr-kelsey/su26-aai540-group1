@@ -216,3 +216,35 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ----- EIA project additions -----
+
+# Data warehouse and bulk pulls
+data/
+*.duckdb
+*.duckdb.wal
+*.parquet
+
+# Local env (API keys)
+.env
+
+# uv
+.venv/
+uv.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Coverage and tooling caches
+.coverage
+.coverage.*
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
