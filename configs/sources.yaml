@@ -1,0 +1,52 @@
+# Per-source configuration. Keep URLs and partition keys here so we can
+# tweak windows without touching code.
+
+bls_qcew:
+  # See src/eia/sources/bls_qcew.py for the two pull modes (by_area vs singlefile).
+  default_year: 2023
+  default_quarter: 3   # Q3 = July-Sept; finalized ~6 months after quarter close
+  # Counties pulled in Phase 0 'by_area' mode. Phase 1 will switch to 'singlefile'
+  # to ingest all ~3,000 US counties at once.
+  phase0_counties:
+    - "06073"   # San Diego, CA — anchor for the exit query
+    - "36061"   # New York, NY (Manhattan)
+    - "17031"   # Cook, IL (Chicago)
+    - "48201"   # Harris, TX (Houston)
+    - "06037"   # Los Angeles, CA
+
+bea_io:
+  # BEA Input-Output Use & Make tables — XLS bundles (annual)
+  # https://www.bea.gov/industry/input-output-accounts-data
+  use_url: "https://apps.bea.gov/industry/iTables%20Static%20Files/AllTablesIO.zip"
+  default_year: 2023
+
+census_acs:
+  # Census ACS 5-year via the data API.
+  # https://api.census.gov/data.html
+  base_url: "https://api.census.gov/data"
+  default_end_year: 2023
+  variables:
+    # See https://api.census.gov/data/2023/acs/acs5/variables.html
+    population: "B01003_001E"
+    median_household_income: "B19013_001E"
+    median_age: "B01002_001E"
+    bachelors_count: "B15003_022E"   # plus 023, 024, 025 for "or higher"
+    bachelors_master: "B15003_023E"
+    bachelors_prof:   "B15003_024E"
+    bachelors_doctor: "B15003_025E"
+    population_25_plus: "B15003_001E"
+  states:
+    - "06"   # California (Phase 0 starts here; expands to all states later)
+
+tiger:
+  # TIGER/Line county shapefiles
+  # https://www2.census.gov/geo/tiger/TIGER<year>/COUNTY/
+  default_year: 2023
+
+hud_crosswalk:
+  # HUD USPS ZIP-County crosswalk (residential weights)
+  # https://www.huduser.gov/portal/datasets/usps_crosswalk.html
+  # NOTE: their portal requires a free signup for direct CSV downloads;
+  # we mirror the latest snapshot via a community mirror in Phase 0,
+  # and switch to the official portal once API key is added.
+  default_quarter: "2024Q1"
