@@ -112,3 +112,39 @@ def test_attach_county_fips_logs_miss_summary(
     assert "2 bad coords" in msg
     assert "1 off-county" in msg
     assert "tiger_year=2023" in msg
+
+
+def test_attach_county_fips_empty_dataframe(fake_counties_geo: Path) -> None:
+    from eia.transforms.geo import attach_county_fips
+
+    df = pl.DataFrame(
+        schema={"venue_lat": pl.Float64, "venue_lon": pl.Float64},
+    )
+    out = attach_county_fips(df)
+    assert out.height == 0
+    assert out.columns == ["venue_lat", "venue_lon", "county_fips"]
+    assert out.schema["county_fips"] == pl.Utf8
+
+
+def test_attach_county_fips_passes_other_columns_through(
+    fake_counties_geo: Path,
+) -> None:
+    from eia.transforms.geo import attach_county_fips
+
+    df = pl.DataFrame(
+        {
+            "event_id": ["tm_1", "tm_2"],
+            "event_name": ["Show A", "Show B"],
+            "event_date": ["2023-08-01", "2023-08-02"],
+            "venue_lat": [1.0, 11.0],
+            "venue_lon": [1.0, 11.0],
+            "expected_attendance": [500, 1200],
+        }
+    )
+    out = attach_county_fips(df)
+
+    # All input columns preserved, in original order, plus county_fips.
+    assert out.columns == [*df.columns, "county_fips"]
+    for col in df.columns:
+        assert out[col].to_list() == df[col].to_list()
+    assert out["county_fips"].to_list() == ["00001", "00002"]
