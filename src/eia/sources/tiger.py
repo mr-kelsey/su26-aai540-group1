@@ -57,14 +57,17 @@ class TIGERCounties(Source):
         """
         import geopandas as gpd
 
+        # geopandas reads zipped shapefiles directly via zip:// scheme.
         gdf = gpd.read_file(f"zip://{raw_path}")
 
+        # Project to equal-area for sane area calculations.
         gdf_aea = gdf.to_crs(epsg=5070)
-        gdf["land_area_sqmi"] = gdf_aea.geometry.area / 2_589_988.11  # m^2 -> mi^2
+        gdf["land_area_sqmi"] = gdf_aea.geometry.area / 2_589_988.11  # m^2 → mi^2
         centroids = gdf_aea.geometry.centroid.to_crs(epsg=4326)
         gdf["latitude"] = centroids.y
         gdf["longitude"] = centroids.x
 
+        # TIGER county fields: STATEFP, COUNTYFP, GEOID, NAME, NAMELSAD, CBSAFP
         cleaned = pl.DataFrame(
             {
                 "county_fips": gdf["GEOID"].astype(str).tolist(),
