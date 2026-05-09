@@ -369,3 +369,18 @@ def test_zip_logs_summary(
     assert "1 no ZIP" in msg
     assert "1 ZIP not in crosswalk" in msg
     assert "2024Q1" in msg
+
+
+def test_zip_public_import(fake_counties_geo: Path) -> None:
+    """The canonical caller form — `from eia.transforms import attach_county_fips_via_zip`."""
+    from eia.transforms import attach_county_fips_via_zip as imported
+
+    df = pl.DataFrame(
+        {"venue_zip": ["92101"], "county_fips": [None]},
+        schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
+    )
+    out = imported(df, hud)
+    assert out["county_fips"].to_list() == ["06073"]
