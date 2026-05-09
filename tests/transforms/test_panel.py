@@ -129,3 +129,13 @@ def test_custom_fips_col() -> None:
 
     assert panel.columns == ["my_fips", "period_month", "period_id", "year", "month"]
     assert panel["my_fips"].to_list() == ["06073"] * 12
+
+
+def test_public_import() -> None:
+    """The canonical caller form — `from eia.transforms import build_county_month_panel`."""
+    from eia.transforms import build_county_month_panel as imported
+
+    counties = pl.DataFrame({"county_fips": ["06073"]})
+    panel = imported(counties, start_year=2023, end_year=2023)
+    assert panel.height == 12
+    assert panel["county_fips"].unique().to_list() == ["06073"]
