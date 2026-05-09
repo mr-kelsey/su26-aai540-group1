@@ -9,8 +9,8 @@ Reference: https://www2.census.gov/geo/tiger/TIGER<year>/COUNTY/
 
 from __future__ import annotations
 
-import zipfile
 from pathlib import Path
+from typing import Any
 
 import polars as pl
 import yaml
@@ -30,9 +30,9 @@ class TIGERCounties(Source):
         self.year = year or cfg["default_year"]
 
     @staticmethod
-    def _load_config() -> dict:
+    def _load_config() -> dict[str, Any]:
         with open("configs/sources.yaml") as f:
-            return yaml.safe_load(f)["tiger"]
+            return yaml.safe_load(f)["tiger"]  # type: ignore[no-any-return]
 
     def fetch(self) -> Path:
         out = self.raw_dir / f"tl_{self.year}_us_county.zip"
