@@ -148,3 +148,12 @@ def test_attach_county_fips_passes_other_columns_through(
     for col in df.columns:
         assert out[col].to_list() == df[col].to_list()
     assert out["county_fips"].to_list() == ["00001", "00002"]
+
+
+def test_public_import(fake_counties_geo: Path) -> None:
+    """The canonical caller form — `from eia.transforms import attach_county_fips`."""
+    from eia.transforms import attach_county_fips as imported
+
+    df = pl.DataFrame({"venue_lat": [1.0], "venue_lon": [1.0]})
+    out = imported(df)
+    assert out["county_fips"].to_list() == ["00001"]
