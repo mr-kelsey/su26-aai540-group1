@@ -77,6 +77,40 @@ All API-backed sources go through `RateLimitedClient` ([src/eia/clients/base.py]
 
 `Settings` ([src/eia/config.py](src/eia/config.py)) is a Pydantic v2 `BaseSettings` loaded from env + `.env`. Project-namespaced env vars use the `EIA_` prefix; bare API keys (`CENSUS_API_KEY`, `TICKETMASTER_API_KEY`, etc.) live alongside without prefix. Import the module-level `settings` singleton.
 
+### Transforms layer (clean-time enrichment)
+
+`src/eia/transforms/` holds pure-Polars functions called from event-source `to_cleaned()` methods. All take a `pl.DataFrame` and return a new one with derived columns added. Composable left-to-right; canonical chain at the call site:
+
+```python
+from eia.transforms import (
+    attach_county_fips,         # lat/lon -> county_fips (TIGER spatial join)
+    attach_county_fips_via_zip, # fill nulls from HUD ZIP-county crosswalk
+    attach_period_id,           # event_date -> period_id ('YYYYQQ') + period_month ('YYYY-MM')
+    build_county_month_panel,   # counties -> dense (county × month) panel for treatment-effect modeling
+)
+
+df = attach_county_fips(df)
+df = attach_county_fips_via_zip(df, hud)  # caller pre-filters hud to one quarter
+df = attach_period_id(df)
+```
+
+Format consistency across transforms is locked: `period_id` matches `bls_qcew.period_id` byte-for-byte, `period_month` matches what `build_county_month_panel` produces. Verified by `tests/transforms/test_composition.py`.
+
+### Multipliers layer (model-side foundation)
+
+`src/eia/multipliers/` holds the BEA Leontief multiplier engine. Standard Type I, industry-by-industry, industry-technology-assumption formulation: `A = D @ B`; `L = (I - A)^-1`. Long-form Polars in/out; NumPy under the hood (already a transitive dep).
+
+```python
+from eia.multipliers import compute_leontief_inverse, apply_multipliers
+
+# Build the multiplier table from BEA Use/Make.
+L = compute_leontief_inverse(use, make)
+# Apply to a final-demand vector y -> total output per industry.
+total = apply_multipliers(L, demand)
+```
+
+Math invariants are locked by a hand-computable 2-industry reference test case in [tests/multipliers/test_leontief.py](tests/multipliers/test_leontief.py).
+
 ### Phase 0 exit criterion
 
 [pipelines/phase0_exit_query.py](pipelines/phase0_exit_query.py) is the canonical proof-of-data query: it joins `dim_county` + `census_acs_county` + `bls_qcew` for San Diego (FIPS `06073`), Q3 2023, NAICS 721 (Accommodation). If that cross-source join returns a row, Phase 0 is green. Treat this as the integration test for new federal-side schema changes.
