@@ -93,3 +93,13 @@ def test_passes_other_columns_through() -> None:
         assert out[col].to_list() == df[col].to_list()
     assert out["period_id"].to_list() == ["2023Q3", "2023Q3"]
     assert out["period_month"].to_list() == ["2023-07", "2023-08"]
+
+
+def test_public_import() -> None:
+    """The canonical caller form — `from eia.transforms import attach_period_id`."""
+    from eia.transforms import attach_period_id as imported
+
+    df = pl.DataFrame({"event_date": [date(2023, 7, 15)]})
+    out = imported(df)
+    assert out["period_id"].to_list() == ["2023Q3"]
+    assert out["period_month"].to_list() == ["2023-07"]
