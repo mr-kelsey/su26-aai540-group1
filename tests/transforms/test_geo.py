@@ -1,4 +1,4 @@
-"""Tests for transforms.geo.attach_county_fips and its loader."""
+"""Tests for transforms.geo."""
 
 from __future__ import annotations
 

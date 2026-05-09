@@ -7,6 +7,7 @@ touching real TIGER data. Also clears the module-level cache between tests.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from pathlib import Path
 
 import geopandas as gpd
@@ -15,7 +16,7 @@ from shapely.geometry import box
 
 
 @pytest.fixture(autouse=True)
-def fake_counties_geo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+def fake_counties_geo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Path]:
     """Two fake counties:
         GEOID 00001  bbox lon=[0,2],   lat=[0,2]
         GEOID 00002  bbox lon=[10,12], lat=[10,12]
