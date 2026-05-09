@@ -157,3 +157,215 @@ def test_public_import(fake_counties_geo: Path) -> None:
     df = pl.DataFrame({"venue_lat": [1.0], "venue_lon": [1.0]})
     out = imported(df)
     assert out["county_fips"].to_list() == ["00001"]
+
+
+# ---- attach_county_fips_via_zip tests ----
+
+
+def test_zip_already_set_fips_preserved(fake_counties_geo: Path) -> None:
+    """If county_fips is already non-null, the function does not overwrite it."""
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame(
+        {
+            "venue_zip": ["92101", "92103"],
+            "county_fips": ["99999", None],
+        },
+        schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {
+            "zip": ["92101", "92103"],
+            "county_fips": ["06073", "06073"],
+            "res_ratio": [1.0, 1.0],
+        }
+    )
+
+    out = attach_county_fips_via_zip(df, hud)
+
+    assert out["county_fips"].to_list() == ["99999", "06073"]
+
+
+def test_zip_null_fips_filled_from_single_county_zip(
+    fake_counties_geo: Path,
+) -> None:
+    """A null county_fips + ZIP mapping to one county gets filled."""
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame(
+        {"venue_zip": ["92101"], "county_fips": [None]},
+        schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
+    )
+
+    out = attach_county_fips_via_zip(df, hud)
+
+    assert out["county_fips"].to_list() == ["06073"]
+
+
+def test_zip_max_res_ratio_wins_multi_county(fake_counties_geo: Path) -> None:
+    """A ZIP spanning multiple counties picks the max res_ratio one."""
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame(
+        {"venue_zip": ["12345"], "county_fips": [None]},
+        schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {
+            "zip": ["12345", "12345", "12345"],
+            "county_fips": ["00001", "00002", "00003"],
+            "res_ratio": [0.2, 0.7, 0.1],
+        }
+    )
+
+    out = attach_county_fips_via_zip(df, hud)
+
+    assert out["county_fips"].to_list() == ["00002"]
+
+
+def test_zip_tie_on_res_ratio_breaks_alphabetically(
+    fake_counties_geo: Path,
+) -> None:
+    """Ties on res_ratio resolve to the alphabetically-lowest county_fips."""
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame(
+        {"venue_zip": ["12345"], "county_fips": [None]},
+        schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {
+            "zip": ["12345", "12345"],
+            "county_fips": ["00002", "00001"],
+            "res_ratio": [0.5, 0.5],
+        }
+    )
+
+    out = attach_county_fips_via_zip(df, hud)
+
+    assert out["county_fips"].to_list() == ["00001"]
+
+
+def test_zip_null_zip_stays_null(fake_counties_geo: Path) -> None:
+    """A null venue_zip with null county_fips stays null."""
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame(
+        {"venue_zip": [None], "county_fips": [None]},
+        schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
+    )
+
+    out = attach_county_fips_via_zip(df, hud)
+
+    assert out["county_fips"].to_list() == [None]
+
+
+def test_zip_not_in_hud_stays_null(fake_counties_geo: Path) -> None:
+    """A ZIP that isn't in HUD leaves county_fips null."""
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame(
+        {"venue_zip": ["99999"], "county_fips": [None]},
+        schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
+    )
+
+    out = attach_county_fips_via_zip(df, hud)
+
+    assert out["county_fips"].to_list() == [None]
+
+
+def test_zip_empty_input(fake_counties_geo: Path) -> None:
+    """Empty input frame returns empty frame, columns preserved."""
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame(
+        {"venue_zip": [], "county_fips": []},
+        schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
+    )
+
+    out = attach_county_fips_via_zip(df, hud)
+
+    assert out.height == 0
+    assert out.columns == ["venue_zip", "county_fips"]
+
+
+def test_zip_missing_fips_col_raises(fake_counties_geo: Path) -> None:
+    """If fips_col is absent, raise ValueError pointing the caller at attach_county_fips."""
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame({"venue_zip": ["92101"]})
+    hud = pl.DataFrame(
+        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
+    )
+
+    with pytest.raises(ValueError, match=r"attach_county_fips"):
+        attach_county_fips_via_zip(df, hud)
+
+
+def test_zip_custom_column_names(fake_counties_geo: Path) -> None:
+    """Caller can override zip_col and fips_col."""
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame(
+        {"the_zip": ["92101"], "the_fips": [None]},
+        schema={"the_zip": pl.Utf8, "the_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
+    )
+
+    out = attach_county_fips_via_zip(
+        df, hud, zip_col="the_zip", fips_col="the_fips"
+    )
+
+    assert out["the_fips"].to_list() == ["06073"]
+
+
+def test_zip_logs_summary(
+    fake_counties_geo: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    """One INFO line per call with fill counts."""
+    import logging
+
+    from eia.transforms.geo import attach_county_fips_via_zip
+
+    df = pl.DataFrame(
+        {
+            "venue_zip": ["92101", None, "99999", "92103"],
+            "county_fips": [None, None, None, "99999"],
+        },
+        schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
+    )
+    hud = pl.DataFrame(
+        {
+            "zip": ["92101"],
+            "county_fips": ["06073"],
+            "res_ratio": [1.0],
+            "quarter": ["2024Q1"],
+        }
+    )
+
+    with caplog.at_level(logging.INFO, logger="eia.transforms.geo"):
+        attach_county_fips_via_zip(df, hud)
+
+    matched = [
+        r for r in caplog.records if "attach_county_fips_via_zip" in r.getMessage()
+    ]
+    assert len(matched) == 1
+    msg = matched[0].getMessage()
+    assert "filled 1/3" in msg
+    assert "1 no ZIP" in msg
+    assert "1 ZIP not in crosswalk" in msg
+    assert "2024Q1" in msg
