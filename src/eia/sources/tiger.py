@@ -48,27 +48,28 @@ class TIGERCounties(Source):
     def to_cleaned(self, raw_path: Path) -> Path:
         """Read the shapefile via geopandas, derive centroid + sq miles, write Parquet.
 
+        Also writes a sibling counties_geo_<year>.parquet (GEOID + polygon, WGS84)
+        for downstream spatial-join transforms. The flat Parquet is the warehouse
+        loader's input; the geo Parquet is consumed only by transforms/geo.py.
+
         Note: shapefile centroids in geographic CRS are inaccurate; we project
         to NAD83 / Conus Albers (EPSG:5070) for area + centroid math.
         """
         import geopandas as gpd
 
-        # geopandas reads zipped shapefiles directly via zip:// scheme.
         gdf = gpd.read_file(f"zip://{raw_path}")
 
-        # Project to equal-area for sane area calculations.
         gdf_aea = gdf.to_crs(epsg=5070)
-        gdf["land_area_sqmi"] = gdf_aea.geometry.area / 2_589_988.11  # m^2 → mi^2
+        gdf["land_area_sqmi"] = gdf_aea.geometry.area / 2_589_988.11  # m^2 -> mi^2
         centroids = gdf_aea.geometry.centroid.to_crs(epsg=4326)
         gdf["latitude"] = centroids.y
         gdf["longitude"] = centroids.x
 
-        # TIGER county fields: STATEFP, COUNTYFP, GEOID, NAME, NAMELSAD, CBSAFP
         cleaned = pl.DataFrame(
             {
                 "county_fips": gdf["GEOID"].astype(str).tolist(),
                 "state_fips": gdf["STATEFP"].astype(str).tolist(),
-                "state_abbr": [None] * len(gdf),  # joined in later
+                "state_abbr": [None] * len(gdf),
                 "county_name": gdf["NAMELSAD"].astype(str).tolist(),
                 "cbsa_code": [
                     str(c) if str(c) not in ("None", "nan", "") else None
@@ -85,6 +86,11 @@ class TIGERCounties(Source):
         )
         out = self.cleaned_dir / f"counties_{self.year}.parquet"
         cleaned.write_parquet(out)
+
+        geo_out = self.cleaned_dir / f"counties_geo_{self.year}.parquet"
+        if not (geo_out.exists() and geo_out.stat().st_size > 0):
+            gdf.to_crs(epsg=4326)[["GEOID", "geometry"]].to_parquet(geo_out)
+
         return out
 
 
