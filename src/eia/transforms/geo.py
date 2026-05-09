@@ -53,6 +53,8 @@ def attach_county_fips(
     falls inside no US county polygon also receive null. Points exactly on
     polygon boundaries are not matched by `within` (strict interior only) and
     receive `null`.
+
+    Logs one INFO line per call summarising hit/miss counts.
     """
     counties = _load_counties_gdf(tiger_year)
 
@@ -62,6 +64,7 @@ def attach_county_fips(
             f"Input DataFrame must not contain reserved column '{pos}'."
         )
     work = df.with_row_index(pos)
+    n = work.height
 
     is_valid = (
         pl.col(lat_col).is_not_null()
@@ -71,8 +74,10 @@ def attach_county_fips(
         & ~((pl.col(lat_col) == 0.0) & (pl.col(lon_col) == 0.0))
     )
     joinable = work.filter(is_valid).select(pos, lat_col, lon_col)
+    bad_coords = n - joinable.height
 
     if joinable.height == 0:
+        _log_summary(n, bad_coords=bad_coords, off_county=0, tiger_year=tiger_year)
         return work.with_columns(pl.lit(None).cast(pl.Utf8).alias(out_col)).drop(pos)
 
     joinable_pd = joinable.to_pandas()
@@ -92,5 +97,19 @@ def attach_county_fips(
         pl.col(pos).cast(pl.UInt32),
         pl.col("GEOID").cast(pl.Utf8).alias(out_col),
     )
+    off_county = fips_df.filter(pl.col(out_col).is_null()).height
 
+    _log_summary(n, bad_coords=bad_coords, off_county=off_county, tiger_year=tiger_year)
     return work.join(fips_df, on=pos, how="left").drop(pos)
+
+
+def _log_summary(total: int, *, bad_coords: int, off_county: int, tiger_year: int) -> None:
+    miss = bad_coords + off_county
+    logger.info(
+        "attach_county_fips: %d/%d unmapped (%d bad coords, %d off-county) [tiger_year=%d]",
+        miss,
+        total,
+        bad_coords,
+        off_county,
+        tiger_year,
+    )

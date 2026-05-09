@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from pathlib import Path
 
 import geopandas as gpd
@@ -86,3 +87,28 @@ def test_attach_county_fips_rejects_reserved_column(fake_counties_geo: Path) -> 
 
     with pytest.raises(ValueError, match=r"reserved column '__pos__'"):
         attach_county_fips(df)
+
+
+def test_attach_county_fips_logs_miss_summary(
+    fake_counties_geo: Path, caplog: pytest.LogCaptureFixture
+) -> None:
+    from eia.transforms.geo import attach_county_fips
+
+    df = pl.DataFrame(
+        {
+            "venue_lat": [1.0, 11.0, 5.0, None, 91.0],
+            "venue_lon": [1.0, 11.0, 5.0, 1.0, 1.0],
+        }
+    )
+
+    with caplog.at_level(logging.INFO, logger="eia.transforms.geo"):
+        attach_county_fips(df)
+
+    matched = [r for r in caplog.records if "attach_county_fips" in r.getMessage()]
+    assert len(matched) == 1
+    msg = matched[0].getMessage()
+    # 5 rows total, 2 hits, 1 off-county, 2 bad coords -> 3 unmapped
+    assert "3/5 unmapped" in msg
+    assert "2 bad coords" in msg
+    assert "1 off-county" in msg
+    assert "tiger_year=2023" in msg
