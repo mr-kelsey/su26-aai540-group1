@@ -5,6 +5,8 @@ from __future__ import annotations
 import polars as pl
 import pytest
 
+# Note: matrix variable name 'L' below is BEA notation; ruff N806 silenced.
+
 
 def _two_industry_inputs() -> tuple[pl.DataFrame, pl.DataFrame]:
     """The canonical 2-industry / 2-commodity hand-computed reference case.
@@ -51,7 +53,7 @@ def test_two_industry_hand_computed() -> None:
     from eia.multipliers.leontief import compute_leontief_inverse
 
     use, make = _two_industry_inputs()
-    L = compute_leontief_inverse(use, make)
+    L = compute_leontief_inverse(use, make)  # noqa: N806
 
     # Sorted by (demand_industry asc, output_industry asc).
     expected = [
@@ -62,7 +64,7 @@ def test_two_industry_hand_computed() -> None:
     ]
     actual = L.to_dicts()
     assert len(actual) == len(expected)
-    for row, (out_code, demand_code, val) in zip(actual, expected):
+    for row, (out_code, demand_code, val) in zip(actual, expected, strict=True):
         assert row["output_industry"] == out_code
         assert row["demand_industry"] == demand_code
         assert abs(row["total_requirement"] - val) < 1e-9
@@ -73,7 +75,7 @@ def test_output_schema_and_sort_order() -> None:
     from eia.multipliers.leontief import compute_leontief_inverse
 
     use, make = _two_industry_inputs()
-    L = compute_leontief_inverse(use, make)
+    L = compute_leontief_inverse(use, make)  # noqa: N806
 
     assert L.columns == ["output_industry", "demand_industry", "total_requirement"]
     assert L.schema["output_industry"] == pl.Utf8
@@ -103,7 +105,7 @@ def test_identity_case() -> None:
         }
     )
 
-    L = compute_leontief_inverse(use, make)
+    L = compute_leontief_inverse(use, make)  # noqa: N806
 
     by_pair = {
         (r["demand_industry"], r["output_industry"]): r["total_requirement"]
@@ -120,7 +122,7 @@ def test_diagonals_are_at_least_one() -> None:
     from eia.multipliers.leontief import compute_leontief_inverse
 
     use, make = _two_industry_inputs()
-    L = compute_leontief_inverse(use, make)
+    L = compute_leontief_inverse(use, make)  # noqa: N806
 
     diagonal = L.filter(
         pl.col("output_industry") == pl.col("demand_industry")
@@ -190,7 +192,7 @@ def test_custom_column_names() -> None:
         }
     )
 
-    L = compute_leontief_inverse(
+    L = compute_leontief_inverse(  # noqa: N806
         use, make,
         industry_col="naics",
         commodity_col="comm",
@@ -209,6 +211,53 @@ def test_public_import_smoke() -> None:
     from eia.multipliers import compute_leontief_inverse as imported
 
     use, make = _two_industry_inputs()
-    L = imported(use, make)
+    L = imported(use, make)  # noqa: N806
     assert L.height == 4
     assert L.columns == ["output_industry", "demand_industry", "total_requirement"]
+
+
+def test_industries_union_when_one_input_missing_some() -> None:
+    """If Use has industry I3 but Make doesn't (I3 makes nothing), output still includes I3 rows.
+
+    Make matrix has industries {I1, I2}. Use matrix has industries {I1, I2, I3} —
+    I3 buys $5 of A from somewhere. Since I3 doesn't appear in Make, V[I3, :] = 0,
+    q[I3] = 0, so B[:, I3] = 0 (B's I3 column is the zero vector by the divide-by-zero
+    guard). The function should still produce a 3x3 output L with I3 as one of the
+    output_industry / demand_industry values.
+    """
+    from eia.multipliers.leontief import compute_leontief_inverse
+
+    make = pl.DataFrame(
+        {
+            "industry_code": ["I1", "I1", "I2", "I2"],
+            "commodity_code": ["A", "B", "A", "B"],
+            "value_millions": [10.0, 0.0, 0.0, 20.0],
+        }
+    )
+    use = pl.DataFrame(
+        {
+            "industry_code": ["I1", "I1", "I2", "I2", "I3"],
+            "commodity_code": ["A", "B", "A", "B", "A"],
+            "value_millions": [2.0, 1.0, 6.0, 8.0, 5.0],
+        }
+    )
+
+    result = compute_leontief_inverse(use, make)
+
+    # 3 industries -> 3x3 = 9 rows.
+    assert result.height == 9
+    industries_in_output = set(result["output_industry"].unique().to_list())
+    assert industries_in_output == {"I1", "I2", "I3"}
+    industries_in_demand = set(result["demand_industry"].unique().to_list())
+    assert industries_in_demand == {"I1", "I2", "I3"}
+
+    # Diagonal of I3 must be exactly 1.0: I3 has zero output -> column j=I3 of A is zero
+    # -> (I - A)'s I3 column is the unit vector e_I3 -> L's I3 column has 1 on the diagonal
+    # and zeros elsewhere.
+    by_pair = {
+        (r["demand_industry"], r["output_industry"]): r["total_requirement"]
+        for r in result.to_dicts()
+    }
+    assert abs(by_pair[("I3", "I3")] - 1.0) < 1e-9
+    assert abs(by_pair[("I3", "I1")] - 0.0) < 1e-9
+    assert abs(by_pair[("I3", "I2")] - 0.0) < 1e-9

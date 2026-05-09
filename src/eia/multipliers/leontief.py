@@ -59,13 +59,21 @@ def compute_leontief_inverse(
     industry_idx = {code: i for i, code in enumerate(all_industries)}
     commodity_idx = {code: i for i, code in enumerate(all_commodities)}
 
-    V = np.zeros((n_ind, n_com))
+    # Matrix variable names follow BEA's published methodology (V = Make
+    # matrix, U = Use matrix, D = market-shares, B = direct-requirements,
+    # A = industry-by-industry direct-requirements, L = Leontief inverse).
+    # Lowercasing them would break the correspondence to the standard
+    # input-output literature (see Miller & Blair, Input-Output Analysis).
+    # Annotations below silence ruff N806 case-sensitivity for these
+    # mathematically-conventional names.
+
+    V = np.zeros((n_ind, n_com))  # noqa: N806
     for row in make_matrix.iter_rows(named=True):
         i = industry_idx[row[industry_col]]
         c = commodity_idx[row[commodity_col]]
         V[i, c] = float(row[value_col])
 
-    U = np.zeros((n_com, n_ind))
+    U = np.zeros((n_com, n_ind))  # noqa: N806
     for row in use_matrix.iter_rows(named=True):
         c = commodity_idx[row[commodity_col]]
         j = industry_idx[row[industry_col]]
@@ -74,19 +82,19 @@ def compute_leontief_inverse(
     q = V.sum(axis=1)
     x = V.sum(axis=0)
 
-    D = np.zeros_like(V)
+    D = np.zeros_like(V)  # noqa: N806
     nonzero_x = x > 0
     D[:, nonzero_x] = V[:, nonzero_x] / x[nonzero_x]
 
-    B = np.zeros_like(U)
+    B = np.zeros_like(U)  # noqa: N806
     nonzero_q = q > 0
     B[:, nonzero_q] = U[:, nonzero_q] / q[nonzero_q]
 
-    A = D @ B
+    A = D @ B  # noqa: N806
 
-    I_minus_A = np.eye(n_ind) - A
+    I_minus_A = np.eye(n_ind) - A  # noqa: N806
     try:
-        L = np.linalg.inv(I_minus_A)
+        L = np.linalg.inv(I_minus_A)  # noqa: N806
     except np.linalg.LinAlgError as exc:
         raise ValueError(f"(I - A) is singular: {exc}") from exc
 
