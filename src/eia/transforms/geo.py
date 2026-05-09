@@ -27,6 +27,11 @@ def _load_counties_gdf(year: int) -> gpd.GeoDataFrame:
     if cached is not None:
         return cached
     path = _counties_path(year)
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Counties GeoParquet not found at {path}. "
+            f"Run `make pull-tiger` to generate it."
+        )
     gdf = gpd.read_parquet(path)
     _COUNTIES_CACHE[year] = gdf
     return gdf

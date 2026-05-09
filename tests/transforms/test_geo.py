@@ -28,3 +28,16 @@ def test_loader_caches_after_first_read(
 
     assert first is second
     assert calls["n"] == 1
+
+
+def test_loader_raises_clear_error_when_geo_parquet_missing(
+    fake_counties_geo: Path,
+) -> None:
+    """If the file is missing, the error message must point the user at make pull-tiger."""
+    from eia.transforms import geo
+
+    fake_counties_geo.unlink()  # delete the planted fixture
+    geo._COUNTIES_CACHE.clear()
+
+    with pytest.raises(FileNotFoundError, match=r"make pull-tiger"):
+        geo._load_counties_gdf(2023)
