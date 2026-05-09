@@ -25,7 +25,7 @@ def test_empty_counties_returns_empty_panel() -> None:
 
 
 def test_single_county_single_year_yields_12_rows() -> None:
-    """One county × one year produces 12 rows in calendar order with correct period strings."""
+    """One county x one year produces 12 rows in calendar order with correct period strings."""
     from eia.transforms.panel import build_county_month_panel
 
     counties = pl.DataFrame({"county_fips": ["06073"]})
@@ -54,7 +54,7 @@ def test_two_counties_two_years_yields_48_rows_sorted() -> None:
     counties = pl.DataFrame({"county_fips": ["06073", "36061"]})
     panel = build_county_month_panel(counties, start_year=2015, end_year=2016)
 
-    assert panel.height == 48  # 2 counties × 2 years × 12 months
+    assert panel.height == 48  # 2 counties x 2 years x 12 months
 
     # First 24 rows are "06073" (alphabetically first), last 24 are "36061".
     first_24 = panel.head(24)

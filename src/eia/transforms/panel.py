@@ -1,4 +1,4 @@
-"""(county_fips × period_month) cartesian-product panel for treatment-effect modeling.
+"""(county_fips x period_month) cartesian-product panel for treatment-effect modeling.
 
 Produces the dense (county, month) cell grid the regression input needs:
 every county-month must exist as a row, including months at a county where
@@ -22,7 +22,7 @@ def build_county_month_panel(
     end_year: int = 2023,
     fips_col: str = "county_fips",
 ) -> pl.DataFrame:
-    """Produce the (county_fips × period_month) cartesian product as a Polars DataFrame.
+    """Produce the (county_fips x period_month) cartesian product as a Polars DataFrame.
 
     Returns columns `[fips_col, "period_month", "period_id", "year", "month"]`,
     sorted by `(fips_col, year, month)`. Output formats:
