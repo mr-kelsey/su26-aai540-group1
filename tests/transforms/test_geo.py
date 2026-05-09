@@ -70,3 +70,19 @@ def test_attach_county_fips_full_matrix(fake_counties_geo: Path) -> None:
     assert fips[3] is None      # null lat
     assert fips[4] is None      # (0, 0) sentinel
     assert fips[5] is None      # lat out of range
+
+
+def test_attach_county_fips_rejects_reserved_column(fake_counties_geo: Path) -> None:
+    """The internal `__pos__` column must not collide with caller-provided columns."""
+    from eia.transforms.geo import attach_county_fips
+
+    df = pl.DataFrame(
+        {
+            "venue_lat": [1.0],
+            "venue_lon": [1.0],
+            "__pos__": [42],
+        }
+    )
+
+    with pytest.raises(ValueError, match=r"reserved column '__pos__'"):
+        attach_county_fips(df)

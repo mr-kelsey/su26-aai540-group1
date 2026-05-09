@@ -50,13 +50,17 @@ def attach_county_fips(
 
     Rows with null, out-of-range, or (0, 0) sentinel coordinates skip the
     spatial join entirely and receive a null `county_fips`. Rows whose point
-    falls inside no US county polygon also receive null. Boundary rows match
-    whichever polygon `gpd.sjoin(predicate="within")` returns first
-    (deterministic for a fixed TIGER year).
+    falls inside no US county polygon also receive null. Points exactly on
+    polygon boundaries are not matched by `within` (strict interior only) and
+    receive `null`.
     """
     counties = _load_counties_gdf(tiger_year)
 
     pos = "__pos__"
+    if pos in df.columns:
+        raise ValueError(
+            f"Input DataFrame must not contain reserved column '{pos}'."
+        )
     work = df.with_row_index(pos)
 
     is_valid = (
