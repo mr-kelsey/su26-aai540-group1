@@ -5,14 +5,18 @@ bls_qcew:
   # See src/eia/sources/bls_qcew.py for the two pull modes (by_area vs singlefile).
   default_year: 2023
   default_quarter: 3   # Q3 = July-Sept; finalized ~6 months after quarter close
-  # Counties pulled in Phase 0 'by_area' mode. Phase 1 will switch to 'singlefile'
-  # to ingest all ~3,000 US counties at once.
+  # Phase 0 'by_area' mode hits a small set of counties for fast iteration.
   phase0_counties:
     - "06073"   # San Diego, CA — anchor for the exit query
     - "36061"   # New York, NY (Manhattan)
     - "17031"   # Cook, IL (Chicago)
     - "48201"   # Harris, TX (Houston)
     - "06037"   # Los Angeles, CA
+  # Phase 1 'singlefile' mode pulls all ~3,000 US counties for these years.
+  # Driven by pipelines/phase1_bls_qcew.py (loops year x quarter; per-year zip
+  # is reused across the four quarters of that year).
+  phase1_years: [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023]
+  phase1_quarters: [1, 2, 3, 4]
 
 bea_io:
   # BEA Input-Output Use & Make tables — XLS bundles (annual)
@@ -36,7 +40,58 @@ census_acs:
     bachelors_doctor: "B15003_025E"
     population_25_plus: "B15003_001E"
   states:
-    - "06"   # California (Phase 0 starts here; expands to all states later)
+    # Phase 1: all 50 states plus DC. (Phase 0 was "06" / California only.)
+    - "01"  # Alabama
+    - "02"  # Alaska
+    - "04"  # Arizona
+    - "05"  # Arkansas
+    - "06"  # California
+    - "08"  # Colorado
+    - "09"  # Connecticut
+    - "10"  # Delaware
+    - "11"  # District of Columbia
+    - "12"  # Florida
+    - "13"  # Georgia
+    - "15"  # Hawaii
+    - "16"  # Idaho
+    - "17"  # Illinois
+    - "18"  # Indiana
+    - "19"  # Iowa
+    - "20"  # Kansas
+    - "21"  # Kentucky
+    - "22"  # Louisiana
+    - "23"  # Maine
+    - "24"  # Maryland
+    - "25"  # Massachusetts
+    - "26"  # Michigan
+    - "27"  # Minnesota
+    - "28"  # Mississippi
+    - "29"  # Missouri
+    - "30"  # Montana
+    - "31"  # Nebraska
+    - "32"  # Nevada
+    - "33"  # New Hampshire
+    - "34"  # New Jersey
+    - "35"  # New Mexico
+    - "36"  # New York
+    - "37"  # North Carolina
+    - "38"  # North Dakota
+    - "39"  # Ohio
+    - "40"  # Oklahoma
+    - "41"  # Oregon
+    - "42"  # Pennsylvania
+    - "44"  # Rhode Island
+    - "45"  # South Carolina
+    - "46"  # South Dakota
+    - "47"  # Tennessee
+    - "48"  # Texas
+    - "49"  # Utah
+    - "50"  # Vermont
+    - "51"  # Virginia
+    - "53"  # Washington
+    - "54"  # West Virginia
+    - "55"  # Wisconsin
+    - "56"  # Wyoming
 
 tiger:
   # TIGER/Line county shapefiles
