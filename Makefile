@@ -6,7 +6,7 @@
         pull-all pull-bls-qcew pull-bea-io pull-census-acs pull-tiger pull-hud \
         pull-ticketmaster pull-runsignup pull-setlistfm \
         warehouse-init warehouse-reset \
-        phase0 validate-bea-multipliers clean
+        phase0 validate-bea-multipliers enrich-events clean
 
 help:  ## Show this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-22s\033[0m %s\n", $$1, $$2}'
@@ -80,6 +80,11 @@ validate-bea-multipliers:  ## Cross-check our B matrix against BEA's published C
 	@# which causes site.py to skip the editable-install pth and break `import eia`.
 	@chflags nohidden .venv/lib/python*/site-packages/*.pth 2>/dev/null || true
 	uv run --no-sync python pipelines/validate_bea_multipliers.py
+
+# ----- Events enrichment -----
+enrich-events:  ## Attach county_fips and period_id to events table after a source pull.
+	@chflags nohidden .venv/lib/python*/site-packages/*.pth 2>/dev/null || true
+	uv run --no-sync python pipelines/enrich_events.py
 
 # ----- Cleanup -----
 clean:  ## Remove caches.

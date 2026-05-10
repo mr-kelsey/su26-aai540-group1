@@ -119,6 +119,10 @@ Math invariants are locked by a hand-computable 2-industry reference test case i
 
 [pipelines/validate_bea_multipliers.py](pipelines/validate_bea_multipliers.py) (run via `make validate-bea-multipliers`) cross-checks our computed direct-requirements matrix `B = U / q` against BEA's published `CxI_DR_*_Summary.xlsx` for every year 1997-2023, and runs Leontief sanity checks (`L` diagonal >= 1, max diagonal < 10). Agreement is bounded at ~3.4e-5 across all years; the small systematic gap is the documented publication-date stagger between BEA's CxI_DR (2024-08-28) and the Use/Make tables (2024-09-06) inside `AllTablesIO.zip`. Re-run after any change to `compute_leontief_inverse` or the BEA parser.
 
+### Events enrichment
+
+Event-source `to_cleaned()` methods (Ticketmaster, RunSignUp, Setlist.fm) deliberately leave `county_fips`, `period_id`, and `period_month` null — those derive from `venue_lat`/`venue_lon` and `event_date` via transforms that live in `src/eia/transforms/`. [pipelines/enrich_events.py](pipelines/enrich_events.py) (run via `make enrich-events`) reads the events table, applies `attach_county_fips` (TIGER spatial join) and `attach_period_id`, writes `data/cleaned/events_enriched.parquet`, and re-registers the events table. Run AFTER any event pull. Idempotent — old derived columns are dropped and recomputed each time.
+
 ## Conventions
 
 - DataFrames use **Polars**, not pandas. `pl.read_csv`, `pl.read_parquet`, and the warehouse's `query()` all return Polars.
