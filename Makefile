@@ -6,7 +6,8 @@
         pull-all pull-bls-qcew pull-bea-io pull-census-acs pull-tiger pull-hud \
         pull-ticketmaster pull-runsignup pull-setlistfm \
         warehouse-init warehouse-reset \
-        phase0 validate-bea-multipliers enrich-events build-events clean
+        phase0 validate-bea-multipliers enrich-events build-events \
+        phase1-summary clean
 
 # UVRUN: invocation prefix for all python/eia commands.
 # - chflags nohidden: macOS+iCloud quirk under Desktop paths marks editable-install
@@ -90,6 +91,9 @@ enrich-events:  ## Re-enrich the existing events table in place.
 
 build-events:  ## UNION all event-source staging tables -> events (canonical pipeline).
 	$(UVRUN) python pipelines/build_events.py
+
+phase1-summary:  ## Cross-source summary: events x dim_county x ACS x QCEW.
+	$(UVRUN) python pipelines/phase1_summary.py
 
 # ----- Cleanup -----
 clean:  ## Remove caches.
