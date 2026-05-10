@@ -63,6 +63,7 @@ def _build_synthetic_bea_zip(
     commodities: list[str] | None = None,
     use_extra_final_demand: list[str] | None = None,
     use_extra_value_added: list[str] | None = None,
+    make_extra_invalid_rows: list[str] | None = None,
     use_value: float = 1.0,
     make_value: float = 2.0,
     blank_use_cell: tuple[str, str] | None = None,
@@ -73,17 +74,21 @@ def _build_synthetic_bea_zip(
     test the row-filter); columns = industries + use_extra_final_demand
     (so FD columns can test the column-filter).
 
-    Make sheet rows = industries; columns = commodities (no extras —
-    Make is structurally clean).
+    Make sheet rows = industries + make_extra_invalid_rows (the latter
+    used to test pattern-filtering of footnote-text rows that BEA
+    sometimes includes at the bottom of Make sheets); columns =
+    commodities (Make's columns are always clean).
     """
     years = years or [2022, 2023]
     industries = industries or ["I1", "I2", "I3"]
     commodities = commodities or ["C1", "C2", "C3", "C4"]
     use_extra_final_demand = use_extra_final_demand or []
     use_extra_value_added = use_extra_value_added or []
+    make_extra_invalid_rows = make_extra_invalid_rows or []
 
     use_industry_codes = list(industries) + list(use_extra_final_demand)
     use_commodity_codes = list(commodities) + list(use_extra_value_added)
+    make_row_codes = list(industries) + list(make_extra_invalid_rows)
 
     use_wb = Workbook()
     use_wb.remove(use_wb.active)
@@ -105,7 +110,7 @@ def _build_synthetic_bea_zip(
             title="The Make of Commodities by Industries",
             year=year,
             col_codes=commodities,
-            row_codes=industries,
+            row_codes=make_row_codes,
             cell_value=make_value,
         )
 
@@ -342,3 +347,43 @@ def test_load_drops_manifest_and_populates_use_and_make(
     n_make = wh.query("SELECT COUNT(*) AS n FROM bea_io_make")["n"][0]
     assert n_use == 12  # 1 year × 4 commodities × 3 industries
     assert n_make == 12  # 1 year × 3 industries × 4 commodities
+
+
+def test_make_drops_non_iocode_rows(tmp_path: Path) -> None:
+    """Footnote-text rows in Make (non-IOCode patterns) are filtered out.
+
+    BEA's published Make sheets sometimes include trailing footnote text
+    in the same row layout as data rows (e.g. "Note. Detail may not add to
+    total due to rounding."). Without filtering, these get treated as
+    industries — observed in real 2023 BEA data.
+    """
+    from datetime import datetime, timezone
+
+    from eia.sources.bea_io import (
+        _extract_make_to_temp,
+        _industries_and_commodities_from_make,
+        _parse_make_year,
+    )
+
+    zip_path = _build_synthetic_bea_zip(
+        tmp_path / "AllTablesIO.zip",
+        years=[2023],
+        industries=["I1", "I2", "I3"],
+        commodities=["C1", "C2", "C3", "C4"],
+        make_extra_invalid_rows=[
+            "Note. Detail may not add to total due to rounding.",
+            "1. Consists of only scrap in the use table.",
+        ],
+    )
+    make_path = _extract_make_to_temp(zip_path, tmp_path / "_make.xlsx")
+
+    industries, commodities = _industries_and_commodities_from_make(make_path)
+    # Footnote-text rows must NOT appear in the canonical industries set.
+    assert industries == ["I1", "I2", "I3"]
+
+    df = _parse_make_year(
+        make_path, year=2023, fetched_at=datetime(2026, 5, 9, tzinfo=timezone.utc)
+    )
+    # 3 industries × 4 commodities = 12 rows; the 2 footnote rows are dropped.
+    assert df.height == 12
+    assert sorted(df["industry_code"].unique().to_list()) == ["I1", "I2", "I3"]

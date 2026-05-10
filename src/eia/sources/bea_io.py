@@ -9,6 +9,7 @@ Reference: https://www.bea.gov/industry/input-output-accounts-data
 from __future__ import annotations
 
 import logging
+import re
 import tempfile
 import zipfile
 from pathlib import Path
@@ -24,6 +25,21 @@ logger = logging.getLogger(__name__)
 
 USE_MEMBER = "IOUse_After_Redefinitions_PRO_1997-2023_Summary.xlsx"
 MAKE_MEMBER = "IOMake_After_Redefinitions_PRO_1997-2023_Summary.xlsx"
+
+# BEA IOCodes are short alphanumeric (sometimes letters only, sometimes
+# digits+letters). Footnote text rows that BEA includes at the bottom of
+# Make sheets ("Note. Detail may not add to total due to rounding.",
+# "1. Consists of only scrap...") have spaces and punctuation and must
+# be filtered out. This regex matches the legitimate IOCode shape.
+_IOCODE_PATTERN = re.compile(r"^[A-Za-z0-9]+$")
+
+
+def _is_iocode(value: object) -> bool:
+    """True if value looks like a BEA IOCode (short alphanumeric, no spaces or punctuation)."""
+    if not isinstance(value, str):
+        return False
+    s = value.strip()
+    return bool(s) and bool(_IOCODE_PATTERN.match(s))
 
 
 class BEAIO(Source):
@@ -174,13 +190,14 @@ def _industries_and_commodities_from_make(
         # Row 5 (0-indexed 4): cols 3+ are commodity codes (Make's column header).
         header_row = df.row(4)
         for v in header_row[2:]:
-            if isinstance(v, str) and v.strip():
-                commodities.add(v.strip())
+            if _is_iocode(v):
+                commodities.add(v.strip())  # type: ignore[union-attr]
         # Rows 7+ (0-indexed 6+): col 1 is the industry IOCode for that row.
+        # Pattern-filter to skip footnote-text rows ("Note. ...", "1. Consists ...").
         for ridx in range(6, df.height):
             v = df.row(ridx)[0]
-            if isinstance(v, str) and v.strip():
-                industries.add(v.strip())
+            if _is_iocode(v):
+                industries.add(v.strip())  # type: ignore[union-attr]
     return sorted(industries), sorted(commodities)
 
 
@@ -205,9 +222,9 @@ def _parse_make_year(
     for ridx in range(6, df.height):
         row = df.row(ridx)
         ind_raw = row[0]
-        if not isinstance(ind_raw, str) or not ind_raw.strip():
+        if not _is_iocode(ind_raw):
             continue
-        industry_code = ind_raw.strip()
+        industry_code = ind_raw.strip()  # type: ignore[union-attr]
         for cidx, comm_code in enumerate(commodity_codes):
             if not comm_code:
                 continue
