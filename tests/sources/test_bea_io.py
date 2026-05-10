@@ -173,3 +173,92 @@ def test_parse_make_year(tmp_path: Path) -> None:
     assert sorted(df["commodity_code"].unique().to_list()) == ["C1", "C2", "C3", "C4"]
     # All values are the synthetic 7.0 we passed.
     assert df["value_millions"].to_list() == [7.0] * 12
+
+
+def test_parse_use_year_filters_final_demand_columns(tmp_path: Path) -> None:
+    """A column code not in the industries set (final-demand) is dropped from output."""
+    from datetime import datetime, timezone
+
+    from eia.sources.bea_io import _extract_use_to_temp, _parse_use_year
+
+    zip_path = _build_synthetic_bea_zip(
+        tmp_path / "AllTablesIO.zip",
+        years=[2023],
+        industries=["I1", "I2", "I3"],
+        commodities=["C1", "C2", "C3", "C4"],
+        use_extra_final_demand=["F010"],   # PCE — should be filtered out
+    )
+    use_path = _extract_use_to_temp(zip_path, tmp_path / "_use.xlsx")
+    fetched_at = datetime(2026, 5, 9, tzinfo=timezone.utc)
+
+    df = _parse_use_year(
+        use_path,
+        year=2023,
+        industries={"I1", "I2", "I3"},
+        commodities={"C1", "C2", "C3", "C4"},
+        fetched_at=fetched_at,
+    )
+
+    # 4 commodities × 3 industries = 12 rows; F010 column is dropped.
+    assert df.height == 12
+    assert "F010" not in df["industry_code"].unique().to_list()
+
+
+def test_parse_use_year_filters_value_added_rows(tmp_path: Path) -> None:
+    """A row code not in the commodities set (value-added) is dropped from output."""
+    from datetime import datetime, timezone
+
+    from eia.sources.bea_io import _extract_use_to_temp, _parse_use_year
+
+    zip_path = _build_synthetic_bea_zip(
+        tmp_path / "AllTablesIO.zip",
+        years=[2023],
+        industries=["I1", "I2", "I3"],
+        commodities=["C1", "C2", "C3", "C4"],
+        use_extra_value_added=["V001"],   # compensation of employees — filtered out
+    )
+    use_path = _extract_use_to_temp(zip_path, tmp_path / "_use.xlsx")
+    fetched_at = datetime(2026, 5, 9, tzinfo=timezone.utc)
+
+    df = _parse_use_year(
+        use_path,
+        year=2023,
+        industries={"I1", "I2", "I3"},
+        commodities={"C1", "C2", "C3", "C4"},
+        fetched_at=fetched_at,
+    )
+
+    # 4 commodities × 3 industries = 12 rows; V001 row is dropped.
+    assert df.height == 12
+    assert "V001" not in df["commodity_code"].unique().to_list()
+
+
+def test_parse_use_year_blank_cell_becomes_null(tmp_path: Path) -> None:
+    """A blank Use cell maps to a null value_millions in the long-form output."""
+    from datetime import datetime, timezone
+
+    from eia.sources.bea_io import _extract_use_to_temp, _parse_use_year
+
+    zip_path = _build_synthetic_bea_zip(
+        tmp_path / "AllTablesIO.zip",
+        years=[2023],
+        industries=["I1", "I2", "I3"],
+        commodities=["C1", "C2", "C3", "C4"],
+        blank_use_cell=("C2", "I2"),
+    )
+    use_path = _extract_use_to_temp(zip_path, tmp_path / "_use.xlsx")
+    fetched_at = datetime(2026, 5, 9, tzinfo=timezone.utc)
+
+    df = _parse_use_year(
+        use_path,
+        year=2023,
+        industries={"I1", "I2", "I3"},
+        commodities={"C1", "C2", "C3", "C4"},
+        fetched_at=fetched_at,
+    )
+
+    target = df.filter(
+        (pl.col("commodity_code") == "C2") & (pl.col("industry_code") == "I2")
+    )
+    assert target.height == 1
+    assert target["value_millions"][0] is None

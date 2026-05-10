@@ -194,3 +194,80 @@ def _parse_make_year(
             "fetched_at": pl.Datetime,
         },
     )
+
+
+def _parse_use_year(
+    use_xlsx_path: Path,
+    *,
+    year: int,
+    industries: set[str],
+    commodities: set[str],
+    fetched_at: object,
+) -> pl.DataFrame:
+    """Parse one year sheet of the Use XLSX into long-form rows, with cross-reference filtering.
+
+    Use's rows are commodities (+ value-added footer rows that we drop) and
+    its columns are industries (+ final-demand columns that we drop). The
+    `industries` and `commodities` sets come from `_industries_and_commodities_from_make`
+    and define which codes we keep. Codes that aren't in those sets are
+    dropped and a WARNING is logged.
+    """
+    df = pl.read_excel(use_xlsx_path, sheet_name=str(year), has_header=False)
+    header_row = df.row(4)
+    industry_codes_raw = [
+        (v.strip() if isinstance(v, str) else None) for v in header_row[2:]
+    ]
+    keep_col_indices: list[int] = []
+    for cidx, code in enumerate(industry_codes_raw):
+        if not code:
+            continue
+        if code in industries:
+            keep_col_indices.append(cidx)
+        else:
+            logger.warning(
+                "Use column code %r (year %d) not in industries set; dropping",
+                code,
+                year,
+            )
+
+    rows: list[dict[str, object]] = []
+    for ridx in range(6, df.height):
+        row = df.row(ridx)
+        comm_raw = row[0]
+        if not isinstance(comm_raw, str) or not comm_raw.strip():
+            continue
+        commodity_code = comm_raw.strip()
+        if commodity_code not in commodities:
+            logger.warning(
+                "Use row code %r (year %d) not in commodities set; dropping",
+                commodity_code,
+                year,
+            )
+            continue
+        for cidx in keep_col_indices:
+            industry_code = industry_codes_raw[cidx]
+            cell = row[2 + cidx]
+            value: float | None
+            if cell is None or (isinstance(cell, str) and cell.strip() in ("", "...")):
+                value = None
+            else:
+                value = float(cell)
+            rows.append(
+                {
+                    "table_year": year,
+                    "industry_code": industry_code,
+                    "commodity_code": commodity_code,
+                    "value_millions": value,
+                    "fetched_at": fetched_at,
+                }
+            )
+    return pl.DataFrame(
+        rows,
+        schema={
+            "table_year": pl.Int16,
+            "industry_code": pl.Utf8,
+            "commodity_code": pl.Utf8,
+            "value_millions": pl.Float64,
+            "fetched_at": pl.Datetime,
+        },
+    )
