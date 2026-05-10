@@ -128,7 +128,7 @@ class RateLimitedClient:
     def close(self) -> None:
         self._client.close()
 
-    def __enter__(self) -> "RateLimitedClient":
+    def __enter__(self) -> RateLimitedClient:
         return self
 
     def __exit__(self, *_exc: object) -> None:

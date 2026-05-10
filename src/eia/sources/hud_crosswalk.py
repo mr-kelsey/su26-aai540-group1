@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from typing import Any
 
 import polars as pl
 import yaml
@@ -23,10 +24,9 @@ import yaml
 from eia.sources.base import Source
 from eia.sources.registry import register
 
-
 # Hand-curated minimal sample for San Diego County (FIPS 06073).
 # Sufficient to demonstrate the join in the Phase 0 exit query.
-_SAN_DIEGO_SAMPLE: list[dict] = [
+_SAN_DIEGO_SAMPLE: list[dict[str, Any]] = [
     # ZIP, county_fips, res_ratio, bus_ratio, oth_ratio, tot_ratio
     {"zip": "92101", "county_fips": "06073", "res_ratio": 1.0, "bus_ratio": 1.0,
      "oth_ratio": 1.0, "tot_ratio": 1.0},
@@ -54,9 +54,9 @@ class HUDCrosswalk(Source):
         self.token = os.getenv("HUD_API_TOKEN")
 
     @staticmethod
-    def _load_config() -> dict:
+    def _load_config() -> dict[str, Any]:
         with open("configs/sources.yaml") as f:
-            return yaml.safe_load(f)["hud_crosswalk"]
+            return yaml.safe_load(f)["hud_crosswalk"]  # type: ignore[no-any-return]
 
     def fetch(self) -> Path:
         out = self.raw_dir / f"crosswalk_{self.quarter}.csv"

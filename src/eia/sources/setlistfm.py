@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any
 
 import polars as pl
-import yaml  # type: ignore[import-untyped]
+import yaml
 
 from eia.clients import RateLimitedClient
 from eia.config import settings
@@ -102,13 +102,18 @@ class SetlistFM(Source):
         page: int,
     ) -> dict[str, Any]:
         """Single API call. Rate limiting is handled by the client."""
+        # _check_key in fetch() guarantees api_key is set before we get here.
+        assert self.api_key is not None
         params = {
             "countryCode": country,
             "stateCode": state,
             "year": year,
             "p": page,
         }
-        headers = {"Accept": "application/json", "x-api-key": self.api_key}
+        headers: dict[str, str] = {
+            "Accept": "application/json",
+            "x-api-key": self.api_key,
+        }
         return client.get_json(  # type: ignore[no-any-return]
             "/rest/1.0/search/setlists",
             params=params,
@@ -133,9 +138,7 @@ class SetlistFM(Source):
         first = self._fetch_page(client, country, state, year, page)  # type: ignore[arg-type]
         total = int(first.get("total", 0))
         if total == 0:
-            logger.info(
-                "Setlist.fm %s %s %d: empty partition", country, state, year
-            )
+            logger.info("Setlist.fm %s %s %d: empty partition", country, state, year)
             return 0
 
         max_pages = self.max_pages_per_partition
@@ -212,9 +215,7 @@ class SetlistFM(Source):
         out = self.cleaned_dir / "setlists.parquet"
         out.parent.mkdir(parents=True, exist_ok=True)
         df.write_parquet(out)
-        logger.info(
-            "Setlist.fm to_cleaned: %d setlists written to %s", df.height, out
-        )
+        logger.info("Setlist.fm to_cleaned: %d setlists written to %s", df.height, out)
         return out
 
     # ---- parsing helper ----

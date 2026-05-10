@@ -159,9 +159,7 @@ def test_parse_setlist_missing_required_returns_none() -> None:
 
 def test_fetch_partition_exhaustive_under_cap(tmp_path, monkeypatch) -> None:
     """When total < 10000, fetch every page up to ceil(total/20)."""
-    monkeypatch.setattr(
-        "eia.config.settings.setlistfm_api_key", "test-key", raising=False
-    )
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
     src = SetlistFM(country_code="US", years=[2022], state_codes=["CA"])
 
     total = 437  # arbitrary under-cap number
@@ -184,9 +182,7 @@ def test_fetch_partition_exhaustive_under_cap(tmp_path, monkeypatch) -> None:
 
 def test_fetch_partition_caps_at_max_pages(tmp_path, monkeypatch) -> None:
     """When total exceeds cap, stop at max_pages_per_partition."""
-    monkeypatch.setattr(
-        "eia.config.settings.setlistfm_api_key", "test-key", raising=False
-    )
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
     src = SetlistFM(
         country_code="US", years=[2022], state_codes=["CA"], max_pages=3
     )  # max_pages=3 for a fast test
@@ -207,9 +203,7 @@ def test_fetch_partition_caps_at_max_pages(tmp_path, monkeypatch) -> None:
 
 def test_fetch_partition_empty_partition(tmp_path, monkeypatch) -> None:
     """When total == 0, write zero files and return 0."""
-    monkeypatch.setattr(
-        "eia.config.settings.setlistfm_api_key", "test-key", raising=False
-    )
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
     src = SetlistFM(country_code="US", years=[2022], state_codes=["WY"])
 
     def fake_fetch_page(self, client, country, state, year, page):
@@ -228,9 +222,7 @@ def test_fetch_partition_empty_partition(tmp_path, monkeypatch) -> None:
 
 
 def test_to_cleaned_writes_parquet_with_expected_schema(tmp_path, monkeypatch) -> None:
-    monkeypatch.setattr(
-        "eia.config.settings.setlistfm_api_key", "test-key", raising=False
-    )
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
     monkeypatch.setattr("eia.config.settings.eia_data_root", tmp_path)
     src = SetlistFM()
     raw_root = tmp_path / "raw" / "setlistfm"
@@ -268,9 +260,7 @@ def test_to_cleaned_writes_parquet_with_expected_schema(tmp_path, monkeypatch) -
 
 
 def test_to_cleaned_deduplicates_setlist_id(tmp_path, monkeypatch) -> None:
-    monkeypatch.setattr(
-        "eia.config.settings.setlistfm_api_key", "test-key", raising=False
-    )
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
     monkeypatch.setattr("eia.config.settings.eia_data_root", tmp_path)
     src = SetlistFM()
     raw_root = tmp_path / "raw" / "setlistfm"
@@ -292,9 +282,7 @@ def test_to_cleaned_deduplicates_setlist_id(tmp_path, monkeypatch) -> None:
 
 
 def test_to_cleaned_skips_unparseable_rows(tmp_path, monkeypatch) -> None:
-    monkeypatch.setattr(
-        "eia.config.settings.setlistfm_api_key", "test-key", raising=False
-    )
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
     monkeypatch.setattr("eia.config.settings.eia_data_root", tmp_path)
     src = SetlistFM()
     raw_root = tmp_path / "raw" / "setlistfm"
