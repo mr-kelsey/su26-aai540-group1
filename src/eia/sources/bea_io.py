@@ -13,13 +13,15 @@ import re
 import tempfile
 import zipfile
 from pathlib import Path
+from typing import Any
 
 import polars as pl
-import yaml
+import yaml  # type: ignore[import-untyped]
 
 from eia.clients import RateLimitedClient
 from eia.sources.base import Source
 from eia.sources.registry import register
+from eia.warehouse.base import Warehouse
 
 logger = logging.getLogger(__name__)
 
@@ -53,9 +55,9 @@ class BEAIO(Source):
         self.url = cfg["use_url"]
 
     @staticmethod
-    def _load_config() -> dict:
+    def _load_config() -> dict[str, Any]:
         with open("configs/sources.yaml") as f:
-            return yaml.safe_load(f)["bea_io"]
+            return yaml.safe_load(f)["bea_io"]  # type: ignore[no-any-return]
 
     def fetch(self) -> Path:
         out = self.raw_dir / "AllTablesIO.zip"
@@ -133,7 +135,7 @@ class BEAIO(Source):
             make_master.write_parquet(make_out)
             return use_out
 
-    def load(self, cleaned_path: Path, warehouse) -> None:  # type: ignore[override]
+    def load(self, cleaned_path: Path, warehouse: Warehouse) -> None:
         """Register Use and Make parquets into the warehouse; drop legacy manifest."""
         make_path = cleaned_path.parent / cleaned_path.name.replace("use_", "make_")
         warehouse.register_table_from_parquet(
@@ -191,13 +193,13 @@ def _industries_and_commodities_from_make(
         header_row = df.row(4)
         for v in header_row[2:]:
             if _is_iocode(v):
-                commodities.add(v.strip())  # type: ignore[union-attr]
+                commodities.add(v.strip())
         # Rows 7+ (0-indexed 6+): col 1 is the industry IOCode for that row.
         # Pattern-filter to skip footnote-text rows ("Note. ...", "1. Consists ...").
         for ridx in range(6, df.height):
             v = df.row(ridx)[0]
             if _is_iocode(v):
-                industries.add(v.strip())  # type: ignore[union-attr]
+                industries.add(v.strip())
     return sorted(industries), sorted(commodities)
 
 
@@ -224,7 +226,7 @@ def _parse_make_year(
         ind_raw = row[0]
         if not _is_iocode(ind_raw):
             continue
-        industry_code = ind_raw.strip()  # type: ignore[union-attr]
+        industry_code = ind_raw.strip()
         for cidx, comm_code in enumerate(commodity_codes):
             if not comm_code:
                 continue

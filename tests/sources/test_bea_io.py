@@ -4,14 +4,13 @@ from __future__ import annotations
 
 import io
 import zipfile
+from datetime import UTC
 from pathlib import Path
 from typing import Any
 
-import openpyxl
 import polars as pl
 import pytest
 from openpyxl.workbook import Workbook
-
 
 # ---- fixture helper ----
 
@@ -147,8 +146,8 @@ def test_industries_and_commodities_from_make(tmp_path: Path) -> None:
 
 
 def test_parse_make_year(tmp_path: Path) -> None:
-    """Make is rows=industries × cols=commodities; output is long-form."""
-    from datetime import datetime, timezone
+    """Make is rows=industries x cols=commodities; output is long-form."""
+    from datetime import datetime
 
     from eia.sources.bea_io import _extract_make_to_temp, _parse_make_year
 
@@ -160,11 +159,11 @@ def test_parse_make_year(tmp_path: Path) -> None:
         make_value=7.0,
     )
     make_path = _extract_make_to_temp(zip_path, tmp_path / "_make.xlsx")
-    fetched_at = datetime(2026, 5, 9, tzinfo=timezone.utc)
+    fetched_at = datetime(2026, 5, 9, tzinfo=UTC)
 
     df = _parse_make_year(make_path, year=2023, fetched_at=fetched_at)
 
-    # 3 industries × 4 commodities = 12 rows.
+    # 3 industries x 4 commodities = 12 rows.
     assert df.height == 12
     assert df.columns == [
         "table_year",
@@ -182,7 +181,7 @@ def test_parse_make_year(tmp_path: Path) -> None:
 
 def test_parse_use_year_filters_final_demand_columns(tmp_path: Path) -> None:
     """A column code not in the industries set (final-demand) is dropped from output."""
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     from eia.sources.bea_io import _extract_use_to_temp, _parse_use_year
 
@@ -194,7 +193,7 @@ def test_parse_use_year_filters_final_demand_columns(tmp_path: Path) -> None:
         use_extra_final_demand=["F010"],   # PCE — should be filtered out
     )
     use_path = _extract_use_to_temp(zip_path, tmp_path / "_use.xlsx")
-    fetched_at = datetime(2026, 5, 9, tzinfo=timezone.utc)
+    fetched_at = datetime(2026, 5, 9, tzinfo=UTC)
 
     df = _parse_use_year(
         use_path,
@@ -204,14 +203,14 @@ def test_parse_use_year_filters_final_demand_columns(tmp_path: Path) -> None:
         fetched_at=fetched_at,
     )
 
-    # 4 commodities × 3 industries = 12 rows; F010 column is dropped.
+    # 4 commodities x 3 industries = 12 rows; F010 column is dropped.
     assert df.height == 12
     assert "F010" not in df["industry_code"].unique().to_list()
 
 
 def test_parse_use_year_filters_value_added_rows(tmp_path: Path) -> None:
     """A row code not in the commodities set (value-added) is dropped from output."""
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     from eia.sources.bea_io import _extract_use_to_temp, _parse_use_year
 
@@ -223,7 +222,7 @@ def test_parse_use_year_filters_value_added_rows(tmp_path: Path) -> None:
         use_extra_value_added=["V001"],   # compensation of employees — filtered out
     )
     use_path = _extract_use_to_temp(zip_path, tmp_path / "_use.xlsx")
-    fetched_at = datetime(2026, 5, 9, tzinfo=timezone.utc)
+    fetched_at = datetime(2026, 5, 9, tzinfo=UTC)
 
     df = _parse_use_year(
         use_path,
@@ -233,14 +232,14 @@ def test_parse_use_year_filters_value_added_rows(tmp_path: Path) -> None:
         fetched_at=fetched_at,
     )
 
-    # 4 commodities × 3 industries = 12 rows; V001 row is dropped.
+    # 4 commodities x 3 industries = 12 rows; V001 row is dropped.
     assert df.height == 12
     assert "V001" not in df["commodity_code"].unique().to_list()
 
 
 def test_parse_use_year_blank_cell_becomes_null(tmp_path: Path) -> None:
     """A blank Use cell maps to a null value_millions in the long-form output."""
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     from eia.sources.bea_io import _extract_use_to_temp, _parse_use_year
 
@@ -252,7 +251,7 @@ def test_parse_use_year_blank_cell_becomes_null(tmp_path: Path) -> None:
         blank_use_cell=("C2", "I2"),
     )
     use_path = _extract_use_to_temp(zip_path, tmp_path / "_use.xlsx")
-    fetched_at = datetime(2026, 5, 9, tzinfo=timezone.utc)
+    fetched_at = datetime(2026, 5, 9, tzinfo=UTC)
 
     df = _parse_use_year(
         use_path,
@@ -294,14 +293,14 @@ def test_to_cleaned_writes_use_and_make_parquets(
     assert make_path.exists()
 
     use_df = pl.read_parquet(use_path)
-    # 2 years × 4 commodities × 3 industries = 24 rows (FD col + VA row dropped).
+    # 2 years x 4 commodities x 3 industries = 24 rows (FD col + VA row dropped).
     assert use_df.height == 24
     assert sorted(use_df["table_year"].unique().to_list()) == [2022, 2023]
     assert sorted(use_df["industry_code"].unique().to_list()) == ["I1", "I2", "I3"]
     assert sorted(use_df["commodity_code"].unique().to_list()) == ["C1", "C2", "C3", "C4"]
 
     make_df = pl.read_parquet(make_path)
-    # 2 years × 3 industries × 4 commodities = 24 rows.
+    # 2 years x 3 industries x 4 commodities = 24 rows.
     assert make_df.height == 24
 
 
@@ -345,8 +344,8 @@ def test_load_drops_manifest_and_populates_use_and_make(
 
     n_use = wh.query("SELECT COUNT(*) AS n FROM bea_io_use")["n"][0]
     n_make = wh.query("SELECT COUNT(*) AS n FROM bea_io_make")["n"][0]
-    assert n_use == 12  # 1 year × 4 commodities × 3 industries
-    assert n_make == 12  # 1 year × 3 industries × 4 commodities
+    assert n_use == 12  # 1 year x 4 commodities x 3 industries
+    assert n_make == 12  # 1 year x 3 industries x 4 commodities
 
 
 def test_make_drops_non_iocode_rows(tmp_path: Path) -> None:
@@ -357,7 +356,7 @@ def test_make_drops_non_iocode_rows(tmp_path: Path) -> None:
     total due to rounding."). Without filtering, these get treated as
     industries — observed in real 2023 BEA data.
     """
-    from datetime import datetime, timezone
+    from datetime import datetime
 
     from eia.sources.bea_io import (
         _extract_make_to_temp,
@@ -377,13 +376,13 @@ def test_make_drops_non_iocode_rows(tmp_path: Path) -> None:
     )
     make_path = _extract_make_to_temp(zip_path, tmp_path / "_make.xlsx")
 
-    industries, commodities = _industries_and_commodities_from_make(make_path)
+    industries, _ = _industries_and_commodities_from_make(make_path)
     # Footnote-text rows must NOT appear in the canonical industries set.
     assert industries == ["I1", "I2", "I3"]
 
     df = _parse_make_year(
-        make_path, year=2023, fetched_at=datetime(2026, 5, 9, tzinfo=timezone.utc)
+        make_path, year=2023, fetched_at=datetime(2026, 5, 9, tzinfo=UTC)
     )
-    # 3 industries × 4 commodities = 12 rows; the 2 footnote rows are dropped.
+    # 3 industries x 4 commodities = 12 rows; the 2 footnote rows are dropped.
     assert df.height == 12
     assert sorted(df["industry_code"].unique().to_list()) == ["I1", "I2", "I3"]
