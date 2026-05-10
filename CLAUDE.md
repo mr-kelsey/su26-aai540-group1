@@ -115,6 +115,10 @@ Math invariants are locked by a hand-computable 2-industry reference test case i
 
 [pipelines/phase0_exit_query.py](pipelines/phase0_exit_query.py) is the canonical proof-of-data query: it joins `dim_county` + `census_acs_county` + `bls_qcew` for San Diego (FIPS `06073`), Q3 2023, NAICS 721 (Accommodation). If that cross-source join returns a row, Phase 0 is green. Treat this as the integration test for new federal-side schema changes.
 
+### BEA multiplier validation
+
+[pipelines/validate_bea_multipliers.py](pipelines/validate_bea_multipliers.py) (run via `make validate-bea-multipliers`) cross-checks our computed direct-requirements matrix `B = U / q` against BEA's published `CxI_DR_*_Summary.xlsx` for every year 1997-2023, and runs Leontief sanity checks (`L` diagonal >= 1, max diagonal < 10). Agreement is bounded at ~3.4e-5 across all years; the small systematic gap is the documented publication-date stagger between BEA's CxI_DR (2024-08-28) and the Use/Make tables (2024-09-06) inside `AllTablesIO.zip`. Re-run after any change to `compute_leontief_inverse` or the BEA parser.
+
 ## Conventions
 
 - DataFrames use **Polars**, not pandas. `pl.read_csv`, `pl.read_parquet`, and the warehouse's `query()` all return Polars.
