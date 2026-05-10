@@ -20,7 +20,12 @@ make warehouse-init     # apply SQL migrations to the configured warehouse
 make warehouse-reset    # DESTRUCTIVE: drop & re-create
 make phase0             # full Phase 0 lifecycle: warehouse-init → all federal pulls → exit query
 make pull-<source>      # pull one source (bls-qcew, bea-io, census-acs, tiger, hud, ticketmaster, runsignup, setlistfm)
+make build-events       # UNION staging tables -> events (run after any event pull)
+make phase1-summary     # cross-source demo: events x dim_county x ACS x QCEW
+make validate-bea-multipliers  # cross-check B matrix against BEA's CxI_DR
 ```
+
+Note: Makefile targets use a `UVRUN` macro that prefixes `chflags nohidden` on `.venv/lib/python*/site-packages/*.pth` before each `uv run --no-sync ...`. This works around macOS marking editable-install `.pth` files as hidden under Desktop/iCloud paths, which otherwise breaks `import eia`. If you run python directly (not via make), apply the chflags yourself first.
 
 Direct CLI (the `eia` script is registered via `pyproject.toml`):
 
@@ -60,6 +65,10 @@ load(cleaned, wh)     # default impl replaces target_table from the Parquet
 Each module **must call `register(name, cls)` at import time** (see [bls_qcew.py](src/eia/sources/bls_qcew.py) for the canonical example). The CLI's `_register_pull_commands` in [cli.py](src/eia/cli.py) imports each source module to trigger registration, then dynamically generates a `eia pull <name>` Typer command per registered class. **When you add a new source, you must also add its `importlib.import_module(...)` line to `_register_pull_commands` and a Makefile target.**
 
 Source-level configuration (URLs, default years/quarters, FIPS lists) belongs in [configs/sources.yaml](configs/sources.yaml), loaded by each source's `_load_config()` classmethod. Don't hardcode tunable values in source modules.
+
+### Event-side staging architecture
+
+Federal sources land directly into their `target_table` (e.g. `bls_qcew`). Event-side sources (Ticketmaster, Setlist.fm, RunSignUp, ...) each land into a **staging table** named after the source (`ticketmaster_events`, `setlistfm_setlists`, ...). The canonical [pipelines/build_events.py](pipelines/build_events.py) pipeline (`make build-events`) reads every staging table, maps each onto the unified `events` schema (see [migrations/003_events.sql](migrations/003_events.sql)), UNIONs them, applies `attach_county_fips` and `attach_period_id`, and re-registers `events`. Run after any event-source pull. This isolates per-source schemas, lets multiple sources coexist in `events`, and keeps each pull idempotent without clobbering peers.
 
 ### Warehouse abstraction
 
