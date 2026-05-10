@@ -119,9 +119,11 @@ Math invariants are locked by a hand-computable 2-industry reference test case i
 
 [pipelines/validate_bea_multipliers.py](pipelines/validate_bea_multipliers.py) (run via `make validate-bea-multipliers`) cross-checks our computed direct-requirements matrix `B = U / q` against BEA's published `CxI_DR_*_Summary.xlsx` for every year 1997-2023, and runs Leontief sanity checks (`L` diagonal >= 1, max diagonal < 10). Agreement is bounded at ~3.4e-5 across all years; the small systematic gap is the documented publication-date stagger between BEA's CxI_DR (2024-08-28) and the Use/Make tables (2024-09-06) inside `AllTablesIO.zip`. Re-run after any change to `compute_leontief_inverse` or the BEA parser.
 
-### Events enrichment
+### Events staging + build pipeline
 
-Event-source `to_cleaned()` methods (Ticketmaster, RunSignUp, Setlist.fm) deliberately leave `county_fips`, `period_id`, and `period_month` null — those derive from `venue_lat`/`venue_lon` and `event_date` via transforms that live in `src/eia/transforms/`. [pipelines/enrich_events.py](pipelines/enrich_events.py) (run via `make enrich-events`) reads the events table, applies `attach_county_fips` (TIGER spatial join) and `attach_period_id`, writes `data/cleaned/events_enriched.parquet`, and re-registers the events table. Run AFTER any event pull. Idempotent — old derived columns are dropped and recomputed each time.
+Each event-side source writes to its own staging table (`ticketmaster_events`, `setlistfm_setlists`, ...) — none of them touch `events` directly. The canonical [pipelines/build_events.py](pipelines/build_events.py) (`make build-events`) reads every staging table, maps each onto the unified events schema, UNIONs them, applies `attach_county_fips` (TIGER spatial join) and `attach_period_id`, and re-registers the result as the `events` table. Run after any event-source pull.
+
+[pipelines/enrich_events.py](pipelines/enrich_events.py) (`make enrich-events`) is a narrower in-place re-enrichment that operates on the current `events` table without rebuilding from staging — useful if `dim_county`/TIGER changes but nothing else.
 
 ## Conventions
 

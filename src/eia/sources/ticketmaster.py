@@ -24,7 +24,9 @@ from eia.sources.registry import register
 
 class Ticketmaster(Source):
     name = "ticketmaster"
-    target_table = "events"
+    # Land into a staging table; `build_events.py` UNIONs all event-source
+    # staging tables into the canonical `events` table after enrichment.
+    target_table = "ticketmaster_events"
     raw_format = "json"
 
     BASE_URL = "https://app.ticketmaster.com"
