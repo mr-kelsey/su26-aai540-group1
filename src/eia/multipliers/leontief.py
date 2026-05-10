@@ -71,13 +71,15 @@ def compute_leontief_inverse(
     for row in make_matrix.iter_rows(named=True):
         i = industry_idx[row[industry_col]]
         c = commodity_idx[row[commodity_col]]
-        V[i, c] = float(row[value_col])
+        cell = row[value_col]
+        V[i, c] = 0.0 if cell is None else float(cell)
 
     U = np.zeros((n_com, n_ind))  # noqa: N806
     for row in use_matrix.iter_rows(named=True):
         c = commodity_idx[row[commodity_col]]
         j = industry_idx[row[industry_col]]
-        U[c, j] = float(row[value_col])
+        cell = row[value_col]
+        U[c, j] = 0.0 if cell is None else float(cell)
 
     q = V.sum(axis=1)
     x = V.sum(axis=0)
