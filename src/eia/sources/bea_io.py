@@ -140,3 +140,57 @@ def _industries_and_commodities_from_make(
             if isinstance(v, str) and v.strip():
                 industries.add(v.strip())
     return sorted(industries), sorted(commodities)
+
+
+def _parse_make_year(
+    make_xlsx_path: Path,
+    *,
+    year: int,
+    fetched_at: object,
+) -> pl.DataFrame:
+    """Parse one year sheet of the Make XLSX into long-form rows.
+
+    Make's rows are industries; its columns are commodities. There are no
+    final-demand or value-added rows/columns to filter, so we iterate the
+    full data block and emit long-form (industry, commodity, value) rows.
+    """
+    df = pl.read_excel(make_xlsx_path, sheet_name=str(year), has_header=False)
+    header_row = df.row(4)
+    commodity_codes = [
+        (v.strip() if isinstance(v, str) else None) for v in header_row[2:]
+    ]
+    rows: list[dict[str, object]] = []
+    for ridx in range(6, df.height):
+        row = df.row(ridx)
+        ind_raw = row[0]
+        if not isinstance(ind_raw, str) or not ind_raw.strip():
+            continue
+        industry_code = ind_raw.strip()
+        for cidx, comm_code in enumerate(commodity_codes):
+            if not comm_code:
+                continue
+            cell = row[2 + cidx]
+            value: float | None
+            if cell is None or (isinstance(cell, str) and cell.strip() in ("", "...")):
+                value = None
+            else:
+                value = float(cell)
+            rows.append(
+                {
+                    "table_year": year,
+                    "industry_code": industry_code,
+                    "commodity_code": comm_code,
+                    "value_millions": value,
+                    "fetched_at": fetched_at,
+                }
+            )
+    return pl.DataFrame(
+        rows,
+        schema={
+            "table_year": pl.Int16,
+            "industry_code": pl.Utf8,
+            "commodity_code": pl.Utf8,
+            "value_millions": pl.Float64,
+            "fetched_at": pl.Datetime,
+        },
+    )

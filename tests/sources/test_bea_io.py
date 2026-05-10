@@ -139,3 +139,37 @@ def test_industries_and_commodities_from_make(tmp_path: Path) -> None:
 
     assert industries == ["I1", "I2", "I3"]
     assert commodities == ["C1", "C2", "C3", "C4"]
+
+
+def test_parse_make_year(tmp_path: Path) -> None:
+    """Make is rows=industries × cols=commodities; output is long-form."""
+    from datetime import datetime, timezone
+
+    from eia.sources.bea_io import _extract_make_to_temp, _parse_make_year
+
+    zip_path = _build_synthetic_bea_zip(
+        tmp_path / "AllTablesIO.zip",
+        years=[2023],
+        industries=["I1", "I2", "I3"],
+        commodities=["C1", "C2", "C3", "C4"],
+        make_value=7.0,
+    )
+    make_path = _extract_make_to_temp(zip_path, tmp_path / "_make.xlsx")
+    fetched_at = datetime(2026, 5, 9, tzinfo=timezone.utc)
+
+    df = _parse_make_year(make_path, year=2023, fetched_at=fetched_at)
+
+    # 3 industries × 4 commodities = 12 rows.
+    assert df.height == 12
+    assert df.columns == [
+        "table_year",
+        "industry_code",
+        "commodity_code",
+        "value_millions",
+        "fetched_at",
+    ]
+    assert df["table_year"].unique().to_list() == [2023]
+    assert sorted(df["industry_code"].unique().to_list()) == ["I1", "I2", "I3"]
+    assert sorted(df["commodity_code"].unique().to_list()) == ["C1", "C2", "C3", "C4"]
+    # All values are the synthetic 7.0 we passed.
+    assert df["value_millions"].to_list() == [7.0] * 12
