@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 from pathlib import Path
 from typing import Any
 
@@ -114,15 +115,13 @@ class DuckDBWarehouse:
                 "SELECT count(*) FROM information_schema.tables WHERE table_schema='main'"
             ).fetchone()
             applied: list[str] = []
-            try:
+            with contextlib.suppress(duckdb.CatalogException):
                 applied = [
                     r[0]
                     for r in con.execute(
                         "SELECT name FROM _migrations ORDER BY name"
                     ).fetchall()
                 ]
-            except duckdb.CatalogException:
-                pass
         return {
             "backend": self.backend_name,
             "path": str(self.path),

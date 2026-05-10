@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 import polars as pl
-import yaml  # type: ignore[import-untyped]
+import yaml
 
 from eia.clients import RateLimitedClient
 from eia.sources.base import Source

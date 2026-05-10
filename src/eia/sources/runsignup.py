@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 from datetime import date, timedelta
 from pathlib import Path
+from typing import Any, ClassVar
 
 import polars as pl
 
@@ -28,7 +29,7 @@ class RunSignUp(Source):
 
     # RunSignUp event-type IDs of interest. 1=marathon, 2=half marathon, 3=10k...
     # See: https://runsignup.com/API/race
-    EVENT_TYPE_IDS_OF_INTEREST: list[int] = [1, 2]  # marathons + half marathons
+    EVENT_TYPE_IDS_OF_INTEREST: ClassVar[list[int]] = [1, 2]  # marathons + half marathons
 
     def __init__(
         self,
@@ -91,7 +92,7 @@ class RunSignUp(Source):
         df.write_parquet(out)
         return out
 
-    def _normalize_race(self, race: dict) -> list[dict]:
+    def _normalize_race(self, race: dict[str, Any]) -> list[dict[str, Any]]:
         """A RunSignUp 'race' may contain multiple sub-events (5k, 10k, marathon).
         We emit one row per (race, event-of-interest) combination.
         """

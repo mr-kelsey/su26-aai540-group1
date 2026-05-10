@@ -9,6 +9,7 @@ Subcommands:
 from __future__ import annotations
 
 import importlib
+from collections.abc import Callable
 from typing import Annotated
 
 import typer
@@ -44,9 +45,10 @@ def warehouse_reset(
     confirm: Annotated[bool, typer.Option("--yes", help="Skip confirmation")] = False,
 ) -> None:
     """Drop and re-create the warehouse. DESTRUCTIVE."""
-    if not confirm:
-        if not typer.confirm("This will drop all warehouse data. Continue?"):
-            raise typer.Abort()
+    if not confirm and not typer.confirm(
+        "This will drop all warehouse data. Continue?"
+    ):
+        raise typer.Abort()
     wh = get_warehouse()
     wh.reset()
     wh.migrate()
@@ -82,7 +84,9 @@ def _register_pull_commands() -> None:
 
     for name, source_cls in registry.all_sources().items():
 
-        def _make_pull(_name: str = name, _cls: type = source_cls):
+        def _make_pull(
+            _name: str = name, _cls: type = source_cls
+        ) -> Callable[[], None]:
             def _pull() -> None:
                 """Pull this source through the full fetch -> clean -> load lifecycle."""
                 src = _cls()

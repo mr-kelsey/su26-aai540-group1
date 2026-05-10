@@ -9,9 +9,10 @@ TICKETMASTER_API_KEY set in `.env`.
 
 from __future__ import annotations
 
+from collections.abc import Iterator
 from datetime import date, timedelta
 from pathlib import Path
-from typing import Iterator
+from typing import Any
 
 import polars as pl
 
@@ -69,7 +70,9 @@ class Ticketmaster(Source):
                     self._dump_page(page_data, out_dir)
         return out_dir
 
-    def _iter_pages(self, client: RateLimitedClient, segment: str) -> Iterator[dict]:
+    def _iter_pages(
+        self, client: RateLimitedClient, segment: str
+    ) -> Iterator[dict[str, Any]]:
         page = 0
         while True:
             params = {
@@ -92,7 +95,7 @@ class Ticketmaster(Source):
                 return
 
     @staticmethod
-    def _dump_page(page_data: dict, out_dir: Path) -> None:
+    def _dump_page(page_data: dict[str, Any], out_dir: Path) -> None:
         import json
 
         seg = page_data["segment"]
@@ -113,7 +116,7 @@ class Ticketmaster(Source):
         df.write_parquet(out)
         return out
 
-    def _normalize_event(self, ev: dict) -> dict:
+    def _normalize_event(self, ev: dict[str, Any]) -> dict[str, Any]:
         venue = (ev.get("_embedded", {}).get("venues") or [{}])[0]
         loc = venue.get("location", {})
         seg_name = (

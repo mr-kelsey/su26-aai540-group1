@@ -105,3 +105,12 @@ hud_crosswalk:
   # we mirror the latest snapshot via a community mirror in Phase 0,
   # and switch to the official portal once API key is added.
   default_quarter: "2024Q1"
+
+setlistfm:
+  # Phase 1 D-scope: validate end-to-end on a single state-year before scaling.
+  country_code: "US"
+  default_years: [2022]
+  default_states: ["CA"]
+  requests_per_second: 1.0
+  page_size: 20  # Setlist.fm fixes this; informational only.
+  max_pages_per_partition: 500  # 500 * 20 = 10,000 — the API's hard cap.

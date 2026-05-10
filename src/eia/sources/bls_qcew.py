@@ -22,6 +22,7 @@ from __future__ import annotations
 import io
 import zipfile
 from pathlib import Path
+from typing import Any, ClassVar
 
 import polars as pl
 import yaml
@@ -37,7 +38,7 @@ class BLSQCEW(Source):
     raw_format = "csv"
 
     # County-level QCEW aggregation level codes.
-    COUNTY_AGGLVL_CODES = {70, 71, 72, 73, 74, 75, 76, 77, 78}
+    COUNTY_AGGLVL_CODES: ClassVar[set[int]] = {70, 71, 72, 73, 74, 75, 76, 77, 78}
 
     BY_AREA_BASE = "https://data.bls.gov/cew/data/api"
     SINGLEFILE_BASE = "https://data.bls.gov/cew/data/files"
@@ -60,9 +61,9 @@ class BLSQCEW(Source):
         )
 
     @staticmethod
-    def _load_config() -> dict:
+    def _load_config() -> dict[str, Any]:
         with open("configs/sources.yaml") as f:
-            return yaml.safe_load(f)["bls_qcew"]
+            return yaml.safe_load(f)["bls_qcew"]  # type: ignore[no-any-return]
 
     # ---- fetch ----
 
@@ -141,7 +142,7 @@ class BLSQCEW(Source):
     # ---- helpers ----
 
     @staticmethod
-    def _csv_schema_overrides() -> dict:
+    def _csv_schema_overrides() -> dict[str, Any]:
         return {
             "area_fips": pl.Utf8,
             "industry_code": pl.Utf8,
