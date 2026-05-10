@@ -6,7 +6,7 @@
         pull-all pull-bls-qcew pull-bea-io pull-census-acs pull-tiger pull-hud \
         pull-ticketmaster pull-runsignup pull-setlistfm \
         warehouse-init warehouse-reset \
-        phase0 clean
+        phase0 validate-bea-multipliers clean
 
 help:  ## Show this help.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-22s\033[0m %s\n", $$1, $$2}'
@@ -73,6 +73,13 @@ pull-setlistfm:  ## Pull Setlist.fm setlists for sampled venues.
 # ----- Phase 0 -----
 phase0: warehouse-init pull-bls-qcew pull-bea-io pull-census-acs pull-tiger pull-hud  ## Run all Phase 0 pulls.
 	uv run python pipelines/phase0_exit_query.py
+
+# ----- Validation -----
+validate-bea-multipliers:  ## Cross-check our B matrix against BEA's published CxI_DR.
+	@# Workaround for macOS marking .pth files hidden under iCloud/Desktop paths,
+	@# which causes site.py to skip the editable-install pth and break `import eia`.
+	@chflags nohidden .venv/lib/python*/site-packages/*.pth 2>/dev/null || true
+	uv run --no-sync python pipelines/validate_bea_multipliers.py
 
 # ----- Cleanup -----
 clean:  ## Remove caches.
