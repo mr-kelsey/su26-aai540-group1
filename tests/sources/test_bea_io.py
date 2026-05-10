@@ -262,3 +262,83 @@ def test_parse_use_year_blank_cell_becomes_null(tmp_path: Path) -> None:
     )
     assert target.height == 1
     assert target["value_millions"][0] is None
+
+
+def test_to_cleaned_writes_use_and_make_parquets(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """to_cleaned writes both use_summary.parquet and make_summary.parquet, multi-year stacked."""
+    from eia.sources.bea_io import BEAIO
+
+    monkeypatch.setattr("eia.config.settings.eia_data_root", tmp_path)
+    zip_path = _build_synthetic_bea_zip(
+        tmp_path / "AllTablesIO.zip",
+        years=[2022, 2023],
+        industries=["I1", "I2", "I3"],
+        commodities=["C1", "C2", "C3", "C4"],
+        use_extra_final_demand=["F010"],   # Use also has FD col
+        use_extra_value_added=["V001"],    # Use also has VA row
+    )
+
+    src = BEAIO(year=2023)
+    use_path = src.to_cleaned(zip_path)
+
+    assert use_path.exists()
+    assert use_path.name == "use_summary.parquet"
+    make_path = use_path.parent / "make_summary.parquet"
+    assert make_path.exists()
+
+    use_df = pl.read_parquet(use_path)
+    # 2 years × 4 commodities × 3 industries = 24 rows (FD col + VA row dropped).
+    assert use_df.height == 24
+    assert sorted(use_df["table_year"].unique().to_list()) == [2022, 2023]
+    assert sorted(use_df["industry_code"].unique().to_list()) == ["I1", "I2", "I3"]
+    assert sorted(use_df["commodity_code"].unique().to_list()) == ["C1", "C2", "C3", "C4"]
+
+    make_df = pl.read_parquet(make_path)
+    # 2 years × 3 industries × 4 commodities = 24 rows.
+    assert make_df.height == 24
+
+
+def test_load_drops_manifest_and_populates_use_and_make(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """load() registers bea_io_use and bea_io_make and drops bea_io_manifest."""
+    from eia.sources.bea_io import BEAIO
+    from eia.warehouse.duckdb_impl import DuckDBWarehouse
+
+    monkeypatch.setattr("eia.config.settings.eia_data_root", tmp_path)
+    zip_path = _build_synthetic_bea_zip(
+        tmp_path / "AllTablesIO.zip",
+        years=[2023],
+    )
+
+    # Build a tmp warehouse that already has the bea_io_manifest stub table to
+    # prove load() drops it.
+    wh = DuckDBWarehouse(path=tmp_path / "test.duckdb")
+    wh.execute_sql(
+        "CREATE TABLE bea_io_manifest (filename VARCHAR, table_year SMALLINT, fetched_at TIMESTAMP)"
+    )
+    wh.execute_sql(
+        "CREATE TABLE bea_io_use (table_year SMALLINT, industry_code VARCHAR, commodity_code VARCHAR, "
+        "value_millions DOUBLE, fetched_at TIMESTAMP)"
+    )
+    wh.execute_sql(
+        "CREATE TABLE bea_io_make (table_year SMALLINT, industry_code VARCHAR, commodity_code VARCHAR, "
+        "value_millions DOUBLE, fetched_at TIMESTAMP)"
+    )
+    assert "bea_io_manifest" in wh.list_tables()
+
+    src = BEAIO(year=2023)
+    use_path = src.to_cleaned(zip_path)
+    src.load(use_path, wh)
+
+    tables = wh.list_tables()
+    assert "bea_io_manifest" not in tables
+    assert "bea_io_use" in tables
+    assert "bea_io_make" in tables
+
+    n_use = wh.query("SELECT COUNT(*) AS n FROM bea_io_use")["n"][0]
+    n_make = wh.query("SELECT COUNT(*) AS n FROM bea_io_make")["n"][0]
+    assert n_use == 12  # 1 year × 4 commodities × 3 industries
+    assert n_make == 12  # 1 year × 3 industries × 4 commodities

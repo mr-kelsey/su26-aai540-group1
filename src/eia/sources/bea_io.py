@@ -28,7 +28,7 @@ MAKE_MEMBER = "IOMake_After_Redefinitions_PRO_1997-2023_Summary.xlsx"
 
 class BEAIO(Source):
     name = "bea-io"
-    target_table = "bea_io_use"  # also writes bea_io_make
+    target_table = "bea_io_use"  # primary; also writes bea_io_make
     raw_format = "xlsx"
 
     def __init__(self, year: int | None = None) -> None:
@@ -45,7 +45,6 @@ class BEAIO(Source):
         out = self.raw_dir / "AllTablesIO.zip"
         if out.exists() and out.stat().st_size > 0:
             return out
-        # BEA hosts on apps.bea.gov; we fetch the zipped table bundle directly.
         from urllib.parse import urlparse
 
         parsed = urlparse(self.url)
@@ -57,34 +56,77 @@ class BEAIO(Source):
         return out
 
     def to_cleaned(self, raw_path: Path) -> Path:
-        """Extract Use and Make summary tables and write a single Parquet.
+        """Parse Summary-level Use and Make tables (1997-2023) into long-form parquets.
 
-        BEA ships dozens of XLS files; for Phase 0 we extract just the
-        summary-level Use and Make tables for the configured year. Detail-level
-        ingestion comes in Phase 1.
+        Writes two cleaned outputs:
+            cleaned_dir / "use_summary.parquet"
+            cleaned_dir / "make_summary.parquet"
+
+        Returns the use parquet path (canonical; make path is at the sibling
+        location with name replaced).
         """
-        # Phase 0 stub: list the files in the zip and write a manifest Parquet.
-        # Full XLS-to-Parquet conversion lands in Phase 1 once we settle on
-        # which sheet (industry-by-commodity vs commodity-by-industry) we want.
-        with zipfile.ZipFile(raw_path) as z:
-            members = z.namelist()
-        manifest = pl.DataFrame(
-            {
-                "filename": members,
-                "table_year": [self.year] * len(members),
-                "fetched_at": [self.now_utc()] * len(members),
-            }
-        )
-        out = self.cleaned_dir / f"manifest_{self.year}.parquet"
-        manifest.write_parquet(out)
-        return out
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_dir = Path(tmp)
+            use_xlsx = _extract_use_to_temp(raw_path, tmp_dir / "_use.xlsx")
+            make_xlsx = _extract_make_to_temp(raw_path, tmp_dir / "_make.xlsx")
+
+            industries_list, commodities_list = _industries_and_commodities_from_make(
+                make_xlsx
+            )
+            industries = set(industries_list)
+            commodities = set(commodities_list)
+            logger.info(
+                "BEA Make: %d industries, %d commodities",
+                len(industries),
+                len(commodities),
+            )
+
+            fetched_at = self.now_utc()
+            use_frames: list[pl.DataFrame] = []
+            make_frames: list[pl.DataFrame] = []
+            for year in _year_sheets(use_xlsx):
+                try:
+                    use_frames.append(
+                        _parse_use_year(
+                            use_xlsx,
+                            year=year,
+                            industries=industries,
+                            commodities=commodities,
+                            fetched_at=fetched_at,
+                        )
+                    )
+                    make_frames.append(
+                        _parse_make_year(
+                            make_xlsx, year=year, fetched_at=fetched_at
+                        )
+                    )
+                except Exception as exc:  # pragma: no cover - operational
+                    logger.error("BEA year %d failed: %s", year, exc)
+
+            use_master = pl.concat(use_frames) if use_frames else pl.DataFrame()
+            make_master = pl.concat(make_frames) if make_frames else pl.DataFrame()
+            logger.info(
+                "BEA Use: %d rows; BEA Make: %d rows",
+                use_master.height,
+                make_master.height,
+            )
+
+            use_out = self.cleaned_dir / "use_summary.parquet"
+            make_out = self.cleaned_dir / "make_summary.parquet"
+            use_master.write_parquet(use_out)
+            make_master.write_parquet(make_out)
+            return use_out
 
     def load(self, cleaned_path: Path, warehouse) -> None:  # type: ignore[override]
-        # The manifest goes into a side table; the actual Use/Make tables get
-        # populated in Phase 1 when we select specific sheets.
+        """Register Use and Make parquets into the warehouse; drop legacy manifest."""
+        make_path = cleaned_path.parent / cleaned_path.name.replace("use_", "make_")
         warehouse.register_table_from_parquet(
-            "bea_io_manifest", cleaned_path, replace=True
+            "bea_io_use", cleaned_path, replace=True
         )
+        warehouse.register_table_from_parquet(
+            "bea_io_make", make_path, replace=True
+        )
+        warehouse.execute_sql("DROP TABLE IF EXISTS bea_io_manifest")
 
 
 register(BEAIO.name, BEAIO)
