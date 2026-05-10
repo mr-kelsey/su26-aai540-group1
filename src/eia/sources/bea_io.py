@@ -8,7 +8,8 @@ Reference: https://www.bea.gov/industry/input-output-accounts-data
 
 from __future__ import annotations
 
-import io
+import logging
+import tempfile
 import zipfile
 from pathlib import Path
 
@@ -18,6 +19,11 @@ import yaml
 from eia.clients import RateLimitedClient
 from eia.sources.base import Source
 from eia.sources.registry import register
+
+logger = logging.getLogger(__name__)
+
+USE_MEMBER = "IOUse_After_Redefinitions_PRO_1997-2023_Summary.xlsx"
+MAKE_MEMBER = "IOMake_After_Redefinitions_PRO_1997-2023_Summary.xlsx"
 
 
 class BEAIO(Source):
@@ -82,3 +88,55 @@ class BEAIO(Source):
 
 
 register(BEAIO.name, BEAIO)
+
+
+def _extract_member_to_temp(zip_path: Path, member: str, out_path: Path) -> Path:
+    """Extract a single zip member to `out_path` so fastexcel can read it from a path."""
+    with zipfile.ZipFile(zip_path) as zf:
+        out_path.write_bytes(zf.read(member))
+    return out_path
+
+
+def _extract_make_to_temp(zip_path: Path, out_path: Path) -> Path:
+    """Convenience wrapper for the Make XLSX."""
+    return _extract_member_to_temp(zip_path, MAKE_MEMBER, out_path)
+
+
+def _extract_use_to_temp(zip_path: Path, out_path: Path) -> Path:
+    """Convenience wrapper for the Use XLSX."""
+    return _extract_member_to_temp(zip_path, USE_MEMBER, out_path)
+
+
+def _year_sheets(xlsx_path: Path) -> list[int]:
+    """Sheet names that look like 4-digit years, sorted ascending."""
+    import fastexcel
+
+    reader = fastexcel.read_excel(str(xlsx_path))
+    years: list[int] = []
+    for name in reader.sheet_names:
+        if name.isdigit() and len(name) == 4:
+            years.append(int(name))
+    return sorted(years)
+
+
+def _industries_and_commodities_from_make(
+    make_xlsx_path: Path,
+) -> tuple[list[str], list[str]]:
+    """Read all year sheets in Make; union the row IOCodes (industries) and the
+    column IOCodes (commodities). Return sorted lists for deterministic output.
+    """
+    industries: set[str] = set()
+    commodities: set[str] = set()
+    for year in _year_sheets(make_xlsx_path):
+        df = pl.read_excel(make_xlsx_path, sheet_name=str(year), has_header=False)
+        # Row 5 (0-indexed 4): cols 3+ are commodity codes (Make's column header).
+        header_row = df.row(4)
+        for v in header_row[2:]:
+            if isinstance(v, str) and v.strip():
+                commodities.add(v.strip())
+        # Rows 7+ (0-indexed 6+): col 1 is the industry IOCode for that row.
+        for ridx in range(6, df.height):
+            v = df.row(ridx)[0]
+            if isinstance(v, str) and v.strip():
+                industries.add(v.strip())
+    return sorted(industries), sorted(commodities)
