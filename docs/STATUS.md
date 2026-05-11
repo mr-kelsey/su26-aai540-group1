@@ -18,7 +18,9 @@ Run `make warehouse-health` to get the current numbers. Latest snapshot:
 | `ticketmaster_events` | 200 | Last 30 days of Music + Sports events (forward-looking only) |
 | `setlistfm_setlists` | 49,411 | 2022 US concerts across 14 states; **pull crashed on HTTP 429** at IL — resumable, see below |
 | `events` | 49,610 | Unified events (`make build-events` to rebuild) |
-| `cdtfa_taxable_sales` | 30,624 | California county × quarter × business-type taxable sales 2015 Q1 - 2025 Q4 — **the model's Y target for CA events** |
+| `cdtfa_taxable_sales` | 30,624 | California county × quarter × business-type taxable sales 2015 Q1 - 2025 Q4 |
+| `census_state_tax_collections` | 14,217 | **Universal Y floor** — all 50 states + DC × year × tax category, 2016-2024 (Census Bureau STC) |
+| `tx_comptroller_county_allocations` | 19,944 | Texas counties × month, local sales tax allocations 2013-2026 (proxy for county sales activity; only counties that adopted a county sales tax) |
 
 ## Pipelines (run via `make <target>`)
 
