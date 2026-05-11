@@ -123,3 +123,7 @@ setlistfm:
   requests_per_second: 1.0
   page_size: 20  # Setlist.fm fixes this; informational only.
   max_pages_per_partition: 500  # 500 * 20 = 10,000 — the API's hard cap.
+  # cap_bust: if true, saturated year-level partitions (>= 10K setlists) fall
+  # back to per-day fan-out (365 queries/state-year). Use for full historical
+  # pulls — ~6x more requests but 3-5x more data for big states (CA/NY/TX/etc).
+  cap_bust: false
