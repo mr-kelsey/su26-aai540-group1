@@ -7,7 +7,7 @@
         pull-ticketmaster pull-runsignup pull-setlistfm \
         warehouse-init warehouse-reset \
         phase0 validate-bea-multipliers enrich-events build-events \
-        phase1-summary clean
+        phase1-summary warehouse-health clean
 
 # UVRUN: invocation prefix for all python/eia commands.
 # - chflags nohidden: macOS+iCloud quirk under Desktop paths marks editable-install
@@ -94,6 +94,9 @@ build-events:  ## UNION all event-source staging tables -> events (canonical pip
 
 phase1-summary:  ## Cross-source summary: events x dim_county x ACS x QCEW.
 	$(UVRUN) python pipelines/phase1_summary.py
+
+warehouse-health:  ## List all warehouse tables with row counts + freshness.
+	$(UVRUN) python pipelines/warehouse_health.py
 
 # ----- Cleanup -----
 clean:  ## Remove caches.
