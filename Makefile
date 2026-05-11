@@ -8,7 +8,7 @@
         pull-census-state-tax pull-tx-comptroller \
         warehouse-init warehouse-reset \
         phase0 validate-bea-multipliers enrich-events build-events \
-        phase1-summary warehouse-health clean
+        phase1-summary warehouse-health notebook clean
 
 # UVRUN: invocation prefix for all python/eia commands.
 # - chflags nohidden: macOS+iCloud quirk under Desktop paths marks editable-install
@@ -107,6 +107,9 @@ phase1-summary:  ## Cross-source summary: events x dim_county x ACS x QCEW.
 
 warehouse-health:  ## List all warehouse tables with row counts + freshness.
 	$(UVRUN) python pipelines/warehouse_health.py
+
+notebook:  ## Open the warehouse-explorer notebook in JupyterLab.
+	$(UVRUN) jupyter lab notebooks/explore.ipynb
 
 # ----- Cleanup -----
 clean:  ## Remove caches.
