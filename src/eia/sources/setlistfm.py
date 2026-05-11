@@ -288,6 +288,9 @@ class SetlistFM(Source):
         Walks both layouts:
           - year-level: <PARTITION>/page_NNNN.json
           - day-level (cap-busted): <PARTITION>/day_YYYY-MM-DD/page_NNNN.json
+
+        Corrupted JSON files (e.g., partial writes from a crashed pull) are
+        logged as WARNING and skipped; the rest of the data is still loaded.
         """
         rows: list[dict[str, Any]] = []
         for partition_dir in sorted(raw_path.iterdir()):
@@ -295,21 +298,13 @@ class SetlistFM(Source):
                 continue
             # Year-level page files directly in the partition dir.
             for page_file in sorted(partition_dir.glob("page_*.json")):
-                data = json.loads(page_file.read_text())
-                for sl in data.get("setlist", []):
-                    row = self._parse_setlist(sl)
-                    if row is not None:
-                        rows.append(row)
+                self._parse_page_into(page_file, rows)
             # Day-level page files in day_YYYY-MM-DD subdirs (cap-busting).
             for day_dir in sorted(partition_dir.glob("day_*")):
                 if not day_dir.is_dir():
                     continue
                 for page_file in sorted(day_dir.glob("page_*.json")):
-                    data = json.loads(page_file.read_text())
-                    for sl in data.get("setlist", []):
-                        row = self._parse_setlist(sl)
-                        if row is not None:
-                            rows.append(row)
+                    self._parse_page_into(page_file, rows)
 
         df = pl.DataFrame(
             rows,
@@ -341,6 +336,21 @@ class SetlistFM(Source):
         df.write_parquet(out)
         logger.info("Setlist.fm to_cleaned: %d setlists written to %s", df.height, out)
         return out
+
+    def _parse_page_into(self, page_file: Path, rows: list[dict[str, Any]]) -> None:
+        """Read one page JSON file and append parsed setlist rows to `rows`.
+
+        Logs a WARNING and continues if the file is unreadable or malformed.
+        """
+        try:
+            data = json.loads(page_file.read_text())
+        except (OSError, json.JSONDecodeError) as exc:
+            logger.warning("Setlist.fm to_cleaned: skipping bad page file %s: %s", page_file, exc)
+            return
+        for sl in data.get("setlist", []):
+            row = self._parse_setlist(sl)
+            if row is not None:
+                rows.append(row)
 
     # ---- parsing helper ----
 
