@@ -202,7 +202,7 @@ def test_fetch_partition_caps_at_max_pages(tmp_path, monkeypatch) -> None:
 
 
 def test_fetch_partition_empty_partition(tmp_path, monkeypatch) -> None:
-    """When total == 0, write zero files and return 0."""
+    """When total == 0, write page_0001.json (for resume short-circuit) and return 0."""
     monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
     src = SetlistFM(country_code="US", years=[2022], state_codes=["WY"])
 
@@ -215,7 +215,61 @@ def test_fetch_partition_empty_partition(tmp_path, monkeypatch) -> None:
         n_pages = src._fetch_partition(None, "US", "WY", 2022, out_dir)
 
     assert n_pages == 0
-    assert list(out_dir.glob("page_*.json")) == []
+    # A single empty page_0001 is persisted so re-runs don't re-fetch.
+    written = list(out_dir.glob("page_*.json"))
+    assert len(written) == 1
+
+
+def test_fetch_partition_resumes_from_partial(tmp_path, monkeypatch) -> None:
+    """If partial page files exist, resume from the first missing page."""
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
+    src = SetlistFM(country_code="US", years=[2022], state_codes=["CA"], max_pages=10)
+
+    out_dir = tmp_path / "raw" / "setlistfm" / "US_CA_2022"
+    out_dir.mkdir(parents=True)
+    # Pre-seed with pages 1-3 of an 8-page partition (total=160)
+    for p in range(1, 4):
+        (out_dir / f"page_{p:04d}.json").write_text(json.dumps(_fake_response(160, p)))
+
+    pages_requested: list[int] = []
+
+    def fake_fetch_page(self, client, country, state, year, page):
+        pages_requested.append(page)
+        return _fake_response(160, page)
+
+    with patch.object(SetlistFM, "_fetch_page", new=fake_fetch_page):
+        n_pages = src._fetch_partition(None, "US", "CA", 2022, out_dir)
+
+    # 160 setlists / 20 per page = 8 expected pages. Pre-seeded 3, fetch 4..8 = 5 calls.
+    assert pages_requested == [4, 5, 6, 7, 8]
+    assert n_pages == 8
+    assert sorted(p.name for p in out_dir.glob("page_*.json")) == [
+        f"page_{p:04d}.json" for p in range(1, 9)
+    ]
+
+
+def test_fetch_partition_skips_when_complete(tmp_path, monkeypatch) -> None:
+    """If all expected pages already exist, make zero API calls."""
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
+    src = SetlistFM(country_code="US", years=[2022], state_codes=["CA"], max_pages=10)
+
+    out_dir = tmp_path / "raw" / "setlistfm" / "US_CA_2022"
+    out_dir.mkdir(parents=True)
+    # Pre-seed all 5 pages of a total=100 partition
+    for p in range(1, 6):
+        (out_dir / f"page_{p:04d}.json").write_text(json.dumps(_fake_response(100, p)))
+
+    pages_requested: list[int] = []
+
+    def fake_fetch_page(self, client, country, state, year, page):
+        pages_requested.append(page)
+        raise AssertionError("should not be called when partition is complete")
+
+    with patch.object(SetlistFM, "_fetch_page", new=fake_fetch_page):
+        n_pages = src._fetch_partition(None, "US", "CA", 2022, out_dir)
+
+    assert pages_requested == []
+    assert n_pages == 5
 
 
 # ---- to_cleaned tests ----

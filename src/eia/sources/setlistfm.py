@@ -81,16 +81,16 @@ class SetlistFM(Source):
         Returns the raw_dir path; per-partition output lives in subdirs named
         `<country>_<state>_<year>/page_NNNN.json`.
 
-        Resumable: if a partition_dir already contains page files, the
-        partition is skipped (assumed previously completed). This is a coarse
-        check — partial pulls aren't repaired. Delete the partition dir to
-        force a refetch.
+        Resumable at the page level: `_fetch_partition` inspects existing
+        pages, infers the total from page_0001, and resumes from the first
+        missing page. Fully-completed partitions cost zero API calls on a
+        re-run. Use this to drip a large pull across multiple days when the
+        per-day API quota blocks a single-session sweep.
         """
         self._check_key()
         out_root = self.raw_dir
         out_root.mkdir(parents=True, exist_ok=True)
         total_pages = 0
-        skipped = 0
         with RateLimitedClient(
             self.BASE_URL,
             requests_per_second=self.requests_per_second,
@@ -99,20 +99,11 @@ class SetlistFM(Source):
             for year in self.years:
                 for state in self.state_codes:
                     partition_dir = out_root / f"{self.country_code}_{state}_{year}"
-                    if partition_dir.exists() and any(
-                        partition_dir.glob("page_*.json")
-                    ):
-                        skipped += 1
-                        continue
                     pages = self._fetch_partition(
                         client, self.country_code, state, year, partition_dir
                     )
                     total_pages += pages
-        logger.info(
-            "Setlist.fm fetch complete: %d pages this run, %d partitions skipped",
-            total_pages,
-            skipped,
-        )
+        logger.info("Setlist.fm fetch complete: %d pages this run", total_pages)
         return out_root
 
     def _fetch_page(
@@ -152,20 +143,93 @@ class SetlistFM(Source):
     ) -> int:
         """Paginate one (country, state, year) partition; write page files.
 
+        Resumable: if `out_dir` already contains page files, read page_0001
+        to recover `total`, compute expected page count, and fetch only the
+        missing pages. Already-complete partitions cost zero API calls.
+
         If the partition saturates the 10K cap and `cap_bust=True`, falls
         back to per-day fan-out (one query per day of the year). Otherwise
         logs a WARNING and pulls only the first `max_pages_per_partition`
         pages.
         """
         out_dir.mkdir(parents=True, exist_ok=True)
+        existing_pages = sorted(out_dir.glob("page_*.json"))
+
+        max_pages = self.max_pages_per_partition
+
+        if existing_pages:
+            # Resume mode: avoid a fresh API call by reading total from page_0001
+            try:
+                first_text = (out_dir / "page_0001.json").read_text()
+                first = json.loads(first_text)
+            except (OSError, json.JSONDecodeError) as exc:
+                logger.warning(
+                    "Setlist.fm %s %s %d: bad page_0001 (%s); restarting partition",
+                    country,
+                    state,
+                    year,
+                    exc,
+                )
+                existing_pages = []
+                first = None
+            else:
+                total = int(first.get("total", 0))
+                if total == 0:
+                    logger.info("Setlist.fm %s %s %d: cached empty partition", country, state, year)
+                    return 0
+                n_expected = min(max_pages, (total + self.PAGE_SIZE - 1) // self.PAGE_SIZE)
+                n_have = len(existing_pages)
+                if n_have >= n_expected:
+                    logger.info(
+                        "Setlist.fm %s %s %d: partition already complete (%d/%d pages)",
+                        country,
+                        state,
+                        year,
+                        n_have,
+                        n_expected,
+                    )
+                    return n_have
+                # Partial — resume from the first missing page number. We don't
+                # try to repair non-contiguous gaps; resume from n_have+1.
+                start_page = n_have + 1
+                logger.info(
+                    "Setlist.fm %s %s %d: resuming from page %d (have %d, need %d)",
+                    country,
+                    state,
+                    year,
+                    start_page,
+                    n_have,
+                    n_expected,
+                )
+                saturated = total > max_pages * self.PAGE_SIZE
+                if saturated and self.cap_bust:
+                    # Resume into day-mode is complex; treat the year-level
+                    # data we have as 'done enough', then run day-mode
+                    # additively. Day mode independently resumes per day.
+                    return self._fetch_year_by_day(client, country, state, year, out_dir) + n_have
+                for page in range(start_page, n_expected + 1):
+                    data = self._fetch_page(client, country, state, year, page)  # type: ignore[arg-type]
+                    (out_dir / f"page_{page:04d}.json").write_text(json.dumps(data))
+                logger.info(
+                    "Setlist.fm %s %s %d: completed (was %d pages, added %d)",
+                    country,
+                    state,
+                    year,
+                    n_have,
+                    n_expected - n_have,
+                )
+                return n_expected
+
+        # Cold start
         page = 1
         first = self._fetch_page(client, country, state, year, page)  # type: ignore[arg-type]
         total = int(first.get("total", 0))
         if total == 0:
             logger.info("Setlist.fm %s %s %d: empty partition", country, state, year)
+            # Persist an empty page_0001 so next run sees it and skips
+            (out_dir / f"page_{page:04d}.json").write_text(json.dumps(first))
             return 0
 
-        max_pages = self.max_pages_per_partition
         saturated = total > max_pages * self.PAGE_SIZE
 
         if saturated and self.cap_bust:
@@ -176,6 +240,8 @@ class SetlistFM(Source):
                 year,
                 total,
             )
+            # Still persist page_0001 so future runs can detect cap_bust mode
+            (out_dir / f"page_{page:04d}.json").write_text(json.dumps(first))
             return self._fetch_year_by_day(client, country, state, year, out_dir)
 
         n_to_pull = min(
