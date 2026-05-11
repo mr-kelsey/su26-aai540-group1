@@ -281,6 +281,121 @@ def test_to_cleaned_deduplicates_setlist_id(tmp_path, monkeypatch) -> None:
     assert df.height == 39
 
 
+# ---- cap-busting tests ----
+
+
+def test_fetch_partition_cap_busts_when_saturated(tmp_path, monkeypatch) -> None:
+    """Saturated partition + cap_bust=True triggers daily fan-out."""
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
+    src = SetlistFM(
+        country_code="US",
+        years=[2022],
+        state_codes=["CA"],
+        max_pages=2,  # tiny cap to force saturation
+        cap_bust=True,
+    )
+
+    # Year-level page1 says total=50000 (saturated). Day-level pages each
+    # return 0 (synthetic empty days) so the test stays small.
+    year_call_count = 0
+    day_calls: list[str] = []
+
+    def fake_year_page(self, client, country, state, year, page):
+        nonlocal year_call_count
+        year_call_count += 1
+        return _fake_response(50_000, page)
+
+    def fake_day_page(self, client, country, state, date_param, page):
+        day_calls.append(date_param)
+        return _fake_response(0, page)
+
+    out_dir = tmp_path / "raw" / "setlistfm" / "US_CA_2022"
+    with (
+        patch.object(SetlistFM, "_fetch_page", new=fake_year_page),
+        patch.object(SetlistFM, "_fetch_page_day", new=fake_day_page),
+    ):
+        n_pages = src._fetch_partition(None, "US", "CA", 2022, out_dir)
+
+    # The year-level "probe" only fires once before bailing to daily mode.
+    assert year_call_count == 1
+    # Daily fan-out hit each day of 2022.
+    assert len(day_calls) == 365
+    # All synthetic days were empty -> no page files written -> 0 pages returned.
+    assert n_pages == 0
+
+
+def test_fetch_partition_no_cap_bust_when_disabled(tmp_path, monkeypatch) -> None:
+    """Saturated partition + cap_bust=False uses the legacy capped sweep."""
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
+    src = SetlistFM(
+        country_code="US",
+        years=[2022],
+        state_codes=["CA"],
+        max_pages=3,
+        cap_bust=False,
+    )
+
+    def fake_year_page(self, client, country, state, year, page):
+        return _fake_response(50_000, page)
+
+    out_dir = tmp_path / "raw" / "setlistfm" / "US_CA_2022"
+    with patch.object(SetlistFM, "_fetch_page", new=fake_year_page):
+        n_pages = src._fetch_partition(None, "US", "CA", 2022, out_dir)
+
+    # Capped at max_pages=3
+    assert n_pages == 3
+
+
+def test_fetch_day_writes_page_files(tmp_path, monkeypatch) -> None:
+    """_fetch_day writes one file per page when total > 0."""
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
+    src = SetlistFM()
+    day_dir = tmp_path / "day_2022-06-15"
+
+    def fake_day_page(self, client, country, state, date_param, page):
+        return _fake_response(45, page)  # 45 setlists / 20 per page = 3 pages
+
+    with patch.object(SetlistFM, "_fetch_page_day", new=fake_day_page):
+        n = src._fetch_day(None, "US", "CA", "15-06-2022", day_dir)
+
+    assert n == 3
+    assert sorted(p.name for p in day_dir.glob("page_*.json")) == [
+        "page_0001.json",
+        "page_0002.json",
+        "page_0003.json",
+    ]
+
+
+def test_to_cleaned_reads_both_year_and_day_layouts(tmp_path, monkeypatch) -> None:
+    """to_cleaned walks both layouts: page files at partition root AND in day subdirs."""
+    monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
+    monkeypatch.setattr("eia.config.settings.eia_data_root", tmp_path)
+    src = SetlistFM()
+    raw_root = tmp_path / "raw" / "setlistfm"
+    partition = raw_root / "US_CA_2022"
+    partition.mkdir(parents=True)
+    # Year-level file with 5 setlists
+    year_page = _fake_response(5, 1)
+    (partition / "page_0001.json").write_text(json.dumps(year_page))
+    # Day-level files with 10 + 8 setlists (different IDs)
+    day1_dir = partition / "day_2022-03-15"
+    day1_dir.mkdir()
+    day1_page = _fake_response(10, 1)
+    for i, sl in enumerate(day1_page["setlist"]):
+        sl["id"] = f"day1_{i}"
+    (day1_dir / "page_0001.json").write_text(json.dumps(day1_page))
+    day2_dir = partition / "day_2022-03-16"
+    day2_dir.mkdir()
+    day2_page = _fake_response(8, 1)
+    for i, sl in enumerate(day2_page["setlist"]):
+        sl["id"] = f"day2_{i}"
+    (day2_dir / "page_0001.json").write_text(json.dumps(day2_page))
+
+    out_path = src.to_cleaned(raw_root)
+    df = pl.read_parquet(out_path)
+    assert df.height == 5 + 10 + 8  # all three sources visible
+
+
 def test_to_cleaned_skips_unparseable_rows(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr("eia.config.settings.setlistfm_api_key", "test-key", raising=False)
     monkeypatch.setattr("eia.config.settings.eia_data_root", tmp_path)

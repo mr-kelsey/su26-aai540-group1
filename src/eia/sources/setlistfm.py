@@ -14,7 +14,8 @@ from __future__ import annotations
 
 import json
 import logging
-from datetime import datetime
+from datetime import date as date_cls
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -43,6 +44,7 @@ class SetlistFM(Source):
         years: list[int] | None = None,
         state_codes: list[str] | None = None,
         max_pages: int | None = None,
+        cap_bust: bool | None = None,
     ) -> None:
         cfg = self._load_config()
         self.api_key = settings.setlistfm_api_key
@@ -53,6 +55,11 @@ class SetlistFM(Source):
         self.max_pages_per_partition = (
             max_pages if max_pages is not None else cfg["max_pages_per_partition"]
         )
+        # cap_bust=True falls back to per-day fan-out (365 queries/state-year)
+        # whenever the year-level partition saturates the 10K cap. Off by
+        # default; enable for full historical pulls (~6x more requests for
+        # the saturated state-years, which are also the most data-rich).
+        self.cap_bust = bool(cap_bust if cap_bust is not None else cfg.get("cap_bust", False))
 
     @staticmethod
     def _load_config() -> dict[str, Any]:
@@ -130,8 +137,10 @@ class SetlistFM(Source):
     ) -> int:
         """Paginate one (country, state, year) partition; write page files.
 
-        Returns the number of pages written. Logs cap-warnings when the
-        partition's `total` exceeds `max_pages_per_partition * PAGE_SIZE`.
+        If the partition saturates the 10K cap and `cap_bust=True`, falls
+        back to per-day fan-out (one query per day of the year). Otherwise
+        logs a WARNING and pulls only the first `max_pages_per_partition`
+        pages.
         """
         out_dir.mkdir(parents=True, exist_ok=True)
         page = 1
@@ -142,14 +151,27 @@ class SetlistFM(Source):
             return 0
 
         max_pages = self.max_pages_per_partition
+        saturated = total > max_pages * self.PAGE_SIZE
+
+        if saturated and self.cap_bust:
+            logger.info(
+                "Setlist.fm %s %s %d: total %d saturated cap; falling back to daily fan-out",
+                country,
+                state,
+                year,
+                total,
+            )
+            return self._fetch_year_by_day(client, country, state, year, out_dir)
+
         n_to_pull = min(
             max_pages,
             (total + self.PAGE_SIZE - 1) // self.PAGE_SIZE,
         )
-        if total > max_pages * self.PAGE_SIZE:
+        if saturated:
             logger.warning(
                 "Setlist.fm %s %s %d: total %d exceeds cap (%d pages); "
-                "some setlists unreachable in this partition",
+                "some setlists unreachable in this partition "
+                "(set cap_bust=True to subdivide by day)",
                 country,
                 state,
                 year,
@@ -172,20 +194,122 @@ class SetlistFM(Source):
         )
         return n_to_pull
 
+    def _fetch_year_by_day(
+        self,
+        client: RateLimitedClient | None,
+        country: str,
+        state: str,
+        year: int,
+        out_dir: Path,
+    ) -> int:
+        """Iterate each day of `year`, querying with date=DD-MM-YYYY filter.
+
+        Day-level results are written under `out_dir/day_YYYY-MM-DD/page_NNNN.json`.
+        Returns the total number of page files written across all days.
+        """
+        total_pages = 0
+        d = date_cls(year, 1, 1)
+        while d.year == year:
+            day_iso = d.strftime("%Y-%m-%d")
+            date_param = d.strftime("%d-%m-%Y")
+            day_dir = out_dir / f"day_{day_iso}"
+            n = self._fetch_day(client, country, state, date_param, day_dir)
+            total_pages += n
+            d += timedelta(days=1)
+        logger.info(
+            "Setlist.fm %s %s %d: daily fan-out wrote %d pages across 365 days",
+            country,
+            state,
+            year,
+            total_pages,
+        )
+        return total_pages
+
+    def _fetch_day(
+        self,
+        client: RateLimitedClient | None,
+        country: str,
+        state: str,
+        date_param: str,
+        day_dir: Path,
+    ) -> int:
+        """Pull one day-level partition; paginated."""
+        page = 1
+        first = self._fetch_page_day(client, country, state, date_param, page)  # type: ignore[arg-type]
+        total = int(first.get("total", 0))
+        if total == 0:
+            return 0
+        day_dir.mkdir(parents=True, exist_ok=True)
+        n_pages = (total + self.PAGE_SIZE - 1) // self.PAGE_SIZE
+        if n_pages > self.max_pages_per_partition:
+            logger.warning(
+                "Setlist.fm day %s: total %d exceeds even day-level cap; truncating",
+                date_param,
+                total,
+            )
+            n_pages = self.max_pages_per_partition
+        (day_dir / f"page_{page:04d}.json").write_text(json.dumps(first))
+        for page in range(2, n_pages + 1):
+            data = self._fetch_page_day(client, country, state, date_param, page)  # type: ignore[arg-type]
+            (day_dir / f"page_{page:04d}.json").write_text(json.dumps(data))
+        return n_pages
+
+    def _fetch_page_day(
+        self,
+        client: RateLimitedClient,
+        country: str,
+        state: str,
+        date_param: str,
+        page: int,
+    ) -> dict[str, Any]:
+        """Single API call filtered to a specific day (DD-MM-YYYY)."""
+        assert self.api_key is not None
+        params = {
+            "countryCode": country,
+            "stateCode": state,
+            "date": date_param,
+            "p": page,
+        }
+        headers: dict[str, str] = {
+            "Accept": "application/json",
+            "x-api-key": self.api_key,
+        }
+        return client.get_json(  # type: ignore[no-any-return]
+            "/rest/1.0/search/setlists",
+            params=params,
+            headers=headers,
+        )
+
     # ---- clean ----
 
     def to_cleaned(self, raw_path: Path) -> Path:
-        """Read all page JSONs under raw_path, flatten, dedup, write parquet."""
+        """Read all page JSONs under raw_path, flatten, dedup, write parquet.
+
+        Walks both layouts:
+          - year-level: <PARTITION>/page_NNNN.json
+          - day-level (cap-busted): <PARTITION>/day_YYYY-MM-DD/page_NNNN.json
+        """
         rows: list[dict[str, Any]] = []
         for partition_dir in sorted(raw_path.iterdir()):
             if not partition_dir.is_dir():
                 continue
+            # Year-level page files directly in the partition dir.
             for page_file in sorted(partition_dir.glob("page_*.json")):
                 data = json.loads(page_file.read_text())
                 for sl in data.get("setlist", []):
                     row = self._parse_setlist(sl)
                     if row is not None:
                         rows.append(row)
+            # Day-level page files in day_YYYY-MM-DD subdirs (cap-busting).
+            for day_dir in sorted(partition_dir.glob("day_*")):
+                if not day_dir.is_dir():
+                    continue
+                for page_file in sorted(day_dir.glob("page_*.json")):
+                    data = json.loads(page_file.read_text())
+                    for sl in data.get("setlist", []):
+                        row = self._parse_setlist(sl)
+                        if row is not None:
+                            rows.append(row)
 
         df = pl.DataFrame(
             rows,
