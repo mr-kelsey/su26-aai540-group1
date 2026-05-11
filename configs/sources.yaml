@@ -135,3 +135,21 @@ cdtfa:
   dataset_path: "/dataportal/api/odata/Taxable_Sales_Counties"
   top: 100000  # Server returns all ~30K rows in one shot under this $top.
   requests_per_second: 1.0
+
+census_state_tax:
+  # Census Bureau State Government Tax Collections (annual, state-level).
+  # Universal Y-target floor covering all 50 states + DC for 2016-2024.
+  base_url: "https://api.census.gov"
+  dataset_path: "/data/timeseries/govsstatetax"
+  start_year: 2016  # earliest year Census publishes in this dataset
+  end_year: 2024    # latest published; 2025 may not be available yet
+  requests_per_second: 2.0
+
+tx_comptroller:
+  # Texas Comptroller — local sales tax allocations to counties (monthly).
+  # Socrata API at data.texas.gov, 2013-present. Proxy for taxable sales
+  # since TX doesn't publish raw taxable-sales-by-county.
+  base_url: "https://data.texas.gov"
+  dataset_path: "/resource/qsh8-tby8.json"
+  limit_per_page: 50000  # Socrata: paginate if dataset grows beyond
+  requests_per_second: 2.0
