@@ -190,7 +190,7 @@ def test_parse_use_year_filters_final_demand_columns(tmp_path: Path) -> None:
         years=[2023],
         industries=["I1", "I2", "I3"],
         commodities=["C1", "C2", "C3", "C4"],
-        use_extra_final_demand=["F010"],   # PCE — should be filtered out
+        use_extra_final_demand=["F010"],  # PCE — should be filtered out
     )
     use_path = _extract_use_to_temp(zip_path, tmp_path / "_use.xlsx")
     fetched_at = datetime(2026, 5, 9, tzinfo=UTC)
@@ -219,7 +219,7 @@ def test_parse_use_year_filters_value_added_rows(tmp_path: Path) -> None:
         years=[2023],
         industries=["I1", "I2", "I3"],
         commodities=["C1", "C2", "C3", "C4"],
-        use_extra_value_added=["V001"],   # compensation of employees — filtered out
+        use_extra_value_added=["V001"],  # compensation of employees — filtered out
     )
     use_path = _extract_use_to_temp(zip_path, tmp_path / "_use.xlsx")
     fetched_at = datetime(2026, 5, 9, tzinfo=UTC)
@@ -261,9 +261,7 @@ def test_parse_use_year_blank_cell_becomes_null(tmp_path: Path) -> None:
         fetched_at=fetched_at,
     )
 
-    target = df.filter(
-        (pl.col("commodity_code") == "C2") & (pl.col("industry_code") == "I2")
-    )
+    target = df.filter((pl.col("commodity_code") == "C2") & (pl.col("industry_code") == "I2"))
     assert target.height == 1
     assert target["value_millions"][0] is None
 
@@ -280,8 +278,8 @@ def test_to_cleaned_writes_use_and_make_parquets(
         years=[2022, 2023],
         industries=["I1", "I2", "I3"],
         commodities=["C1", "C2", "C3", "C4"],
-        use_extra_final_demand=["F010"],   # Use also has FD col
-        use_extra_value_added=["V001"],    # Use also has VA row
+        use_extra_final_demand=["F010"],  # Use also has FD col
+        use_extra_value_added=["V001"],  # Use also has VA row
     )
 
     src = BEAIO(year=2023)
@@ -380,9 +378,7 @@ def test_make_drops_non_iocode_rows(tmp_path: Path) -> None:
     # Footnote-text rows must NOT appear in the canonical industries set.
     assert industries == ["I1", "I2", "I3"]
 
-    df = _parse_make_year(
-        make_path, year=2023, fetched_at=datetime(2026, 5, 9, tzinfo=UTC)
-    )
+    df = _parse_make_year(make_path, year=2023, fetched_at=datetime(2026, 5, 9, tzinfo=UTC))
     # 3 industries x 4 commodities = 12 rows; the 2 footnote rows are dropped.
     assert df.height == 12
     assert sorted(df["industry_code"].unique().to_list()) == ["I1", "I2", "I3"]

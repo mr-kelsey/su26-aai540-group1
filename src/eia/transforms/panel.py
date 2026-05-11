@@ -35,9 +35,7 @@ def build_county_month_panel(
     deduped.
     """
     if start_year > end_year:
-        raise ValueError(
-            f"start_year ({start_year}) > end_year ({end_year})"
-        )
+        raise ValueError(f"start_year ({start_year}) > end_year ({end_year})")
     if counties[fips_col].null_count() > 0:
         raise ValueError(f"{fips_col} contains null values")
 
@@ -55,9 +53,7 @@ def build_county_month_panel(
         }
     )
     months = months.with_columns(
-        pl.date(pl.col("year"), pl.col("month"), 1)
-        .dt.strftime("%Y-%m")
-        .alias("period_month"),
+        pl.date(pl.col("year"), pl.col("month"), 1).dt.strftime("%Y-%m").alias("period_month"),
         pl.format(
             "{}Q{}",
             pl.col("year"),

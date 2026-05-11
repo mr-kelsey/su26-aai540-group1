@@ -108,8 +108,7 @@ def test_identity_case() -> None:
     L = compute_leontief_inverse(use, make)  # noqa: N806
 
     by_pair = {
-        (r["demand_industry"], r["output_industry"]): r["total_requirement"]
-        for r in L.to_dicts()
+        (r["demand_industry"], r["output_industry"]): r["total_requirement"] for r in L.to_dicts()
     }
     assert abs(by_pair[("I1", "I1")] - 1.0) < 1e-9
     assert abs(by_pair[("I2", "I2")] - 1.0) < 1e-9
@@ -124,9 +123,9 @@ def test_diagonals_are_at_least_one() -> None:
     use, make = _two_industry_inputs()
     L = compute_leontief_inverse(use, make)  # noqa: N806
 
-    diagonal = L.filter(
-        pl.col("output_industry") == pl.col("demand_industry")
-    )["total_requirement"].to_list()
+    diagonal = L.filter(pl.col("output_industry") == pl.col("demand_industry"))[
+        "total_requirement"
+    ].to_list()
 
     for v in diagonal:
         assert v >= 1.0 - 1e-12
@@ -162,9 +161,7 @@ def test_missing_required_column_raises() -> None:
     """If an input is missing a required column, raise ValueError naming it."""
     from eia.multipliers.leontief import compute_leontief_inverse
 
-    use_bad = pl.DataFrame(
-        {"industry_code": ["I1"], "commodity_code": ["A"]}
-    )
+    use_bad = pl.DataFrame({"industry_code": ["I1"], "commodity_code": ["A"]})
     make_ok = pl.DataFrame(
         {"industry_code": ["I1"], "commodity_code": ["A"], "value_millions": [10.0]}
     )
@@ -193,7 +190,8 @@ def test_custom_column_names() -> None:
     )
 
     L = compute_leontief_inverse(  # noqa: N806
-        use, make,
+        use,
+        make,
         industry_col="naics",
         commodity_col="comm",
         value_col="usd",

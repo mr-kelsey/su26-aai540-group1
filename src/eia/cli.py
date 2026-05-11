@@ -31,6 +31,7 @@ console = Console()
 
 # ---- warehouse subcommands ----
 
+
 @warehouse_app.command("init")
 def warehouse_init() -> None:
     """Initialize the warehouse with the schema."""
@@ -45,9 +46,7 @@ def warehouse_reset(
     confirm: Annotated[bool, typer.Option("--yes", help="Skip confirmation")] = False,
 ) -> None:
     """Drop and re-create the warehouse. DESTRUCTIVE."""
-    if not confirm and not typer.confirm(
-        "This will drop all warehouse data. Continue?"
-    ):
+    if not confirm and not typer.confirm("This will drop all warehouse data. Continue?"):
         raise typer.Abort()
     wh = get_warehouse()
     wh.reset()
@@ -70,6 +69,7 @@ def warehouse_info() -> None:
 
 # ---- pull subcommands (one per source, dynamically registered) ----
 
+
 def _register_pull_commands() -> None:
     """Auto-register a `pull` subcommand for every entry in the source registry."""
     # Triggers source modules to register themselves.
@@ -84,9 +84,7 @@ def _register_pull_commands() -> None:
 
     for name, source_cls in registry.all_sources().items():
 
-        def _make_pull(
-            _name: str = name, _cls: type = source_cls
-        ) -> Callable[[], None]:
+        def _make_pull(_name: str = name, _cls: type = source_cls) -> Callable[[], None]:
             def _pull() -> None:
                 """Pull this source through the full fetch -> clean -> load lifecycle."""
                 src = _cls()

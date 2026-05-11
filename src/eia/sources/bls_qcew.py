@@ -57,7 +57,8 @@ class BLSQCEW(Source):
         # Phase 0 default: a small set of counties anchoring the exit query.
         # Phase 1 widens to all counties via mode="singlefile".
         self.county_fips = county_fips or cfg.get(
-            "phase0_counties", ["06073"]  # San Diego
+            "phase0_counties",
+            ["06073"],  # San Diego
         )
 
     @staticmethod
@@ -91,7 +92,9 @@ class BLSQCEW(Source):
         out = self.raw_dir / f"{self.year}_qtrly_singlefile.zip"
         if out.exists() and out.stat().st_size > 0:
             return out
-        with RateLimitedClient(self.SINGLEFILE_BASE, requests_per_second=1.0, timeout_s=600.0) as client:
+        with RateLimitedClient(
+            self.SINGLEFILE_BASE, requests_per_second=1.0, timeout_s=600.0
+        ) as client:
             data = client.get_bytes(f"/{self.year}/csv/{self.year}_qtrly_singlefile.zip")
         out.write_bytes(data)
         return out
@@ -160,9 +163,7 @@ class BLSQCEW(Source):
 
     @classmethod
     def _read_csv(cls, path: Path) -> pl.DataFrame:
-        return pl.read_csv(
-            path, schema_overrides=cls._csv_schema_overrides(), ignore_errors=True
-        )
+        return pl.read_csv(path, schema_overrides=cls._csv_schema_overrides(), ignore_errors=True)
 
     @classmethod
     def _read_singlefile(cls, raw_path: Path) -> pl.DataFrame:

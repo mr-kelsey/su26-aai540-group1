@@ -75,9 +75,7 @@ def test_demand_industry_not_in_L_is_ignored() -> None:  # noqa: N802
     from eia.multipliers.apply import apply_multipliers
 
     L = _two_industry_L()  # noqa: N806
-    demand = pl.DataFrame(
-        {"industry": ["I1", "I3"], "value": [1.0, 999.0]}
-    )
+    demand = pl.DataFrame({"industry": ["I1", "I3"], "value": [1.0, 999.0]})
 
     out = apply_multipliers(L, demand)
 

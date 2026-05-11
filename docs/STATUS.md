@@ -1,0 +1,75 @@
+# Project Status — 2026-05-10
+
+A snapshot of what's in the warehouse and what pipelines exist, as of the
+end of the Setlist.fm scaleup session.
+
+## Data layer
+
+Run `make warehouse-health` to get the current numbers. Latest snapshot:
+
+| Table | Rows | What it is |
+|---|---:|---|
+| `dim_county` | 3,235 | TIGER county shapefile centroids + areas |
+| `census_acs_county` | 3,144 | ACS 5-year (population, income, education) for all states |
+| `bls_qcew` | 104,075,464 | BLS QCEW employment/wages by county/quarter/NAICS, 2015-2023 |
+| `bea_io_use` | 139,941 | BEA Use table (commodity x industry $) 1997-2023 |
+| `bea_io_make` | 139,941 | BEA Make table (industry x commodity $) 1997-2023 |
+| `hud_zip_county` | 6 | ZIP-county crosswalk — **placeholder only**, needs `HUD_API_TOKEN` for real pull |
+| `ticketmaster_events` | 200 | Last 30 days of Music + Sports events (forward-looking only) |
+| `setlistfm_setlists` | _populating_ | 2022 US concerts; pull running for 50 states in background |
+| `events` | 239 | Unified events (`make build-events` to rebuild) |
+
+## Pipelines (run via `make <target>`)
+
+| Target | Purpose |
+|---|---|
+| `phase0` | Apply migrations, pull all federal sources, run exit query |
+| `pull-<source>` | Pull a single source (`bls-qcew`, `bea-io`, `census-acs`, `tiger`, `hud`, `ticketmaster`, `setlistfm`, `runsignup`) |
+| `build-events` | UNION every event-source staging table into the canonical `events` table |
+| `enrich-events` | Re-apply county_fips + period_id to existing events (cheaper than build) |
+| `phase1-summary` | Cross-source demo: events x dim_county x ACS x QCEW |
+| `validate-bea-multipliers` | Confirm our Leontief B-matrix matches BEA's published CxI_DR |
+| `warehouse-health` | One-screen overview of all warehouse tables |
+| `test` / `lint` / `typecheck` | Quality gates (92 tests, 27 source files clean) |
+
+## What was built in this session
+
+- **Setlist.fm source** ([src/eia/sources/setlistfm.py](../src/eia/sources/setlistfm.py)) — was a Phase 0 stub, now pulls real `/rest/1.0/search/setlists` data by (country, state, year) partition with 13 unit tests
+- **Event staging architecture** — every event source writes to its own staging table (`ticketmaster_events`, `setlistfm_setlists`, ...) instead of overwriting `events` directly
+- **`build_events` pipeline** ([pipelines/build_events.py](../pipelines/build_events.py)) — UNIONs staging tables, applies enrichments, re-registers `events`; 8 unit tests
+- **`phase1_summary` pipeline** — cross-source demo (events x dim_county x ACS x QCEW with state-level rollups)
+- **`warehouse_health` pipeline** — quick ops introspection
+- **Lint/mypy cleanup** — `make lint`, `make typecheck`, `make test` all green (92 tests)
+- **Background pull** — 50-state Setlist.fm pull running; expected to finish in 1-2 hours from session end
+
+## Known gaps (autonomous work didn't tackle)
+
+- **Setlist.fm 10K-per-query cap** — for big states (CA/NY/TX/FL/IL/PA the API truncates results at 10,000 setlists. We log a WARNING and capture the most recent 10K. Cap-busting via daily subdivision (~365 day-queries per state-year) is a real follow-up — would 3-5x the data for those states but needs ~30 more min of pull time per saturated state-year.
+- **Venue geocoding fallback** — Setlist.fm doesn't always return lat/lon. Empirically the CA 2022 sample had 100% coverage, but other states may not. A city → county_fips lookup using Census Places data would close this gap.
+- **Ticketmaster historical data** — Discovery API only surfaces the last ~14 months. For training data we need events ≥24 months old; Setlist.fm is the answer for concerts, but RunSignUp / Wikidata for races and major events still need attention.
+- **Wikidata events source** — explored briefly; the API works but data is sparse and inconsistently typed. Would need substantial query design to be productive.
+- **HUD real pull** — needs `HUD_API_TOKEN` (5-min free signup at huduser.gov).
+- **RunSignUp** — needs `RUNSIGNUP_API_KEY` + `RUNSIGNUP_API_SECRET`.
+
+## Recommended next moves when you return
+
+1. **Verify the Setlist.fm pull completed cleanly:**
+   ```bash
+   make warehouse-health        # check setlistfm_setlists row count
+   make build-events            # merge into events
+   make phase1-summary          # see the cross-source demo with much more data
+   ```
+
+2. **Decide on Phase 2:**
+   - **A. Model layer brainstorm** — design the Bayesian regression now that we have data
+   - **B. Cap-busting subdivision** — get the rest of CA/NY/TX/FL/IL/PA
+   - **C. Wikidata properly** — sub-project: identify the right entity types, build a curated set of high-impact events with attendance figures
+   - **D. Get HUD or RunSignUp keys** — unblock the remaining stubbed sources
+
+My recommendation: **A** if partners are available to discuss the model; **B or D** if you want more data first.
+
+## Background pull state at session end
+
+See `tail -f /tmp/setlistfm-pull.log` (mostly silent — output is the files in `data/raw/setlistfm/`).
+
+Check progress: `ls data/raw/setlistfm/ | wc -l` (target: 51, including DC).

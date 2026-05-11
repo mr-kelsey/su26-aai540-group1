@@ -24,7 +24,9 @@ from eia.sources.registry import register
 
 class Ticketmaster(Source):
     name = "ticketmaster"
-    target_table = "events"
+    # Land into a staging table; `build_events.py` UNIONs all event-source
+    # staging tables into the canonical `events` table after enrichment.
+    target_table = "ticketmaster_events"
     raw_format = "json"
 
     BASE_URL = "https://app.ticketmaster.com"
@@ -70,9 +72,7 @@ class Ticketmaster(Source):
                     self._dump_page(page_data, out_dir)
         return out_dir
 
-    def _iter_pages(
-        self, client: RateLimitedClient, segment: str
-    ) -> Iterator[dict[str, Any]]:
+    def _iter_pages(self, client: RateLimitedClient, segment: str) -> Iterator[dict[str, Any]]:
         page = 0
         while True:
             params = {
@@ -119,9 +119,7 @@ class Ticketmaster(Source):
     def _normalize_event(self, ev: dict[str, Any]) -> dict[str, Any]:
         venue = (ev.get("_embedded", {}).get("venues") or [{}])[0]
         loc = venue.get("location", {})
-        seg_name = (
-            (ev.get("classifications") or [{}])[0].get("segment", {}).get("name", "Other")
-        )
+        seg_name = (ev.get("classifications") or [{}])[0].get("segment", {}).get("name", "Other")
         category = {
             "Music": "concert",
             "Sports": "sport",
@@ -142,7 +140,7 @@ class Ticketmaster(Source):
             "venue_lat": float(loc["latitude"]) if loc.get("latitude") else None,
             "venue_lon": float(loc["longitude"]) if loc.get("longitude") else None,
             "county_fips": None,  # derived in a later transform step
-            "period_id": None,    # derived
+            "period_id": None,  # derived
             "expected_attendance": None,  # not provided by TM
             "ticket_min_usd": prices[0].get("min"),
             "ticket_max_usd": prices[0].get("max"),

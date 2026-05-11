@@ -30,9 +30,7 @@ def test_mid_quarter_dates() -> None:
     """Dates inside a quarter still map to that quarter."""
     from eia.transforms.temporal import attach_period_id
 
-    df = pl.DataFrame(
-        {"event_date": [date(2023, 8, 15), date(2023, 12, 31)]}
-    )
+    df = pl.DataFrame({"event_date": [date(2023, 8, 15), date(2023, 12, 31)]})
     out = attach_period_id(df)
     assert out["period_id"].to_list() == ["2023Q3", "2023Q4"]
     assert out["period_month"].to_list() == ["2023-08", "2023-12"]

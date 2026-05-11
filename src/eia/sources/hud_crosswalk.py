@@ -28,18 +28,54 @@ from eia.sources.registry import register
 # Sufficient to demonstrate the join in the Phase 0 exit query.
 _SAN_DIEGO_SAMPLE: list[dict[str, Any]] = [
     # ZIP, county_fips, res_ratio, bus_ratio, oth_ratio, tot_ratio
-    {"zip": "92101", "county_fips": "06073", "res_ratio": 1.0, "bus_ratio": 1.0,
-     "oth_ratio": 1.0, "tot_ratio": 1.0},
-    {"zip": "92103", "county_fips": "06073", "res_ratio": 1.0, "bus_ratio": 1.0,
-     "oth_ratio": 1.0, "tot_ratio": 1.0},
-    {"zip": "92104", "county_fips": "06073", "res_ratio": 1.0, "bus_ratio": 1.0,
-     "oth_ratio": 1.0, "tot_ratio": 1.0},
-    {"zip": "92108", "county_fips": "06073", "res_ratio": 1.0, "bus_ratio": 1.0,
-     "oth_ratio": 1.0, "tot_ratio": 1.0},
-    {"zip": "92110", "county_fips": "06073", "res_ratio": 1.0, "bus_ratio": 1.0,
-     "oth_ratio": 1.0, "tot_ratio": 1.0},
-    {"zip": "92121", "county_fips": "06073", "res_ratio": 1.0, "bus_ratio": 1.0,
-     "oth_ratio": 1.0, "tot_ratio": 1.0},
+    {
+        "zip": "92101",
+        "county_fips": "06073",
+        "res_ratio": 1.0,
+        "bus_ratio": 1.0,
+        "oth_ratio": 1.0,
+        "tot_ratio": 1.0,
+    },
+    {
+        "zip": "92103",
+        "county_fips": "06073",
+        "res_ratio": 1.0,
+        "bus_ratio": 1.0,
+        "oth_ratio": 1.0,
+        "tot_ratio": 1.0,
+    },
+    {
+        "zip": "92104",
+        "county_fips": "06073",
+        "res_ratio": 1.0,
+        "bus_ratio": 1.0,
+        "oth_ratio": 1.0,
+        "tot_ratio": 1.0,
+    },
+    {
+        "zip": "92108",
+        "county_fips": "06073",
+        "res_ratio": 1.0,
+        "bus_ratio": 1.0,
+        "oth_ratio": 1.0,
+        "tot_ratio": 1.0,
+    },
+    {
+        "zip": "92110",
+        "county_fips": "06073",
+        "res_ratio": 1.0,
+        "bus_ratio": 1.0,
+        "oth_ratio": 1.0,
+        "tot_ratio": 1.0,
+    },
+    {
+        "zip": "92121",
+        "county_fips": "06073",
+        "res_ratio": 1.0,
+        "bus_ratio": 1.0,
+        "oth_ratio": 1.0,
+        "tot_ratio": 1.0,
+    },
 ]
 
 
@@ -81,8 +117,13 @@ class HUDCrosswalk(Source):
             pl.lit(self.quarter).alias("quarter"),
             pl.lit(self.now_utc()).alias("fetched_at"),
         ).select(
-            "zip", "county_fips", "quarter",
-            "res_ratio", "bus_ratio", "oth_ratio", "tot_ratio",
+            "zip",
+            "county_fips",
+            "quarter",
+            "res_ratio",
+            "bus_ratio",
+            "oth_ratio",
+            "tot_ratio",
             "fetched_at",
         )
         out = self.cleaned_dir / f"crosswalk_{self.quarter}.parquet"
