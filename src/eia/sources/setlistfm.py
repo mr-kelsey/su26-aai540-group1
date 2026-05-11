@@ -80,11 +80,17 @@ class SetlistFM(Source):
 
         Returns the raw_dir path; per-partition output lives in subdirs named
         `<country>_<state>_<year>/page_NNNN.json`.
+
+        Resumable: if a partition_dir already contains page files, the
+        partition is skipped (assumed previously completed). This is a coarse
+        check — partial pulls aren't repaired. Delete the partition dir to
+        force a refetch.
         """
         self._check_key()
         out_root = self.raw_dir
         out_root.mkdir(parents=True, exist_ok=True)
         total_pages = 0
+        skipped = 0
         with RateLimitedClient(
             self.BASE_URL,
             requests_per_second=self.requests_per_second,
@@ -93,11 +99,20 @@ class SetlistFM(Source):
             for year in self.years:
                 for state in self.state_codes:
                     partition_dir = out_root / f"{self.country_code}_{state}_{year}"
+                    if partition_dir.exists() and any(
+                        partition_dir.glob("page_*.json")
+                    ):
+                        skipped += 1
+                        continue
                     pages = self._fetch_partition(
                         client, self.country_code, state, year, partition_dir
                     )
                     total_pages += pages
-        logger.info("Setlist.fm fetch complete: %d pages total", total_pages)
+        logger.info(
+            "Setlist.fm fetch complete: %d pages this run, %d partitions skipped",
+            total_pages,
+            skipped,
+        )
         return out_root
 
     def _fetch_page(
