@@ -82,6 +82,7 @@ def _register_pull_commands() -> None:
     importlib.import_module("eia.sources.runsignup")
     importlib.import_module("eia.sources.setlistfm")
     importlib.import_module("eia.sources.cdtfa")
+    importlib.import_module("eia.sources.census_state_tax")
 
     for name, source_cls in registry.all_sources().items():
 

@@ -5,6 +5,7 @@
         lint format typecheck test \
         pull-all pull-bls-qcew pull-bea-io pull-census-acs pull-tiger pull-hud \
         pull-ticketmaster pull-runsignup pull-setlistfm pull-cdtfa \
+        pull-census-state-tax \
         warehouse-init warehouse-reset \
         phase0 validate-bea-multipliers enrich-events build-events \
         phase1-summary warehouse-health clean
@@ -69,6 +70,9 @@ pull-hud:  ## Pull HUD ZIP-County crosswalk.
 
 pull-cdtfa:  ## Pull California CDTFA quarterly taxable sales by county/business type.
 	$(UVRUN) eia pull cdtfa-taxable-sales
+
+pull-census-state-tax:  ## Pull Census STC: annual state tax collections all 50 + DC.
+	$(UVRUN) eia pull census-state-tax
 
 # ----- Event-side pulls (require API keys in .env) -----
 pull-ticketmaster:  ## Pull Ticketmaster Discovery events.
