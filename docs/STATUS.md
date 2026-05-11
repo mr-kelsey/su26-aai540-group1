@@ -44,7 +44,7 @@ Run `make warehouse-health` to get the current numbers. Latest snapshot:
 
 ## Known gaps (autonomous work didn't tackle)
 
-- **Setlist.fm 10K-per-query cap** — for big states (CA/NY/TX/FL/IL/PA the API truncates results at 10,000 setlists. We log a WARNING and capture the most recent 10K. Cap-busting via daily subdivision (~365 day-queries per state-year) is a real follow-up — would 3-5x the data for those states but needs ~30 more min of pull time per saturated state-year.
+- **Setlist.fm cap-busting is implemented but off by default.** The currently-running pull captures the first 10K setlists of saturated state-years (CA/NY/TX/FL/IL/PA). To get the full data, re-run with `cap_bust=True` (or flip `cap_bust: true` in [configs/sources.yaml](../configs/sources.yaml)). Cost: ~6x more API calls per saturated state-year (~43 min each at 1 req/sec) but 3-5x more setlists.
 - **Venue geocoding fallback** — Setlist.fm doesn't always return lat/lon. Empirically the CA 2022 sample had 100% coverage, but other states may not. A city → county_fips lookup using Census Places data would close this gap.
 - **Ticketmaster historical data** — Discovery API only surfaces the last ~14 months. For training data we need events ≥24 months old; Setlist.fm is the answer for concerts, but RunSignUp / Wikidata for races and major events still need attention.
 - **Wikidata events source** — explored briefly; the API works but data is sparse and inconsistently typed. Would need substantial query design to be productive.
