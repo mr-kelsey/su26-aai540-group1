@@ -153,7 +153,9 @@ def test_fetch_writes_single_json(tmp_path, monkeypatch) -> None:
         def __exit__(self, *args) -> None:
             return None
 
-        def get_json(self, path: str, params: dict | None = None, headers: dict | None = None) -> dict:
+        def get_json(
+            self, path: str, params: dict | None = None, headers: dict | None = None
+        ) -> dict:
             calls.append(path)
             return _odata_response([_full_row()])
 
@@ -165,7 +167,7 @@ def test_fetch_writes_single_json(tmp_path, monkeypatch) -> None:
     assert calls == ["/dataportal/api/odata/Taxable_Sales_Counties"]
 
 
-def _tmp_warehouse_with_fake_dim_county(tmp_path) -> "DuckDBWarehouse":
+def _tmp_warehouse_with_fake_dim_county(tmp_path):  # type: ignore[no-untyped-def]
     """Build an ISOLATED tmp DuckDB warehouse pre-populated with a fake
     dim_county. Don't touch the real warehouse — that's a foot-gun (we
     discovered the hard way in feature/cdtfa-source)."""
@@ -200,10 +202,18 @@ def test_to_cleaned_writes_parquet_with_fips(tmp_path, monkeypatch) -> None:
 
     assert df.height == 3
     expected_cols = {
-        "table_year", "quarter", "period_id", "county_fips",
-        "cdtfa_county_code", "cdtfa_county_name", "business_group_code",
-        "business_type", "permit_count", "taxable_sales_usd",
-        "disclosure_flag", "fetched_at",
+        "table_year",
+        "quarter",
+        "period_id",
+        "county_fips",
+        "cdtfa_county_code",
+        "cdtfa_county_name",
+        "business_group_code",
+        "business_type",
+        "permit_count",
+        "taxable_sales_usd",
+        "disclosure_flag",
+        "fetched_at",
     }
     assert expected_cols.issubset(set(df.columns))
     alameda = df.filter(pl.col("cdtfa_county_name") == "ALAMEDA")

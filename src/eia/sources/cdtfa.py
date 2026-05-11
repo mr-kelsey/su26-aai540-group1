@@ -104,10 +104,7 @@ class CDTFA(Source):
         """
         ca = dim_county.filter(pl.col("state_fips") == "06").select(
             pl.col("county_fips"),
-            pl.col("county_name")
-            .str.to_uppercase()
-            .str.replace(r" COUNTY$", "")
-            .alias("_norm"),
+            pl.col("county_name").str.to_uppercase().str.replace(r" COUNTY$", "").alias("_norm"),
         )
         return dict(zip(ca["_norm"].to_list(), ca["county_fips"].to_list(), strict=True))
 
