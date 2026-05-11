@@ -12,6 +12,7 @@ Canonical query (from the strategy doc):
 
 from __future__ import annotations
 
+import polars as pl
 from rich.console import Console
 from rich.table import Table
 
@@ -119,7 +120,7 @@ def main() -> None:
     console.rule("[bold green]Phase 0 exit criterion met if the cross-source join returned a row")
 
 
-def _print_table(name: str, df) -> None:
+def _print_table(name: str, df: pl.DataFrame) -> None:
     table = Table(title=name, header_style="bold cyan")
     if df.is_empty():
         table.add_column("(no rows)")

@@ -88,9 +88,7 @@ class BEAIO(Source):
             use_xlsx = _extract_use_to_temp(raw_path, tmp_dir / "_use.xlsx")
             make_xlsx = _extract_make_to_temp(raw_path, tmp_dir / "_make.xlsx")
 
-            industries_list, commodities_list = _industries_and_commodities_from_make(
-                make_xlsx
-            )
+            industries_list, commodities_list = _industries_and_commodities_from_make(make_xlsx)
             industries = set(industries_list)
             commodities = set(commodities_list)
             logger.info(
@@ -114,9 +112,7 @@ class BEAIO(Source):
                         )
                     )
                     make_frames.append(
-                        _parse_make_year(
-                            make_xlsx, year=year, fetched_at=fetched_at
-                        )
+                        _parse_make_year(make_xlsx, year=year, fetched_at=fetched_at)
                     )
                 except Exception as exc:  # pragma: no cover - operational
                     logger.error("BEA year %d failed: %s", year, exc)
@@ -138,12 +134,8 @@ class BEAIO(Source):
     def load(self, cleaned_path: Path, warehouse: Warehouse) -> None:
         """Register Use and Make parquets into the warehouse; drop legacy manifest."""
         make_path = cleaned_path.parent / cleaned_path.name.replace("use_", "make_")
-        warehouse.register_table_from_parquet(
-            "bea_io_use", cleaned_path, replace=True
-        )
-        warehouse.register_table_from_parquet(
-            "bea_io_make", make_path, replace=True
-        )
+        warehouse.register_table_from_parquet("bea_io_use", cleaned_path, replace=True)
+        warehouse.register_table_from_parquet("bea_io_make", make_path, replace=True)
         warehouse.execute_sql("DROP TABLE IF EXISTS bea_io_manifest")
 
 
@@ -217,9 +209,7 @@ def _parse_make_year(
     """
     df = pl.read_excel(make_xlsx_path, sheet_name=str(year), has_header=False)
     header_row = df.row(4)
-    commodity_codes = [
-        (v.strip() if isinstance(v, str) else None) for v in header_row[2:]
-    ]
+    commodity_codes = [(v.strip() if isinstance(v, str) else None) for v in header_row[2:]]
     rows: list[dict[str, object]] = []
     for ridx in range(6, df.height):
         row = df.row(ridx)
@@ -275,9 +265,7 @@ def _parse_use_year(
     """
     df = pl.read_excel(use_xlsx_path, sheet_name=str(year), has_header=False)
     header_row = df.row(4)
-    industry_codes_raw = [
-        (v.strip() if isinstance(v, str) else None) for v in header_row[2:]
-    ]
+    industry_codes_raw = [(v.strip() if isinstance(v, str) else None) for v in header_row[2:]]
     keep_col_indices: list[int] = []
     for cidx, code in enumerate(industry_codes_raw):
         if not code:

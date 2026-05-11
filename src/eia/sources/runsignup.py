@@ -85,9 +85,17 @@ class RunSignUp(Source):
             for wrapper in data.get("races") or []:
                 race = wrapper.get("race", {})
                 rows.extend(self._normalize_race(race))
-        df = pl.DataFrame(rows) if rows else pl.DataFrame(schema={
-            "event_id": pl.Utf8, "source": pl.Utf8, "category": pl.Utf8,
-        })
+        df = (
+            pl.DataFrame(rows)
+            if rows
+            else pl.DataFrame(
+                schema={
+                    "event_id": pl.Utf8,
+                    "source": pl.Utf8,
+                    "category": pl.Utf8,
+                }
+            )
+        )
         out = self.cleaned_dir / f"{raw_path.name}.parquet"
         df.write_parquet(out)
         return out
@@ -108,27 +116,29 @@ class RunSignUp(Source):
             type_id = ev.get("event_type_id")
             if type_id not in self.EVENT_TYPE_IDS_OF_INTEREST:
                 continue
-            out.append({
-                "event_id": f"rsu_{race.get('race_id')}_{ev.get('event_id')}",
-                "source": "runsignup",
-                "category": "marathon" if type_id == 1 else "half_marathon",
-                "event_name": race.get("name"),
-                "event_date": (ev.get("start_time") or "")[:10] or None,
-                "venue_name": race.get("name"),
-                "venue_address": address.get("street"),
-                "venue_city": city,
-                "venue_state": state,
-                "venue_zip": zip_,
-                "venue_lat": float(lat) if lat else None,
-                "venue_lon": float(lon) if lon else None,
-                "county_fips": None,
-                "period_id": None,
-                "expected_attendance": ev.get("max_capacity"),
-                "ticket_min_usd": None,
-                "ticket_max_usd": None,
-                "raw_payload": json.dumps({"race": race, "event": ev}),
-                "fetched_at": self.now_utc(),
-            })
+            out.append(
+                {
+                    "event_id": f"rsu_{race.get('race_id')}_{ev.get('event_id')}",
+                    "source": "runsignup",
+                    "category": "marathon" if type_id == 1 else "half_marathon",
+                    "event_name": race.get("name"),
+                    "event_date": (ev.get("start_time") or "")[:10] or None,
+                    "venue_name": race.get("name"),
+                    "venue_address": address.get("street"),
+                    "venue_city": city,
+                    "venue_state": state,
+                    "venue_zip": zip_,
+                    "venue_lat": float(lat) if lat else None,
+                    "venue_lon": float(lon) if lon else None,
+                    "county_fips": None,
+                    "period_id": None,
+                    "expected_attendance": ev.get("max_capacity"),
+                    "ticket_min_usd": None,
+                    "ticket_max_usd": None,
+                    "raw_payload": json.dumps({"race": race, "event": ev}),
+                    "fetched_at": self.now_utc(),
+                }
+            )
         return out
 
 

@@ -41,9 +41,7 @@ def compute_leontief_inverse(
     for df_name, df in (("use_matrix", use_matrix), ("make_matrix", make_matrix)):
         for col in (industry_col, commodity_col, value_col):
             if col not in df.columns:
-                raise ValueError(
-                    f"{df_name} missing required column {col!r}"
-                )
+                raise ValueError(f"{df_name} missing required column {col!r}")
 
     all_industries = sorted(
         set(use_matrix[industry_col].unique().to_list())

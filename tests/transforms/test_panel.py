@@ -35,15 +35,32 @@ def test_single_county_single_year_yields_12_rows() -> None:
     assert panel["county_fips"].unique().to_list() == ["06073"]
     assert panel["month"].to_list() == list(range(1, 13))
     assert panel["period_month"].to_list() == [
-        "2015-01", "2015-02", "2015-03", "2015-04",
-        "2015-05", "2015-06", "2015-07", "2015-08",
-        "2015-09", "2015-10", "2015-11", "2015-12",
+        "2015-01",
+        "2015-02",
+        "2015-03",
+        "2015-04",
+        "2015-05",
+        "2015-06",
+        "2015-07",
+        "2015-08",
+        "2015-09",
+        "2015-10",
+        "2015-11",
+        "2015-12",
     ]
     assert panel["period_id"].to_list() == [
-        "2015Q1", "2015Q1", "2015Q1",
-        "2015Q2", "2015Q2", "2015Q2",
-        "2015Q3", "2015Q3", "2015Q3",
-        "2015Q4", "2015Q4", "2015Q4",
+        "2015Q1",
+        "2015Q1",
+        "2015Q1",
+        "2015Q2",
+        "2015Q2",
+        "2015Q2",
+        "2015Q3",
+        "2015Q3",
+        "2015Q3",
+        "2015Q4",
+        "2015Q4",
+        "2015Q4",
     ]
 
 
@@ -77,9 +94,7 @@ def test_format_consistency_with_attach_period_id() -> None:
     panel = build_county_month_panel(counties, start_year=2023, end_year=2023)
 
     # Run attach_period_id on the first-of-month dates for the same year.
-    dates_df = pl.DataFrame(
-        {"event_date": [date(2023, m, 1) for m in range(1, 13)]}
-    )
+    dates_df = pl.DataFrame({"event_date": [date(2023, m, 1) for m in range(1, 13)]})
     via_attach = attach_period_id(dates_df)
 
     assert panel["period_month"].to_list() == via_attach["period_month"].to_list()
@@ -123,9 +138,7 @@ def test_custom_fips_col() -> None:
     from eia.transforms.panel import build_county_month_panel
 
     counties = pl.DataFrame({"my_fips": ["06073"]})
-    panel = build_county_month_panel(
-        counties, fips_col="my_fips", start_year=2020, end_year=2020
-    )
+    panel = build_county_month_panel(counties, fips_col="my_fips", start_year=2020, end_year=2020)
 
     assert panel.columns == ["my_fips", "period_month", "period_id", "year", "month"]
     assert panel["my_fips"].to_list() == ["06073"] * 12

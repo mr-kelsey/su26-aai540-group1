@@ -56,9 +56,7 @@ class CensusACS(Source):
                 }
                 if self.api_key:
                     params["key"] = self.api_key
-                data = client.get_json(
-                    f"/{self.end_year}/acs/acs5", params=params
-                )
+                data = client.get_json(f"/{self.end_year}/acs/acs5", params=params)
                 import json
 
                 target.write_text(json.dumps(data))

@@ -18,8 +18,8 @@ from shapely.geometry import box
 @pytest.fixture(autouse=True)
 def fake_counties_geo(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[Path]:
     """Two fake counties:
-        GEOID 00001  bbox lon=[0,2],   lat=[0,2]
-        GEOID 00002  bbox lon=[10,12], lat=[10,12]
+    GEOID 00001  bbox lon=[0,2],   lat=[0,2]
+    GEOID 00002  bbox lon=[10,12], lat=[10,12]
     """
     monkeypatch.setattr("eia.config.settings.eia_data_root", tmp_path)
 

@@ -51,7 +51,14 @@ def test_attach_county_fips_full_matrix(fake_counties_geo: Path) -> None:
 
     df = pl.DataFrame(
         {
-            "venue_name": ["inside-A", "inside-B", "off-county", "null-lat", "sentinel-zero", "out-of-range"],
+            "venue_name": [
+                "inside-A",
+                "inside-B",
+                "off-county",
+                "null-lat",
+                "sentinel-zero",
+                "out-of-range",
+            ],
             "venue_lat": [1.0, 11.0, 5.0, None, 0.0, 91.0],
             "venue_lon": [1.0, 11.0, 5.0, 1.0, 0.0, 1.0],
         }
@@ -65,12 +72,12 @@ def test_attach_county_fips_full_matrix(fake_counties_geo: Path) -> None:
     assert out.columns == [*df.columns, "county_fips"]
 
     fips = out["county_fips"].to_list()
-    assert fips[0] == "00001"   # inside county A
-    assert fips[1] == "00002"   # inside county B
-    assert fips[2] is None      # off-county
-    assert fips[3] is None      # null lat
-    assert fips[4] is None      # (0, 0) sentinel
-    assert fips[5] is None      # lat out of range
+    assert fips[0] == "00001"  # inside county A
+    assert fips[1] == "00002"  # inside county B
+    assert fips[2] is None  # off-county
+    assert fips[3] is None  # null lat
+    assert fips[4] is None  # (0, 0) sentinel
+    assert fips[5] is None  # lat out of range
 
 
 def test_attach_county_fips_rejects_reserved_column(fake_counties_geo: Path) -> None:
@@ -196,9 +203,7 @@ def test_zip_null_fips_filled_from_single_county_zip(
         {"venue_zip": ["92101"], "county_fips": [None]},
         schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
     )
-    hud = pl.DataFrame(
-        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
-    )
+    hud = pl.DataFrame({"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]})
 
     out = attach_county_fips_via_zip(df, hud)
 
@@ -257,9 +262,7 @@ def test_zip_null_zip_stays_null(fake_counties_geo: Path) -> None:
         {"venue_zip": [None], "county_fips": [None]},
         schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
     )
-    hud = pl.DataFrame(
-        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
-    )
+    hud = pl.DataFrame({"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]})
 
     out = attach_county_fips_via_zip(df, hud)
 
@@ -274,9 +277,7 @@ def test_zip_not_in_hud_stays_null(fake_counties_geo: Path) -> None:
         {"venue_zip": ["99999"], "county_fips": [None]},
         schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
     )
-    hud = pl.DataFrame(
-        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
-    )
+    hud = pl.DataFrame({"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]})
 
     out = attach_county_fips_via_zip(df, hud)
 
@@ -291,9 +292,7 @@ def test_zip_empty_input(fake_counties_geo: Path) -> None:
         {"venue_zip": [], "county_fips": []},
         schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
     )
-    hud = pl.DataFrame(
-        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
-    )
+    hud = pl.DataFrame({"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]})
 
     out = attach_county_fips_via_zip(df, hud)
 
@@ -306,9 +305,7 @@ def test_zip_missing_fips_col_raises(fake_counties_geo: Path) -> None:
     from eia.transforms.geo import attach_county_fips_via_zip
 
     df = pl.DataFrame({"venue_zip": ["92101"]})
-    hud = pl.DataFrame(
-        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
-    )
+    hud = pl.DataFrame({"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]})
 
     with pytest.raises(ValueError, match=r"attach_county_fips"):
         attach_county_fips_via_zip(df, hud)
@@ -322,20 +319,14 @@ def test_zip_custom_column_names(fake_counties_geo: Path) -> None:
         {"the_zip": ["92101"], "the_fips": [None]},
         schema={"the_zip": pl.Utf8, "the_fips": pl.Utf8},
     )
-    hud = pl.DataFrame(
-        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
-    )
+    hud = pl.DataFrame({"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]})
 
-    out = attach_county_fips_via_zip(
-        df, hud, zip_col="the_zip", fips_col="the_fips"
-    )
+    out = attach_county_fips_via_zip(df, hud, zip_col="the_zip", fips_col="the_fips")
 
     assert out["the_fips"].to_list() == ["06073"]
 
 
-def test_zip_logs_summary(
-    fake_counties_geo: Path, caplog: pytest.LogCaptureFixture
-) -> None:
+def test_zip_logs_summary(fake_counties_geo: Path, caplog: pytest.LogCaptureFixture) -> None:
     """One INFO line per call with fill counts."""
     import logging
 
@@ -360,9 +351,7 @@ def test_zip_logs_summary(
     with caplog.at_level(logging.INFO, logger="eia.transforms.geo"):
         attach_county_fips_via_zip(df, hud)
 
-    matched = [
-        r for r in caplog.records if "attach_county_fips_via_zip" in r.getMessage()
-    ]
+    matched = [r for r in caplog.records if "attach_county_fips_via_zip" in r.getMessage()]
     assert len(matched) == 1
     msg = matched[0].getMessage()
     assert "filled 1/3" in msg
@@ -379,8 +368,6 @@ def test_zip_public_import(fake_counties_geo: Path) -> None:
         {"venue_zip": ["92101"], "county_fips": [None]},
         schema={"venue_zip": pl.Utf8, "county_fips": pl.Utf8},
     )
-    hud = pl.DataFrame(
-        {"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]}
-    )
+    hud = pl.DataFrame({"zip": ["92101"], "county_fips": ["06073"], "res_ratio": [1.0]})
     out = imported(df, hud)
     assert out["county_fips"].to_list() == ["06073"]

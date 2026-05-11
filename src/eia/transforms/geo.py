@@ -30,8 +30,7 @@ def _load_counties_gdf(year: int) -> gpd.GeoDataFrame:
     path = _counties_path(year)
     if not path.exists():
         raise FileNotFoundError(
-            f"Counties GeoParquet not found at {path}. "
-            f"Run `make pull-tiger` to generate it."
+            f"Counties GeoParquet not found at {path}. Run `make pull-tiger` to generate it."
         )
     gdf = gpd.read_parquet(path)
     _COUNTIES_CACHE[year] = gdf
@@ -60,9 +59,7 @@ def attach_county_fips(
 
     pos = "__pos__"
     if pos in df.columns:
-        raise ValueError(
-            f"Input DataFrame must not contain reserved column '{pos}'."
-        )
+        raise ValueError(f"Input DataFrame must not contain reserved column '{pos}'.")
     work = df.with_row_index(pos)
     n = work.height
 
@@ -136,9 +133,7 @@ def attach_county_fips_via_zip(
     Logs one INFO line per call with fill counts.
     """
     if fips_col not in df.columns:
-        raise ValueError(
-            f"{fips_col!r} not in df.columns; run attach_county_fips first"
-        )
+        raise ValueError(f"{fips_col!r} not in df.columns; run attach_county_fips first")
 
     zip_to_county = (
         hud.sort(["res_ratio", "county_fips"], descending=[True, False])
@@ -158,9 +153,7 @@ def attach_county_fips_via_zip(
     )
 
     n_originally_null = enriched.filter(pl.col(fips_col).is_null()).height
-    n_zip_missing = enriched.filter(
-        pl.col(fips_col).is_null() & pl.col(zip_col).is_null()
-    ).height
+    n_zip_missing = enriched.filter(pl.col(fips_col).is_null() & pl.col(zip_col).is_null()).height
     n_zip_not_in_hud = enriched.filter(
         pl.col(fips_col).is_null()
         & pl.col(zip_col).is_not_null()
@@ -174,11 +167,7 @@ def attach_county_fips_via_zip(
         pl.coalesce(pl.col(fips_col), pl.col("_zip_lookup_fips")).alias(fips_col)
     ).drop("_zip_lookup_fips")
 
-    hud_quarter = (
-        hud["quarter"][0]
-        if "quarter" in hud.columns and hud.height > 0
-        else "unknown"
-    )
+    hud_quarter = hud["quarter"][0] if "quarter" in hud.columns and hud.height > 0 else "unknown"
 
     logger.info(
         "attach_county_fips_via_zip: filled %d/%d originally-null rows "

@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import time
 from pathlib import Path
+from typing import Any
 
 import polars as pl
 import yaml
@@ -32,9 +33,9 @@ from eia.warehouse import get_warehouse
 console = Console()
 
 
-def _load_config() -> dict:
+def _load_config() -> dict[str, Any]:
     with open("configs/sources.yaml") as f:
-        return yaml.safe_load(f)["bls_qcew"]
+        return yaml.safe_load(f)["bls_qcew"]  # type: ignore[no-any-return]
 
 
 def main() -> None:
@@ -55,9 +56,7 @@ def main() -> None:
         zip_path = src.fetch()
         elapsed = time.monotonic() - t0
         size_mb = zip_path.stat().st_size / 1024 / 1024
-        console.print(
-            f"  [cyan]{year}[/]: {size_mb:.0f} MB at {zip_path} ({elapsed:.1f}s)"
-        )
+        console.print(f"  [cyan]{year}[/]: {size_mb:.0f} MB at {zip_path} ({elapsed:.1f}s)")
 
     # Step 2: clean each (year, quarter) cell. Each call re-reads the year's
     # singlefile and filters to one quarter; the cleaned parquet is written
@@ -93,9 +92,9 @@ def main() -> None:
 
     # Step 3: concatenate into a single master parquet for the warehouse load.
     console.rule("[bold]Step 3: consolidate")
-    master = pl.concat(
-        [pl.read_parquet(p) for p in cleaned_paths]
-    ).sort("year", "quarter", "county_fips", "naics_code")
+    master = pl.concat([pl.read_parquet(p) for p in cleaned_paths]).sort(
+        "year", "quarter", "county_fips", "naics_code"
+    )
     master_path = cleaned_paths[0].parent / "phase1_master.parquet"
     master.write_parquet(master_path)
     console.print(
