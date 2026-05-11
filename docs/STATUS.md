@@ -104,4 +104,6 @@ Setlist.fm runs on AWS API Gateway with a daily quota that appears to be a rolli
 
 Practical recommendation: wait until the next calendar day, then run `make pull-setlistfm` (the resumable fetch picks up where we left off). Or split the pull across multiple days by editing `default_states` to a smaller subset each run.
 
+**This is now automated.** A scheduled task `setlistfm-drip-pull` (in `~/.claude/scheduled-tasks/`) runs daily at 18:47 local time and invokes pull → build → status → Slack. The page-level resumability (commit `c3575b9`) means each run picks up from the exact page where the prior run stopped. Expected completion: ~5 days. The task auto-disables when all 51 partitions are done. See [docs/superpowers/plans/2026-05-10-setlistfm-multiday-drip.md](superpowers/plans/2026-05-10-setlistfm-multiday-drip.md).
+
 **Lost data from IL:** the partial IL partition has 8,540 of an expected ~10,000 setlists. To force a clean refetch, delete `data/raw/setlistfm/US_IL_2022/` before re-running pull-setlistfm.
