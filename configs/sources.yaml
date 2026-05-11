@@ -127,3 +127,11 @@ setlistfm:
   # back to per-day fan-out (365 queries/state-year). Use for full historical
   # pulls — ~6x more requests but 3-5x more data for big states (CA/NY/TX/etc).
   cap_bust: false
+
+cdtfa:
+  # California Department of Tax and Fee Administration — Taxable Table 3
+  # (Counties by Type of Business), via the public OData endpoint.
+  base_url: "https://cdtfa.ca.gov"
+  dataset_path: "/dataportal/api/odata/Taxable_Sales_Counties"
+  top: 100000  # Server returns all ~30K rows in one shot under this $top.
+  requests_per_second: 1.0

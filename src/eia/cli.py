@@ -81,6 +81,7 @@ def _register_pull_commands() -> None:
     importlib.import_module("eia.sources.ticketmaster")
     importlib.import_module("eia.sources.runsignup")
     importlib.import_module("eia.sources.setlistfm")
+    importlib.import_module("eia.sources.cdtfa")
 
     for name, source_cls in registry.all_sources().items():
 

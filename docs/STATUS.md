@@ -17,7 +17,8 @@ Run `make warehouse-health` to get the current numbers. Latest snapshot:
 | `hud_zip_county` | 6 | ZIP-county crosswalk — **placeholder only**, needs `HUD_API_TOKEN` for real pull |
 | `ticketmaster_events` | 200 | Last 30 days of Music + Sports events (forward-looking only) |
 | `setlistfm_setlists` | 49,411 | 2022 US concerts across 14 states; **pull crashed on HTTP 429** at IL — resumable, see below |
-| `events` | 239 | Unified events (`make build-events` to rebuild) |
+| `events` | 49,610 | Unified events (`make build-events` to rebuild) |
+| `cdtfa_taxable_sales` | 30,624 | California county × quarter × business-type taxable sales 2015 Q1 - 2025 Q4 — **the model's Y target for CA events** |
 
 ## Pipelines (run via `make <target>`)
 

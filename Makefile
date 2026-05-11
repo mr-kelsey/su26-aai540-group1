@@ -4,7 +4,7 @@
 .PHONY: help install install-dev install-postgres install-notebook \
         lint format typecheck test \
         pull-all pull-bls-qcew pull-bea-io pull-census-acs pull-tiger pull-hud \
-        pull-ticketmaster pull-runsignup pull-setlistfm \
+        pull-ticketmaster pull-runsignup pull-setlistfm pull-cdtfa \
         warehouse-init warehouse-reset \
         phase0 validate-bea-multipliers enrich-events build-events \
         phase1-summary warehouse-health clean
@@ -66,6 +66,9 @@ pull-tiger:  ## Pull TIGER/Line county shapefiles.
 
 pull-hud:  ## Pull HUD ZIP-County crosswalk.
 	$(UVRUN) eia pull hud-crosswalk
+
+pull-cdtfa:  ## Pull California CDTFA quarterly taxable sales by county/business type.
+	$(UVRUN) eia pull cdtfa-taxable-sales
 
 # ----- Event-side pulls (require API keys in .env) -----
 pull-ticketmaster:  ## Pull Ticketmaster Discovery events.
