@@ -16,7 +16,7 @@ Run `make warehouse-health` to get the current numbers. Latest snapshot:
 | `bea_io_make` | 139,941 | BEA Make table (industry x commodity $) 1997-2023 |
 | `hud_zip_county` | 6 | ZIP-county crosswalk — **placeholder only**, needs `HUD_API_TOKEN` for real pull |
 | `ticketmaster_events` | 200 | Last 30 days of Music + Sports events (forward-looking only) |
-| `setlistfm_setlists` | _populating_ | 2022 US concerts; pull running for 50 states in background |
+| `setlistfm_setlists` | 49,411 | 2022 US concerts across 14 states; **pull crashed on HTTP 429** at IL — resumable, see below |
 | `events` | 239 | Unified events (`make build-events` to rebuild) |
 
 ## Pipelines (run via `make <target>`)
@@ -70,6 +70,27 @@ My recommendation: **A** if partners are available to discuss the model; **B or 
 
 ## Background pull state at session end
 
-See `tail -f /tmp/setlistfm-pull.log` (mostly silent — output is the files in `data/raw/setlistfm/`).
+The 50-state pull crashed partway through with HTTP 429 (Too Many Requests). Setlist.fm has stricter rate limits than their documented 1 req/sec polite rate — likely hourly/burst quotas not surfaced in their docs.
 
-Check progress: `ls data/raw/setlistfm/ | wc -l` (target: 51, including DC).
+**State at crash:**
+- Completed states fully loaded: AK, AL, AR, AZ, CA (capped 10K), CO, CT, DC, DE, FL (capped 9369), GA, HI, ID
+- Partially completed: IL (got 8540 of ~10K)
+- 49,411 setlists in `setlistfm_setlists` table
+- Raw page files preserved at `data/raw/setlistfm/`
+
+**To resume the pull** (after waiting ~1 hour for rate limit to recover):
+
+```bash
+make pull-setlistfm     # resumable: skips partitions with existing page files
+make build-events       # merge into unified events table
+make phase1-summary     # see the result
+```
+
+The fetch() now skips any `US_<STATE>_<YEAR>` partition that already has page files (added in commit `1f3cf4e`), so a retry doesn't waste API quota on already-pulled states. The remaining ~37 states will probably take ~90 min to pull on a clean rate-limit slate.
+
+If 429s persist, options:
+- Wait longer (2-4 hours, or overnight)
+- Reduce `requests_per_second` in `configs/sources.yaml` from `1.0` to `0.5`
+- Pull smaller batches (edit `default_states` to a subset of remaining states, run, repeat)
+
+**Lost data from IL:** the partial IL partition has 8,540 of an expected ~10,000 setlists. To force a clean refetch, delete `data/raw/setlistfm/US_IL_2022/` before re-running pull-setlistfm.
