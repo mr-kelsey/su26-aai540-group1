@@ -93,4 +93,15 @@ If 429s persist, options:
 - Reduce `requests_per_second` in `configs/sources.yaml` from `1.0` to `0.5`
 - Pull smaller batches (edit `default_states` to a subset of remaining states, run, repeat)
 
+**Confirmed quota behavior (probed 60 min after first block, still 429):**
+
+```
+x-amzn-errortype: LimitExceededException
+{"message":"Limit Exceeded"}
+```
+
+Setlist.fm runs on AWS API Gateway with a daily quota that appears to be a rolling 24-hour window (not a calendar-day reset — UTC midnight passed during the block and we were still capped). Estimated recovery time: **~22 hours from when the 429s first started**. Free-tier daily quota is likely around 1,500-2,000 requests; our pull made ~2,477 before being cut off.
+
+Practical recommendation: wait until the next calendar day, then run `make pull-setlistfm` (the resumable fetch picks up where we left off). Or split the pull across multiple days by editing `default_states` to a smaller subset each run.
+
 **Lost data from IL:** the partial IL partition has 8,540 of an expected ~10,000 setlists. To force a clean refetch, delete `data/raw/setlistfm/US_IL_2022/` before re-running pull-setlistfm.
