@@ -107,4 +107,6 @@ Practical recommendation: wait until the next calendar day, then run `make pull-
 
 **This is now automated.** A scheduled task `setlistfm-drip-pull` (in `~/.claude/scheduled-tasks/`) runs daily at 18:47 local time and invokes pull → build → status → Slack. The page-level resumability (commit `c3575b9`) means each run picks up from the exact page where the prior run stopped. Expected completion: ~5 days. The task auto-disables when all 51 partitions are done. See [docs/superpowers/plans/2026-05-10-setlistfm-multiday-drip.md](superpowers/plans/2026-05-10-setlistfm-multiday-drip.md).
 
+**Action needed once when you return:** the task ran for the first time at 2026-05-11T01:53 UTC but didn't send a Slack notification, almost certainly because the new session needs interactive tool approvals (Bash, Slack mcp tools) that I can't grant for you remotely. Open the Scheduled-Tasks UI, click **Run now** on `setlistfm-drip-pull`, and approve the tools — those approvals are then auto-applied to every future daily run.
+
 **Lost data from IL:** the partial IL partition has 8,540 of an expected ~10,000 setlists. To force a clean refetch, delete `data/raw/setlistfm/US_IL_2022/` before re-running pull-setlistfm.
