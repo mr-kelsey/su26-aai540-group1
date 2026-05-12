@@ -248,3 +248,6 @@ htmlcov/
 .ruff_cache/
 .mypy_cache/
 .pytest_cache/
+
+# Claude Code worktree machinery (per-session, never commit)
+.claude/

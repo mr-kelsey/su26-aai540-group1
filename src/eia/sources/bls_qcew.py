@@ -22,6 +22,7 @@ from __future__ import annotations
 import io
 import zipfile
 from pathlib import Path
+from typing import Any, ClassVar
 
 import polars as pl
 import yaml
@@ -37,7 +38,7 @@ class BLSQCEW(Source):
     raw_format = "csv"
 
     # County-level QCEW aggregation level codes.
-    COUNTY_AGGLVL_CODES = {70, 71, 72, 73, 74, 75, 76, 77, 78}
+    COUNTY_AGGLVL_CODES: ClassVar[set[int]] = {70, 71, 72, 73, 74, 75, 76, 77, 78}
 
     BY_AREA_BASE = "https://data.bls.gov/cew/data/api"
     SINGLEFILE_BASE = "https://data.bls.gov/cew/data/files"
@@ -56,13 +57,14 @@ class BLSQCEW(Source):
         # Phase 0 default: a small set of counties anchoring the exit query.
         # Phase 1 widens to all counties via mode="singlefile".
         self.county_fips = county_fips or cfg.get(
-            "phase0_counties", ["06073"]  # San Diego
+            "phase0_counties",
+            ["06073"],  # San Diego
         )
 
     @staticmethod
-    def _load_config() -> dict:
+    def _load_config() -> dict[str, Any]:
         with open("configs/sources.yaml") as f:
-            return yaml.safe_load(f)["bls_qcew"]
+            return yaml.safe_load(f)["bls_qcew"]  # type: ignore[no-any-return]
 
     # ---- fetch ----
 
@@ -90,7 +92,9 @@ class BLSQCEW(Source):
         out = self.raw_dir / f"{self.year}_qtrly_singlefile.zip"
         if out.exists() and out.stat().st_size > 0:
             return out
-        with RateLimitedClient(self.SINGLEFILE_BASE, requests_per_second=1.0, timeout_s=600.0) as client:
+        with RateLimitedClient(
+            self.SINGLEFILE_BASE, requests_per_second=1.0, timeout_s=600.0
+        ) as client:
             data = client.get_bytes(f"/{self.year}/csv/{self.year}_qtrly_singlefile.zip")
         out.write_bytes(data)
         return out
@@ -141,7 +145,7 @@ class BLSQCEW(Source):
     # ---- helpers ----
 
     @staticmethod
-    def _csv_schema_overrides() -> dict:
+    def _csv_schema_overrides() -> dict[str, Any]:
         return {
             "area_fips": pl.Utf8,
             "industry_code": pl.Utf8,
@@ -159,9 +163,7 @@ class BLSQCEW(Source):
 
     @classmethod
     def _read_csv(cls, path: Path) -> pl.DataFrame:
-        return pl.read_csv(
-            path, schema_overrides=cls._csv_schema_overrides(), ignore_errors=True
-        )
+        return pl.read_csv(path, schema_overrides=cls._csv_schema_overrides(), ignore_errors=True)
 
     @classmethod
     def _read_singlefile(cls, raw_path: Path) -> pl.DataFrame:

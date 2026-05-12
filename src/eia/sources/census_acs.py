@@ -10,6 +10,7 @@ Variables: https://api.census.gov/data/2023/acs/acs5/variables.html
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import polars as pl
 import yaml
@@ -34,9 +35,9 @@ class CensusACS(Source):
         self.api_key = settings.census_api_key
 
     @staticmethod
-    def _load_config() -> dict:
+    def _load_config() -> dict[str, Any]:
         with open("configs/sources.yaml") as f:
-            return yaml.safe_load(f)["census_acs"]
+            return yaml.safe_load(f)["census_acs"]  # type: ignore[no-any-return]
 
     def fetch(self) -> Path:
         """Hit the ACS 5-year endpoint once per state and dump JSON."""
@@ -55,9 +56,7 @@ class CensusACS(Source):
                 }
                 if self.api_key:
                     params["key"] = self.api_key
-                data = client.get_json(
-                    f"/{self.end_year}/acs/acs5", params=params
-                )
+                data = client.get_json(f"/{self.end_year}/acs/acs5", params=params)
                 import json
 
                 target.write_text(json.dumps(data))
@@ -67,10 +66,10 @@ class CensusACS(Source):
         """Combine all state JSON pulls into one wide Parquet."""
         import json
 
-        rows: list[dict] = []
+        rows: list[dict[str, Any]] = []
         var_names = list(self.variables.keys())
         var_codes = list(self.variables.values())
-        col_to_var = dict(zip(var_codes, var_names))
+        col_to_var = dict(zip(var_codes, var_names, strict=True))
 
         for state_file in sorted(raw_path.glob("state_*.json")):
             data = json.loads(state_file.read_text())
@@ -81,7 +80,7 @@ class CensusACS(Source):
             county_pos = header.index("county")
             for rec in records:
                 county_fips = f"{rec[state_pos]}{rec[county_pos]}"
-                row = {"county_fips": county_fips}
+                row: dict[str, Any] = {"county_fips": county_fips}
                 for var_name, pos in var_positions.items():
                     val = rec[pos]
                     row[var_name] = float(val) if val not in (None, "", "null") else None

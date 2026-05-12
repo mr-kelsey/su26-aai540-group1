@@ -1,9 +1,10 @@
 """Setlist.fm API source.
 
-Setlist.fm doesn't list events by region directly; it lists setlists by
-artist or venue. We use it to enrich Ticketmaster pulls (e.g., confirm an
-artist actually played a venue, capture support acts) rather than as a
-primary discovery source.
+Pulls historical concert setlists by (country, state, year) partition into the
+`setlistfm_setlists` staging table. A future `build_events.py` will UNION
+this with the Ticketmaster staging table into the `events` table.
+
+See docs/superpowers/specs/2026-05-10-setlistfm-source-design.md for design.
 
 Free key: https://api.setlist.fm/docs/1.0/index.html
 Polite rate: 1 req/sec.
@@ -11,24 +12,59 @@ Polite rate: 1 req/sec.
 
 from __future__ import annotations
 
+import json
+import logging
+from datetime import date as date_cls
+from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any
 
 import polars as pl
+import yaml
 
+from eia.clients import RateLimitedClient
 from eia.config import settings
 from eia.sources.base import Source
 from eia.sources.registry import register
 
+logger = logging.getLogger(__name__)
+
 
 class SetlistFM(Source):
     name = "setlistfm"
-    target_table = "setlistfm_setlists"  # populated in Phase 1
+    target_table = "setlistfm_setlists"
     raw_format = "json"
 
     BASE_URL = "https://api.setlist.fm"
+    PAGE_SIZE = 20  # fixed by the API
 
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        country_code: str | None = None,
+        years: list[int] | None = None,
+        state_codes: list[str] | None = None,
+        max_pages: int | None = None,
+        cap_bust: bool | None = None,
+    ) -> None:
+        cfg = self._load_config()
         self.api_key = settings.setlistfm_api_key
+        self.country_code = country_code or cfg["country_code"]
+        self.years = years or cfg["default_years"]
+        self.state_codes = state_codes or cfg["default_states"]
+        self.requests_per_second = cfg["requests_per_second"]
+        self.max_pages_per_partition = (
+            max_pages if max_pages is not None else cfg["max_pages_per_partition"]
+        )
+        # cap_bust=True falls back to per-day fan-out (365 queries/state-year)
+        # whenever the year-level partition saturates the 10K cap. Off by
+        # default; enable for full historical pulls (~6x more requests for
+        # the saturated state-years, which are also the most data-rich).
+        self.cap_bust = bool(cap_bust if cap_bust is not None else cfg.get("cap_bust", False))
+
+    @staticmethod
+    def _load_config() -> dict[str, Any]:
+        with open("configs/sources.yaml") as f:
+            return yaml.safe_load(f)["setlistfm"]  # type: ignore[no-any-return]
 
     def _check_key(self) -> None:
         if not self.api_key:
@@ -37,19 +73,408 @@ class SetlistFM(Source):
                 "https://api.setlist.fm/docs/1.0/index.html"
             )
 
+    # ---- fetch ----
+
     def fetch(self) -> Path:
-        """Phase 0: stub. Phase 1 will iterate venues from Ticketmaster pulls
-        and look up their Setlist.fm IDs."""
+        """Pull all configured (country, state, year) partitions into raw_dir.
+
+        Returns the raw_dir path; per-partition output lives in subdirs named
+        `<country>_<state>_<year>/page_NNNN.json`.
+
+        Resumable at the page level: `_fetch_partition` inspects existing
+        pages, infers the total from page_0001, and resumes from the first
+        missing page. Fully-completed partitions cost zero API calls on a
+        re-run. Use this to drip a large pull across multiple days when the
+        per-day API quota blocks a single-session sweep.
+        """
         self._check_key()
-        out_dir = self.raw_dir / "stub"
+        out_root = self.raw_dir
+        out_root.mkdir(parents=True, exist_ok=True)
+        total_pages = 0
+        with RateLimitedClient(
+            self.BASE_URL,
+            requests_per_second=self.requests_per_second,
+            timeout_s=30.0,
+        ) as client:
+            for year in self.years:
+                for state in self.state_codes:
+                    partition_dir = out_root / f"{self.country_code}_{state}_{year}"
+                    pages = self._fetch_partition(
+                        client, self.country_code, state, year, partition_dir
+                    )
+                    total_pages += pages
+        logger.info("Setlist.fm fetch complete: %d pages this run", total_pages)
+        return out_root
+
+    def _fetch_page(
+        self,
+        client: RateLimitedClient,
+        country: str,
+        state: str,
+        year: int,
+        page: int,
+    ) -> dict[str, Any]:
+        """Single API call. Rate limiting is handled by the client."""
+        # _check_key in fetch() guarantees api_key is set before we get here.
+        assert self.api_key is not None
+        params = {
+            "countryCode": country,
+            "stateCode": state,
+            "year": year,
+            "p": page,
+        }
+        headers: dict[str, str] = {
+            "Accept": "application/json",
+            "x-api-key": self.api_key,
+        }
+        return client.get_json(  # type: ignore[no-any-return]
+            "/rest/1.0/search/setlists",
+            params=params,
+            headers=headers,
+        )
+
+    def _fetch_partition(
+        self,
+        client: RateLimitedClient | None,
+        country: str,
+        state: str,
+        year: int,
+        out_dir: Path,
+    ) -> int:
+        """Paginate one (country, state, year) partition; write page files.
+
+        Resumable: if `out_dir` already contains page files, read page_0001
+        to recover `total`, compute expected page count, and fetch only the
+        missing pages. Already-complete partitions cost zero API calls.
+
+        If the partition saturates the 10K cap and `cap_bust=True`, falls
+        back to per-day fan-out (one query per day of the year). Otherwise
+        logs a WARNING and pulls only the first `max_pages_per_partition`
+        pages.
+        """
         out_dir.mkdir(parents=True, exist_ok=True)
-        (out_dir / ".phase0_stub").touch()
-        return out_dir
+        existing_pages = sorted(out_dir.glob("page_*.json"))
+
+        max_pages = self.max_pages_per_partition
+
+        if existing_pages:
+            # Resume mode: avoid a fresh API call by reading total from page_0001
+            try:
+                first_text = (out_dir / "page_0001.json").read_text()
+                first = json.loads(first_text)
+            except (OSError, json.JSONDecodeError) as exc:
+                logger.warning(
+                    "Setlist.fm %s %s %d: bad page_0001 (%s); restarting partition",
+                    country,
+                    state,
+                    year,
+                    exc,
+                )
+                existing_pages = []
+                first = None
+            else:
+                total = int(first.get("total", 0))
+                if total == 0:
+                    logger.info("Setlist.fm %s %s %d: cached empty partition", country, state, year)
+                    return 0
+                n_expected = min(max_pages, (total + self.PAGE_SIZE - 1) // self.PAGE_SIZE)
+                n_have = len(existing_pages)
+                if n_have >= n_expected:
+                    logger.info(
+                        "Setlist.fm %s %s %d: partition already complete (%d/%d pages)",
+                        country,
+                        state,
+                        year,
+                        n_have,
+                        n_expected,
+                    )
+                    return n_have
+                # Partial — resume from the first missing page number. We don't
+                # try to repair non-contiguous gaps; resume from n_have+1.
+                start_page = n_have + 1
+                logger.info(
+                    "Setlist.fm %s %s %d: resuming from page %d (have %d, need %d)",
+                    country,
+                    state,
+                    year,
+                    start_page,
+                    n_have,
+                    n_expected,
+                )
+                saturated = total > max_pages * self.PAGE_SIZE
+                if saturated and self.cap_bust:
+                    # Resume into day-mode is complex; treat the year-level
+                    # data we have as 'done enough', then run day-mode
+                    # additively. Day mode independently resumes per day.
+                    return self._fetch_year_by_day(client, country, state, year, out_dir) + n_have
+                for page in range(start_page, n_expected + 1):
+                    data = self._fetch_page(client, country, state, year, page)  # type: ignore[arg-type]
+                    (out_dir / f"page_{page:04d}.json").write_text(json.dumps(data))
+                logger.info(
+                    "Setlist.fm %s %s %d: completed (was %d pages, added %d)",
+                    country,
+                    state,
+                    year,
+                    n_have,
+                    n_expected - n_have,
+                )
+                return n_expected
+
+        # Cold start
+        page = 1
+        first = self._fetch_page(client, country, state, year, page)  # type: ignore[arg-type]
+        total = int(first.get("total", 0))
+        if total == 0:
+            logger.info("Setlist.fm %s %s %d: empty partition", country, state, year)
+            # Persist an empty page_0001 so next run sees it and skips
+            (out_dir / f"page_{page:04d}.json").write_text(json.dumps(first))
+            return 0
+
+        saturated = total > max_pages * self.PAGE_SIZE
+
+        if saturated and self.cap_bust:
+            logger.info(
+                "Setlist.fm %s %s %d: total %d saturated cap; falling back to daily fan-out",
+                country,
+                state,
+                year,
+                total,
+            )
+            # Still persist page_0001 so future runs can detect cap_bust mode
+            (out_dir / f"page_{page:04d}.json").write_text(json.dumps(first))
+            return self._fetch_year_by_day(client, country, state, year, out_dir)
+
+        n_to_pull = min(
+            max_pages,
+            (total + self.PAGE_SIZE - 1) // self.PAGE_SIZE,
+        )
+        if saturated:
+            logger.warning(
+                "Setlist.fm %s %s %d: total %d exceeds cap (%d pages); "
+                "some setlists unreachable in this partition "
+                "(set cap_bust=True to subdivide by day)",
+                country,
+                state,
+                year,
+                total,
+                max_pages,
+            )
+
+        (out_dir / f"page_{page:04d}.json").write_text(json.dumps(first))
+        for page in range(2, n_to_pull + 1):
+            data = self._fetch_page(client, country, state, year, page)  # type: ignore[arg-type]
+            (out_dir / f"page_{page:04d}.json").write_text(json.dumps(data))
+
+        logger.info(
+            "Setlist.fm %s %s %d: pulled %d pages (total=%d)",
+            country,
+            state,
+            year,
+            n_to_pull,
+            total,
+        )
+        return n_to_pull
+
+    def _fetch_year_by_day(
+        self,
+        client: RateLimitedClient | None,
+        country: str,
+        state: str,
+        year: int,
+        out_dir: Path,
+    ) -> int:
+        """Iterate each day of `year`, querying with date=DD-MM-YYYY filter.
+
+        Day-level results are written under `out_dir/day_YYYY-MM-DD/page_NNNN.json`.
+        Returns the total number of page files written across all days.
+        """
+        total_pages = 0
+        d = date_cls(year, 1, 1)
+        while d.year == year:
+            day_iso = d.strftime("%Y-%m-%d")
+            date_param = d.strftime("%d-%m-%Y")
+            day_dir = out_dir / f"day_{day_iso}"
+            n = self._fetch_day(client, country, state, date_param, day_dir)
+            total_pages += n
+            d += timedelta(days=1)
+        logger.info(
+            "Setlist.fm %s %s %d: daily fan-out wrote %d pages across 365 days",
+            country,
+            state,
+            year,
+            total_pages,
+        )
+        return total_pages
+
+    def _fetch_day(
+        self,
+        client: RateLimitedClient | None,
+        country: str,
+        state: str,
+        date_param: str,
+        day_dir: Path,
+    ) -> int:
+        """Pull one day-level partition; paginated."""
+        page = 1
+        first = self._fetch_page_day(client, country, state, date_param, page)  # type: ignore[arg-type]
+        total = int(first.get("total", 0))
+        if total == 0:
+            return 0
+        day_dir.mkdir(parents=True, exist_ok=True)
+        n_pages = (total + self.PAGE_SIZE - 1) // self.PAGE_SIZE
+        if n_pages > self.max_pages_per_partition:
+            logger.warning(
+                "Setlist.fm day %s: total %d exceeds even day-level cap; truncating",
+                date_param,
+                total,
+            )
+            n_pages = self.max_pages_per_partition
+        (day_dir / f"page_{page:04d}.json").write_text(json.dumps(first))
+        for page in range(2, n_pages + 1):
+            data = self._fetch_page_day(client, country, state, date_param, page)  # type: ignore[arg-type]
+            (day_dir / f"page_{page:04d}.json").write_text(json.dumps(data))
+        return n_pages
+
+    def _fetch_page_day(
+        self,
+        client: RateLimitedClient,
+        country: str,
+        state: str,
+        date_param: str,
+        page: int,
+    ) -> dict[str, Any]:
+        """Single API call filtered to a specific day (DD-MM-YYYY)."""
+        assert self.api_key is not None
+        params = {
+            "countryCode": country,
+            "stateCode": state,
+            "date": date_param,
+            "p": page,
+        }
+        headers: dict[str, str] = {
+            "Accept": "application/json",
+            "x-api-key": self.api_key,
+        }
+        return client.get_json(  # type: ignore[no-any-return]
+            "/rest/1.0/search/setlists",
+            params=params,
+            headers=headers,
+        )
+
+    # ---- clean ----
 
     def to_cleaned(self, raw_path: Path) -> Path:
-        out = self.cleaned_dir / "stub.parquet"
-        pl.DataFrame({"note": ["Phase 0 stub — implementation in Phase 1"]}).write_parquet(out)
+        """Read all page JSONs under raw_path, flatten, dedup, write parquet.
+
+        Walks both layouts:
+          - year-level: <PARTITION>/page_NNNN.json
+          - day-level (cap-busted): <PARTITION>/day_YYYY-MM-DD/page_NNNN.json
+
+        Corrupted JSON files (e.g., partial writes from a crashed pull) are
+        logged as WARNING and skipped; the rest of the data is still loaded.
+        """
+        rows: list[dict[str, Any]] = []
+        for partition_dir in sorted(raw_path.iterdir()):
+            if not partition_dir.is_dir():
+                continue
+            # Year-level page files directly in the partition dir.
+            for page_file in sorted(partition_dir.glob("page_*.json")):
+                self._parse_page_into(page_file, rows)
+            # Day-level page files in day_YYYY-MM-DD subdirs (cap-busting).
+            for day_dir in sorted(partition_dir.glob("day_*")):
+                if not day_dir.is_dir():
+                    continue
+                for page_file in sorted(day_dir.glob("page_*.json")):
+                    self._parse_page_into(page_file, rows)
+
+        df = pl.DataFrame(
+            rows,
+            schema={
+                "setlist_id": pl.Utf8,
+                "artist_name": pl.Utf8,
+                "artist_mbid": pl.Utf8,
+                "event_date": pl.Date,
+                "venue_name": pl.Utf8,
+                "venue_id": pl.Utf8,
+                "city_name": pl.Utf8,
+                "state_code": pl.Utf8,
+                "country_code": pl.Utf8,
+                "venue_lat": pl.Float64,
+                "venue_lon": pl.Float64,
+                "tour_name": pl.Utf8,
+                "info_text": pl.Utf8,
+                "n_songs": pl.Int32,
+                "raw_payload": pl.Utf8,
+                "fetched_at": pl.Datetime,
+            },
+        )
+        # Dedup on setlist_id, keep first occurrence
+        if df.height > 0:
+            df = df.unique(subset=["setlist_id"], keep="first")
+
+        out = self.cleaned_dir / "setlists.parquet"
+        out.parent.mkdir(parents=True, exist_ok=True)
+        df.write_parquet(out)
+        logger.info("Setlist.fm to_cleaned: %d setlists written to %s", df.height, out)
         return out
+
+    def _parse_page_into(self, page_file: Path, rows: list[dict[str, Any]]) -> None:
+        """Read one page JSON file and append parsed setlist rows to `rows`.
+
+        Logs a WARNING and continues if the file is unreadable or malformed.
+        """
+        try:
+            data = json.loads(page_file.read_text())
+        except (OSError, json.JSONDecodeError) as exc:
+            logger.warning("Setlist.fm to_cleaned: skipping bad page file %s: %s", page_file, exc)
+            return
+        for sl in data.get("setlist", []):
+            row = self._parse_setlist(sl)
+            if row is not None:
+                rows.append(row)
+
+    # ---- parsing helper ----
+
+    @staticmethod
+    def _parse_setlist(payload: dict[str, Any]) -> dict[str, Any] | None:
+        """Normalize a single setlist response into the staging-schema row.
+
+        Returns None if a required field (eventDate) is missing or unparseable.
+        """
+        event_date_raw = payload.get("eventDate")
+        if not event_date_raw or not isinstance(event_date_raw, str):
+            return None
+        try:
+            event_date = datetime.strptime(event_date_raw, "%d-%m-%Y").date()
+        except ValueError:
+            return None
+
+        artist = payload.get("artist") or {}
+        venue = payload.get("venue") or {}
+        city = venue.get("city") or {}
+        coords = city.get("coords") or {}
+        tour = payload.get("tour") or {}
+        sets_list = (payload.get("sets") or {}).get("set") or []
+        n_songs = sum(len(s.get("song") or []) for s in sets_list)
+
+        return {
+            "setlist_id": payload.get("id"),
+            "artist_name": artist.get("name"),
+            "artist_mbid": artist.get("mbid"),
+            "event_date": event_date,
+            "venue_name": venue.get("name"),
+            "venue_id": venue.get("id"),
+            "city_name": city.get("name"),
+            "state_code": city.get("stateCode"),
+            "country_code": (city.get("country") or {}).get("code"),
+            "venue_lat": coords.get("lat"),
+            "venue_lon": coords.get("long"),
+            "tour_name": tour.get("name"),
+            "info_text": payload.get("info"),
+            "n_songs": n_songs,
+            "raw_payload": json.dumps(payload),
+            "fetched_at": datetime.utcnow(),
+        }
 
 
 register(SetlistFM.name, SetlistFM)

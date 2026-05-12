@@ -118,9 +118,7 @@ class RateLimitedClient:
             (self.cache_dir / f"{key}.json").write_text(json.dumps(data))
         return data
 
-    def get_bytes(
-        self, path: str, *, params: dict[str, Any] | None = None
-    ) -> bytes:
+    def get_bytes(self, path: str, *, params: dict[str, Any] | None = None) -> bytes:
         resp = self._request("GET", path, params=params)
         resp.raise_for_status()
         return resp.content
@@ -128,7 +126,7 @@ class RateLimitedClient:
     def close(self) -> None:
         self._client.close()
 
-    def __enter__(self) -> "RateLimitedClient":
+    def __enter__(self) -> RateLimitedClient:
         return self
 
     def __exit__(self, *_exc: object) -> None:

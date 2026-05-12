@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 from pathlib import Path
 from typing import Any
 
@@ -81,9 +82,7 @@ class DuckDBWarehouse:
                 "CREATE TABLE IF NOT EXISTS _migrations ("
                 "name VARCHAR PRIMARY KEY, applied_at TIMESTAMP DEFAULT current_timestamp)"
             )
-            applied = {
-                row[0] for row in con.execute("SELECT name FROM _migrations").fetchall()
-            }
+            applied = {row[0] for row in con.execute("SELECT name FROM _migrations").fetchall()}
             applied_now: list[str] = []
             for sql_file in sorted(migrations_dir.glob("*.sql")):
                 if sql_file.name in applied:
@@ -114,15 +113,11 @@ class DuckDBWarehouse:
                 "SELECT count(*) FROM information_schema.tables WHERE table_schema='main'"
             ).fetchone()
             applied: list[str] = []
-            try:
+            with contextlib.suppress(duckdb.CatalogException):
                 applied = [
                     r[0]
-                    for r in con.execute(
-                        "SELECT name FROM _migrations ORDER BY name"
-                    ).fetchall()
+                    for r in con.execute("SELECT name FROM _migrations ORDER BY name").fetchall()
                 ]
-            except duckdb.CatalogException:
-                pass
         return {
             "backend": self.backend_name,
             "path": str(self.path),
