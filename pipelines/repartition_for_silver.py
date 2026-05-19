@@ -47,8 +47,11 @@ def write_unpartitioned(df: pl.DataFrame, table: str, filename: str) -> None:
 def write_partitioned_by(df: pl.DataFrame, table: str, by: list[str], filename: str) -> None:
     """Hive-style partition: writes one file per unique combination of `by` columns.
 
-    Drops null partition values. Keeps the partition columns in the data
-    (slight duplication, but easier for non-Athena readers).
+    Drops null partition values. Drops the partition columns from the data file —
+    Athena/Glue infer them from the directory path, and keeping them inside the
+    parquet triggers `HIVE_INVALID_METADATA: Table descriptor contains duplicate
+    columns`. Non-Athena readers (polars, pandas) still pick up the keys via
+    Hive-style path parsing.
     """
     df = df.drop_nulls(subset=by)
     n_groups = 0
@@ -56,7 +59,7 @@ def write_partitioned_by(df: pl.DataFrame, table: str, by: list[str], filename: 
         parts = [f"{col}={val}" for col, val in zip(by, key_tuple, strict=True)]
         out = STAGING / table / "/".join(parts)
         out.mkdir(parents=True, exist_ok=True)
-        sub.write_parquet(out / filename)
+        sub.drop(by).write_parquet(out / filename)
         n_groups += 1
     log.info("  %s: %d rows across %d partitions (by %s)", table, df.height, n_groups, by)
 
@@ -72,7 +75,12 @@ def repartition_census_acs() -> None:
 
 
 def repartition_bls_qcew() -> None:
-    """36 per-quarter files already exist; copy them into year=Y/quarter=Q dirs."""
+    """36 per-quarter files already exist; rewrite (not copy) into year=Y/quarter=Q dirs.
+
+    We can't just shutil.copy — the source parquets carry redundant `year` and
+    `quarter` columns that would clash with the Hive partition keys. Read, drop
+    those columns, then write.
+    """
     pattern = re.compile(r"^(\d{4})_q(\d)\.parquet$")
     out_root = STAGING / "bls_qcew"
     n = 0
@@ -83,9 +91,10 @@ def repartition_bls_qcew() -> None:
         year, quarter = m.group(1), m.group(2)
         out = out_root / f"year={year}" / f"quarter={quarter}"
         out.mkdir(parents=True, exist_ok=True)
-        shutil.copy(p, out / "qcew.parquet")
+        df = pl.read_parquet(p).drop(["year", "quarter"])
+        df.write_parquet(out / "qcew.parquet")
         n += 1
-    log.info("  bls_qcew: %d per-quarter parquets copied into year=Y/quarter=Q layout", n)
+    log.info("  bls_qcew: %d per-quarter parquets rewritten into year=Y/quarter=Q layout", n)
 
 
 def repartition_bea() -> None:
