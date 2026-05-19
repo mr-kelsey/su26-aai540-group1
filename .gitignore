@@ -219,8 +219,11 @@ __marimo__/
 
 # ----- EIA project additions -----
 
-# Data warehouse and bulk pulls
-data/
+# Data warehouse and bulk pulls — exclude bulk subdirs but allow hand-curated
+# reference data (e.g. venue_capacities.csv) under data/curated/ to be checked in.
+data/*
+!data/curated/
+data/curated/_tmp*
 *.duckdb
 *.duckdb.wal
 *.parquet

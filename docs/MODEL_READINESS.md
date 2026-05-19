@@ -1,9 +1,28 @@
 # Model-Layer Readiness Brief
 
-**Date:** 2026-05-10
+**Date:** 2026-05-10 (original) · **Updated:** 2026-05-18
 **Audience:** USD AAI-540 Group 1 — you and your partners, going into the model-design discussion
 
 **Purpose:** Capture what's in the warehouse, what choices the data forces, and which questions are open. Not a design — a starting point.
+
+---
+
+## Update — 2026-05-18
+
+Two changes since the original brief:
+
+1. **Attendance proxy chosen (resolves Q#4 below).** We took option 1 — venue capacity from a hand-curated lookup. New `aai540_silver.venue_capacities` table (999 CA venues; ~78% of event volume seeded with named-source capacities from Wikipedia / operator websites / festival records; remaining 22% covered by a name-keyword heuristic + a flat-500 default for unmatched small clubs). The Gold layer now exposes `total_est_attendance` per county-quarter, computed as `SUM(venue_capacity × 0.80)` for setlistfm rows and `SUM(expected_attendance)` for Ticketmaster rows. The 0.80 sell-through factor is a fixed prior; PyMC can learn it as a latent.
+
+2. **Cloud data lake stood up.** The full warehouse is now in S3 + Glue Catalog + Athena at `s3://jonno-lucas-steve-bucket/usd-aai540-group1/` (Bronze + Silver + Gold). Partners with IAM credentials can query via Athena Console, awswrangler, DuckDB-on-S3, or `aws s3 cp`. See [`docs/PARTNER_QUICKSTART.md`](PARTNER_QUICKSTART.md) and [`notebooks/aws_starter.ipynb`](../notebooks/aws_starter.ipynb) for the four-interface walkthrough.
+
+The Gold training matrix `aai540_gold.model_training_matrix` is the canonical
+2,552-row panel (58 CA counties × 11 years × 4 quarters). Run an OLS baseline
+on it via the starter notebook — current holdout R² ≈ 0.70 with population /
+employment / wages dominating the signal. Attendance-driven signal becomes
+visible once the setlistfm time-series coverage broadens beyond year=2022 (in
+progress).
+
+---
 
 ## What we have on `main`
 
