@@ -112,6 +112,25 @@ Tax-revenue data the model regresses event activity against. **All three layers 
 
 ---
 
+## 3.5 `venue_capacities` (Silver, reference) — 999 rows
+
+- **Source:** Hand-curated. Top 999 CA venues by event count from `setlistfm_setlists` joined to a curated lookup of known capacities (Wikipedia infoboxes, operator websites, festival capacity records).
+- **What it is:** A row per CA venue (keyed by Setlist.fm `venue_id`) with an estimated attendance capacity and the source of that estimate.
+- **Granularity:** one row per (`venue_id`, `venue_name`, `city_name`) — venues with the same name in different cities (e.g., "Goldfield Trading Post" in Roseville vs. Sacramento) are separate rows.
+- **Why we have it:** **The whole reason event magnitude is observable.** Setlist.fm doesn't publish attendance — it's a post-concert listing service — so without this table we'd have no signal for event *size*. The Gold layer multiplies `capacity * 0.80` (the sell-through assumption) to derive `total_est_attendance` per county-quarter.
+- **Coverage by source (~10K CA events):**
+  - 65% of events have a named-source capacity (wikipedia + operator + festival lookups)
+  - 35% default to 500 (median small-club CA capacity) — these are the long-tail small clubs where each venue typically hosts 1-5 events
+  - 118 venues have explicit capacities; 881 fall back to the default
+- **`capacity_source` values:** `wikipedia`, `operator`, `festival_*` (festival-specific lookups), `cruise_show_theater`, `tv_studio_audience`, `default_small_club`. Filter the table on `capacity_source` to see which classification a row got.
+- **Reproducibility:** [`pipelines/build_venue_capacities.py`](../pipelines/build_venue_capacities.py) holds the SEED dict and the build logic; re-run when new venues appear in the setlistfm panel.
+- **Caveats:**
+  - Capacity is an *upper bound* on attendance. The 0.80 sell-through factor is a fixed prior; PyMC can learn it as a latent later.
+  - Default-500 venues add noise to the long tail. The Bayesian model handles this via a measurement-error term.
+  - Currently CA-only. Extend to other states when broadening the Gold panel.
+
+---
+
 ## 4. How the three Y layers fit together
 
 For any (state, period) the model needs Y, it picks the finest-grained source available:
@@ -164,9 +183,15 @@ LIMIT 10;
 | Local economy | `bls_qcew` | **104,075,464** |
 | Multipliers | `bea_io_use`, `bea_io_make` | 279,882 |
 | Geocoding fallback | `hud_zip_county` | 6 (placeholder) |
-| Events (X) | `events` (unified), `ticketmaster_events`, `setlistfm_setlists` | 78,226 unified |
+| Events (X) | `events` (unified), `ticketmaster_events`, `setlistfm_setlists` | 135,615 unified |
+| Reference | `venue_capacities` (CA venues w/ capacity) | 999 |
 | Y target | `census_state_tax_collections`, `cdtfa_taxable_sales`, `tx_comptroller_county_allocations` | 64,785 |
-| **Warehouse total** | 12 main tables | **~104.5M rows** |
+| **Warehouse total** | 13 main tables | **~104.6M rows** |
+
+The Gold layer (`aai540_gold.model_training_matrix`) is a derived table with
+2,552 rows: one per CA county × quarter × year (2015-2025). See
+[`sql/gold/model_training_matrix.sql`](../sql/gold/model_training_matrix.sql)
+and [`notebooks/aws_starter.ipynb`](../notebooks/aws_starter.ipynb).
 
 ---
 

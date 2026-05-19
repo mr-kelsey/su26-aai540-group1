@@ -14,6 +14,10 @@ By the end of this doc you'll have run your first SQL query against the data lak
 
 If that works, skip to [Sample queries](#sample-queries). If not, read on.
 
+**Working in Python?** Open [`notebooks/aws_starter.ipynb`](../notebooks/aws_starter.ipynb)
+in SageMaker Studio (or local Jupyter). Eighteen cells walk through identity
+check → load the Gold matrix → EDA → ad-hoc queries → OLS baseline.
+
 ---
 
 ## What you have

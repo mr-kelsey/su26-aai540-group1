@@ -30,7 +30,62 @@ CURATED   = Path("data/curated")
 RAW_CSV   = CURATED / "_ca_venues_raw.csv"      # input: from Athena query
 FINAL_CSV = CURATED / "venue_capacities.csv"    # output: canonical reference
 
-DEFAULT_CAPACITY = 500  # median small-club capacity, used when no seed matches
+DEFAULT_CAPACITY = 500  # median small-club capacity, used when no other rule fires
+
+
+# Venue-name keyword → (capacity, capacity_source). Checked in order: first
+# match wins. Captures common patterns when the SEED dict doesn't have an
+# exact match — better than a flat 500 default for venues whose names
+# strongly imply category. Conservative numbers (typical mid-range for the
+# category, not the largest examples) so we don't over-estimate.
+NAME_HEURISTICS: list[tuple[str, int, str]] = [
+    # Very large outdoor / stadium
+    ("Stadium",             30000, "heuristic_stadium"),
+    ("Coliseum",            20000, "heuristic_coliseum"),
+    # Arenas
+    ("Arena",               12000, "heuristic_arena"),
+    ("Forum",               12000, "heuristic_arena"),
+    # Amphitheaters / pavilions
+    ("Amphitheatre",         8000, "heuristic_amphitheatre"),
+    ("Amphitheater",         8000, "heuristic_amphitheatre"),
+    ("Pavilion",             6000, "heuristic_pavilion"),
+    # Outdoor venues / parks
+    ("Fairgrounds",          8000, "heuristic_fairgrounds"),
+    ("Expo Center",          6000, "heuristic_expo"),
+    ("Polo Club",           20000, "heuristic_polo"),
+    # Big indoor venues
+    ("Auditorium",           2500, "heuristic_auditorium"),
+    ("Convention Center",    5000, "heuristic_convention"),
+    ("Music Hall",           1200, "heuristic_music_hall"),
+    ("Ballroom",             1200, "heuristic_ballroom"),
+    # Theaters
+    ("Theatre",              1200, "heuristic_theater"),
+    ("Theater",              1200, "heuristic_theater"),
+    # Generic "Hall"
+    ("Concert Hall",         1500, "heuristic_concert_hall"),
+    ("Hall",                  800, "heuristic_hall"),
+    # Small venues
+    ("Lounge",                300, "heuristic_lounge"),
+    ("Tavern",                250, "heuristic_tavern"),
+    ("Bar",                   200, "heuristic_bar"),
+    ("Pub",                   200, "heuristic_pub"),
+    ("Cafe",                  150, "heuristic_cafe"),
+    ("Café",                  150, "heuristic_cafe"),
+    ("Coffee",                100, "heuristic_coffee"),
+    # Outdoor non-festival sites (parks where small shows happen)
+    ("Plaza",                1500, "heuristic_plaza"),
+    ("Garden",                500, "heuristic_garden"),
+]
+
+
+def apply_name_heuristic(venue_name: str | None) -> tuple[int, str] | None:
+    """Best-effort capacity guess from venue name. Returns None if no rule fires."""
+    if not venue_name:
+        return None
+    for kw, cap, source in NAME_HEURISTICS:
+        if kw in venue_name:
+            return cap, source
+    return None
 
 # Capacity dict keyed by (venue_name, city_name). Sources: Wikipedia infoboxes
 # and operator websites, sanity-checked against known-show photos. For multi-config
@@ -205,10 +260,33 @@ def main() -> int:
     })
 
     out = src.join(seed_df, on=["venue_name", "city_name"], how="left")
+
+    # For rows with no SEED match, try the name-keyword heuristic next, then
+    # fall back to the flat default. Build heuristic columns row-by-row.
+    heur_cap: list[int | None] = []
+    heur_src: list[str | None] = []
+    for vn in out["venue_name"]:
+        hit = apply_name_heuristic(vn)
+        if hit is None:
+            heur_cap.append(None)
+            heur_src.append(None)
+        else:
+            heur_cap.append(hit[0])
+            heur_src.append(hit[1])
+
     out = out.with_columns([
-        pl.col("capacity").fill_null(DEFAULT_CAPACITY).alias("capacity"),
-        pl.col("capacity_source").fill_null("default_small_club").alias("capacity_source"),
+        pl.Series("_heur_cap", heur_cap, dtype=pl.Int64),
+        pl.Series("_heur_src", heur_src, dtype=pl.Utf8),
     ])
+    out = out.with_columns([
+        # 1. Use SEED if available, else 2. name heuristic, else 3. flat default.
+        pl.coalesce(["capacity", "_heur_cap", pl.lit(DEFAULT_CAPACITY)]).alias("capacity"),
+        pl.coalesce([
+            "capacity_source",
+            "_heur_src",
+            pl.lit("default_small_club"),
+        ]).alias("capacity_source"),
+    ]).drop(["_heur_cap", "_heur_src"])
     out = out.select([
         "venue_id", "venue_name", "city_name", "n_events", "n_artists",
         "capacity", "capacity_source",
@@ -216,12 +294,16 @@ def main() -> int:
     FINAL_CSV.parent.mkdir(parents=True, exist_ok=True)
     out.write_csv(FINAL_CSV)
 
-    seeded    = out.filter(pl.col("capacity_source") != "default_small_club")
-    defaulted = out.filter(pl.col("capacity_source") == "default_small_club")
     total_ev  = out["n_events"].sum()
+    seeded    = out.filter(~pl.col("capacity_source").str.starts_with("heuristic_") &
+                            (pl.col("capacity_source") != "default_small_club"))
+    heuristic = out.filter(pl.col("capacity_source").str.starts_with("heuristic_"))
+    defaulted = out.filter(pl.col("capacity_source") == "default_small_club")
 
     print(f"\nseeded:    {seeded.height:>4} venues  ({seeded['n_events'].sum():>5,} events,"
           f" {seeded['n_events'].sum() / total_ev:.1%})")
+    print(f"heuristic: {heuristic.height:>4} venues  ({heuristic['n_events'].sum():>5,} events,"
+          f" {heuristic['n_events'].sum() / total_ev:.1%})  -- via name-keyword fallback")
     print(f"defaulted: {defaulted.height:>4} venues  ({defaulted['n_events'].sum():>5,} events,"
           f" {defaulted['n_events'].sum() / total_ev:.1%}) @ {DEFAULT_CAPACITY}")
     print(f"\nwrote {FINAL_CSV}")
