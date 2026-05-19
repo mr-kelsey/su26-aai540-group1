@@ -67,7 +67,7 @@ Browse to **https://541974874359.signin.aws.amazon.com/console** and sign in wit
 
 You'll be required to:
 
-1. **Change the password.** Pick something strong and store it in 1Password / your password manager.
+1. **Change the password.** Pick something strong and store it in 1Password / your password manager. (If you see a permissions error here, wait 30-60 seconds for IAM to settle and retry — the group's `IAMUserChangePassword` policy allows this.)
 2. **Set up MFA.** Top-right username → *Security credentials* → *Multi-factor authentication*. Any TOTP app works (Authy, 1Password, Google Authenticator). Don't skip this — it's a near-zero-effort security upgrade.
 
 You don't need to use the console day-to-day (everything works from the CLI), but Athena's web Query Editor is genuinely the fastest way to write exploratory SQL.
