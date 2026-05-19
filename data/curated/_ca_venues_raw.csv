@@ -1,0 +1,1000 @@
+venue_name,venue_id,city_name,n_events,n_artists,first_event,last_event
+Kia Forum,2bd02c76,Inglewood,164,124,2022-08-24,2022-12-18
+Yoshi's Oakland,33d4b801,Oakland,161,66,2022-08-25,2022-12-31
+Wiltern Theatre,43d637b3,Los Angeles,120,114,2022-08-27,2022-12-31
+The Belasco,3d28953,Los Angeles,118,114,2022-09-02,2022-12-31
+Discovery Park,5bd6c3c8,Sacramento,115,112,2022-10-06,2022-10-16
+House of Blues,43d63bdb,Anaheim,107,93,2022-08-24,2022-12-30
+Great American Music Hall,4bd4c71e,San Francisco,101,92,2022-08-25,2022-12-31
+Goldfield Trading Post,7bd0da98,Roseville,99,96,2022-08-24,2022-12-31
+The Regent Theater,3d47157,Los Angeles,99,91,2022-08-26,2022-12-16
+Holland America Lines-MS Koningsdam,4bd057ba,San Diego,96,30,2022-10-29,2022-11-04
+Hollywood Bowl,33d62cf9,Los Angeles,94,74,2022-08-24,2022-11-19
+Belly Up Tavern,3bd61cdc,Solana Beach,91,81,2022-08-25,2022-12-31
+The Glass House,7bd61e48,Pomona,91,89,2022-08-27,2022-12-31
+Lodge Room,4bd293fe,Los Angeles,89,77,2022-08-25,2022-12-31
+Hollywood Palladium,73d63a75,Los Angeles,83,74,2022-08-26,2022-12-17
+The Fillmore,3d23db7,San Francisco,82,76,2022-08-24,2022-12-31
+The Chapel,63d772f7,San Francisco,81,65,2022-08-30,2022-12-31
+Troubadour,3bd6d81c,West Hollywood,80,69,2022-08-24,2022-12-16
+Goldfield Trading Post,bd5d53a,Sacramento,79,79,2022-08-26,2022-12-15
+The Observatory,6bd7cab2,Santa Ana,78,74,2022-09-01,2022-12-31
+The Observatory North Park,53d44759,San Diego,78,74,2022-08-24,2022-12-18
+Brick by Brick,3d035e7,San Diego,77,75,2022-08-24,2022-12-17
+Norwegian Jewel,33d3dc19,Los Angeles,76,37,2022-10-25,2022-11-11
+Greek Theatre,4bd61ff2,Los Angeles,76,72,2022-08-27,2022-11-12
+Whisky A Go Go,5bd66bd4,West Hollywood,74,70,2022-08-25,2022-12-31
+Los Angeles State Historic Park,13d65575,Los Angeles,73,73,2022-09-16,2022-12-11
+The Roxy,3d66d67,West Hollywood,73,69,2022-08-27,2022-12-18
+Moreno Beach,73d20205,Perris,71,71,2022-09-29,2022-10-02
+2220 Arts + Archives,3bd0e848,Los Angeles,70,63,2022-08-28,2022-12-09
+The Catalyst,7bd63658,Santa Cruz,70,70,2022-08-26,2022-12-17
+The Regency Ballroom,63d35a77,San Francisco,70,65,2022-08-26,2022-12-17
+The Warfield,63d63667,San Francisco,70,62,2022-08-24,2022-12-28
+The Coach House,7bd6c2a4,San Juan Capistrano,69,63,2022-08-25,2022-12-31
+Garden Amphitheatre,53d237a9,Garden Grove,69,66,2022-09-09,2022-12-30
+House of Blues,2bd6c42a,San Diego,68,68,2022-09-01,2022-12-23
+Golden Gate Park,3d6cdeb,San Francisco,67,66,2022-09-30,2022-10-02
+Brookside Park,4bd39bea,Pasadena,67,67,2022-08-27,2022-08-28
+Zebulon Cafe,23d2b0bb,Los Angeles,66,60,2022-08-28,2022-12-17
+Largo at the Coronet,4bd63b02,Los Angeles,66,31,2022-08-24,2022-12-22
+Pier 80,73d066f1,San Francisco,65,65,2022-09-24,2022-09-25
+The Mountain Winery,bd70d76,Saratoga,65,59,2022-08-25,2022-10-16
+Nevada County Fairgrounds,13d6c93d,Grass Valley,65,45,2022-09-01,2022-10-23
+The Fonda Theatre,1bd74988,Los Angeles,64,54,2022-08-27,2022-12-21
+Fox Theater,3bd2c488,Oakland,64,59,2022-08-24,2022-12-10
+Blue Note Napa,1bd39900,Napa,64,22,2022-08-27,2022-12-31
+The Echo,73d6ca21,Los Angeles,63,62,2022-08-25,2022-12-14
+The Kelly Clarkson Show,23d3ece3,Universal City,62,1,2022-08-25,2022-12-19
+The Catalyst Atrium,13d38dc9,Santa Cruz,60,60,2022-08-28,2022-12-14
+Bottom of the Hill,3d6358b,San Francisco,60,60,2022-08-26,2022-12-23
+Dodger Stadium,1bd63960,Los Angeles,59,57,2022-09-10,2022-12-03
+Ace of Spades,63d7a257,Sacramento,57,56,2022-08-25,2022-12-23
+The Independent,63d6c247,San Francisco,55,52,2022-08-25,2022-12-31
+Harlow's Restaurant & Nightclub,2bd390d6,Sacramento,54,52,2022-09-01,2022-12-14
+Teragram Ballroom,23d5b49b,Los Angeles,51,45,2022-08-26,2022-12-18
+The Casbah,53d63b61,San Diego,51,48,2022-08-28,2022-12-31
+El Rey Theatre,7bd4e2f8,Los Angeles,51,50,2022-08-26,2022-12-14
+Oakland Arena,3bd3c478,Oakland,51,48,2022-08-31,2022-12-17
+1720,bd2fd2a,Los Angeles,50,49,2022-08-26,2022-12-12
+The Masked Singer,23d24cff,Los Angeles,50,28,2022-09-21,2022-11-30
+Cornerstone,63d0c27f,Berkeley,50,50,2022-08-25,2022-12-15
+Constellation Room,3d7ddfb,Santa Ana,49,49,2022-09-16,2022-12-15
+Shoreline Amphitheatre,5bd6d7b4,Mountain View,49,45,2022-08-25,2022-11-05
+Echoplex,7bd61e78,Los Angeles,49,47,2022-08-25,2022-11-27
+Sweetwater Music Hall,4bd7337a,Mill Valley,48,42,2022-08-31,2022-12-31
+SOMA,6bd6c2f6,San Diego,47,42,2022-09-06,2022-12-31
+Chase Center,4bd3f3f2,San Francisco,46,44,2022-08-31,2022-12-11
+Chain Reaction,53d623c1,Anaheim,46,42,2022-09-02,2022-12-17
+YouTube Theater,23d0f42f,Inglewood,46,44,2022-08-24,2022-12-10
+Los Angeles Theatre,3bd7c020,Los Angeles,45,43,2022-10-21,2022-10-22
+Rickshaw Stop,7bd6da7c,San Francisco,43,43,2022-08-25,2022-12-13
+Bill Graham Civic Auditorium,13d6354d,San Francisco,42,36,2022-09-02,2022-12-31
+Pappy & Harriet's Palace,1bd61950,Pioneertown,42,39,2022-08-30,2022-12-18
+Soda Bar,13d675c9,San Diego,42,42,2022-08-24,2022-12-30
+Masonic Auditorium,5bd397ec,San Francisco,41,31,2022-08-26,2022-12-13
+Nova SD,3bd03cec,San Diego,41,41,2022-08-26,2022-12-31
+August Hall,23d2c803,San Francisco,41,41,2022-08-25,2022-11-29
+Humphreys,43d29bbb,San Diego,40,33,2022-08-24,2022-11-20
+Toyota Arena,bd38d22,Ontario,38,37,2022-09-08,2022-12-30
+Starline Social Club,63d582ef,Oakland,38,37,2022-08-26,2022-12-31
+FivePoint Amphitheatre,3bd29ca0,Irvine,36,36,2022-08-24,2022-10-28
+SAP Center at San Jose,6bd3966a,San Jose,36,35,2022-08-27,2022-12-10
+Moroccan Lounge,4bd2a786,Los Angeles,36,36,2022-08-25,2022-12-16
+Academy LA,5bd227fc,Los Angeles,36,36,2022-08-27,2022-12-31
+Petco Park,bd63986,San Diego,36,35,2022-08-28,2022-12-31
+Embarcadero Marina Park North,73d53a3d,San Diego,36,33,2022-09-10,2022-11-20
+The Midnight Hour,3d0ede7,San Fernando,35,32,2022-09-14,2022-12-16
+The Majestic Ventura Theater,53d59739,Ventura,35,34,2022-08-25,2022-12-30
+Honda Center,5bd637a8,Anaheim,35,30,2022-09-07,2022-12-10
+Felton Music Hall,5bd3a398,Felton,35,33,2022-09-09,2022-12-17
+The New Parish,43d66703,Oakland,35,35,2022-08-26,2022-12-09
+Microsoft Theater,1bd5b144,Los Angeles,35,31,2022-09-24,2022-12-31
+National Orange Show Events Center,23d2947b,San Bernardino,35,35,2022-10-28,2022-12-31
+The Starlet Room,5bd33b00,Sacramento,34,32,2022-08-28,2022-12-18
+Seaside Lagoon,63d4860b,Redondo Beach,33,33,2022-09-16,2022-09-18
+Strummer's,63d4964b,Fresno,33,33,2022-09-10,2022-12-29
+Music Box,73d586a5,San Diego,33,33,2022-09-08,2022-12-23
+Doheny State Beach,1bd7e5d0,Dana Point,33,33,2022-09-30,2022-10-02
+Supply and Demand,6bd35a56,Long Beach,32,31,2022-08-26,2022-12-31
+William Randolph Hearst Greek Theatre,53d3a395,Berkeley,32,29,2022-09-07,2022-11-05
+The Novo,5bd5c754,Los Angeles,31,30,2022-08-24,2022-12-22
+The UC Theatre Taube Family Music Hall,33d520d9,Berkeley,31,29,2022-08-25,2022-12-31
+Crypto.com Arena,7bd0d2a8,Los Angeles,30,15,2022-09-14,2022-12-15
+The Guild Theatre,43d03f0f,Menlo Park,30,24,2022-08-27,2022-12-31
+Oak Canyon Park,3bd13088,Silverado,29,29,2022-11-05,2022-11-06
+Hopmonk Tavern,13d74dc1,Novato,28,24,2022-09-09,2022-12-31
+The Theatre at Ace Hotel,43d44b8b,Los Angeles,28,24,2022-08-26,2022-12-17
+Golden 1 Center,53d5c7d5,Sacramento,28,27,2022-08-30,2022-12-21
+Ventura Music Hall,1bd03564,Ventura,28,28,2022-08-27,2022-12-17
+The Canyon,43d55b6f,Agoura Hills,27,27,2022-08-26,2022-12-31
+The Canyon - Montclair,6bd39e96,Montclair,26,24,2022-08-26,2022-12-16
+The Ritz,73d44665,San Jose,26,26,2022-08-27,2022-12-02
+Alex's Bar,3bd6d484,Long Beach,26,25,2022-08-28,2022-12-23
+Pool Deck @ Norwegian Jewel,3bd1008c,Los Angeles,26,24,2022-10-24,2022-11-11
+Private Venue,33d34cd5,Los Angeles,25,16,2022-10-01,2022-12-27
+Pechanga Arena,2bd25cba,San Diego,25,25,2022-08-24,2022-12-31
+SoFi Stadium,13d0b545,Inglewood,25,14,2022-08-27,2022-12-08
+Freight & Salvage,2bd63082,Berkeley,24,18,2022-09-08,2022-12-31
+Transplants Brewing,5bd0ef24,Palmdale,24,23,2022-08-25,2022-12-31
+Waterfront Park,3d441c7,San Diego,24,24,2022-09-24,2022-09-25
+San Jose Civic,63d3966b,San Jose,24,24,2022-09-17,2022-12-20
+Vina Robles Amphitheatre,53d4af6d,Paso Robles,24,24,2022-08-27,2022-10-21
+Ivy Room,23d2cc5f,Albany,23,23,2022-08-25,2022-12-15
+Santa Barbara Bowl,53d63781,Santa Barbara,22,19,2022-08-25,2022-10-19
+Brick & Mortar Music Hall,63d72e9b,San Francisco,22,22,2022-09-17,2022-11-02
+The Magnolia,7bd3ea2c,El Cajon,22,21,2022-09-22,2022-12-19
+Viejas Arena,43d6dbe3,San Diego,22,19,2022-09-03,2022-12-08
+Orpheum Theatre,73d62245,Los Angeles,21,17,2022-09-08,2022-12-16
+North Island Credit Union Amphitheatre,23d3a4fb,Chula Vista,21,21,2022-08-28,2022-10-07
+Miner Auditorium,5bd4e300,San Francisco,21,8,2022-09-08,2022-12-23
+Catch One,1bde892c,Los Angeles,21,21,2022-08-24,2022-12-20
+The Canyon - Santa Clarita,3d2e9f3,Santa Clarita,21,19,2022-08-26,2022-12-30
+The Baked Potato,3bd2f008,Los Angeles,21,11,2022-09-03,2022-12-31
+Bliss Lounge @ Norwegian Jewel,3bd10080,Los Angeles,21,19,2022-10-24,2022-11-08
+Golden State Theatre,3d39977,Monterey,21,20,2022-09-30,2022-12-17
+Bimbo's 365 Club,bd63572,San Francisco,20,19,2022-09-01,2022-12-31
+Stardust Theater @ Norwegian Jewel,33d10081,Los Angeles,20,14,2022-11-03,2022-11-11
+Voodoo Room,63d33287,San Diego,20,20,2022-08-27,2022-12-07
+Seaport Village,13d3cd0d,San Diego,19,19,2022-11-18,2022-11-20
+Magnum's @ Norwegian Jewel,2bd10082,Los Angeles,19,17,2022-10-24,2022-11-07
+Saban Theater,53d78b55,Beverly Hills,18,18,2022-09-03,2022-12-05
+Mosswood Park,43d4774b,Oakland,18,17,2022-10-08,2022-10-09
+Mystic Theatre,13d6c591,Petaluma,18,15,2022-08-25,2022-12-30
+The Venice West,2bd3a40a,Venice,17,17,2022-09-13,2022-12-31
+Resident,63d5c627,Los Angeles,17,16,2022-09-07,2022-12-17
+Eli's Mile High Club,6bd76a56,Oakland,17,17,2022-09-04,2022-12-30
+Moe's Alley,13d60115,Santa Cruz,16,16,2022-09-02,2022-12-31
+First Street Pool & Billiard Parlor,13d1cdb9,Los Angeles,16,15,2022-09-03,2022-12-16
+Mayan Theatre,63d6365f,Los Angeles,16,15,2022-08-24,2022-12-03
+Hard Rock Live,7bd01604,Wheatland,16,16,2022-09-22,2022-12-30
+Rio Theatre,2bd38c5a,Santa Cruz,16,15,2022-09-24,2022-12-31
+Fremont Theater,33d394ed,San Luis Obispo,16,16,2022-08-24,2022-12-11
+Banc of California Stadium,53d23f6d,Los Angeles,16,14,2022-08-27,2022-12-17
+AWE Bar,33d040a5,Yucca Valley,16,16,2022-09-30,2022-12-17
+Don Quixote,2bd0e086,Los Angeles,16,16,2022-09-09,2022-11-19
+The Redwood Bar,53d55b15,Los Angeles,16,16,2022-09-03,2022-12-23
+Frost Amphitheater,63d3aa7f,Stanford,16,16,2022-08-26,2022-09-30
+City National Grove of Anaheim,43d78fd7,Anaheim,16,16,2022-08-30,2022-12-17
+Elbo Room Jack London,6bd2dae2,Oakland,16,15,2022-08-25,2022-12-23
+Balboa Theatre,7bd67268,San Diego,16,13,2022-08-25,2022-12-20
+Knucklehead Hollywood,3d021af,Los Angeles,16,16,2022-09-09,2022-12-10
+Exchange,73d70ab5,Los Angeles,16,16,2022-10-07,2022-12-31
+"",53d18319,Los Angeles,15,15,2022-09-27,2022-12-31
+The Midway,4bd2b396,San Francisco,15,12,2022-09-09,2022-12-31
+Toyota Amphitheatre,13d5b989,Wheatland,15,15,2022-08-26,2022-11-03
+The Wayfarer,3d4190b,Costa Mesa,15,15,2022-08-27,2022-12-07
+The Peppermint Club,3d2b13b,West Hollywood,15,15,2022-09-21,2022-12-11
+Cal Coast Credit Union Open Air Theatre,7bd47af4,San Diego,15,15,2022-08-24,2022-11-26
+Camp Navarro,23d3a403,Navarro,14,8,2022-09-16,2022-09-18
+Mechanics Bank Arena,73d326b1,Bakersfield,14,14,2022-08-25,2022-11-05
+The Hotel Cafe,53d6dbcd,Los Angeles,14,14,2022-09-09,2022-11-20
+Yaamava' Theater,63d01e37,Highland,14,14,2022-09-03,2022-12-30
+The Bourbon Room Hollywood,bd081d2,Los Angeles,14,12,2022-08-30,2022-12-30
+Paul Paul Theater,13d39d59,Fresno,14,14,2022-10-05,2022-10-16
+Masonic Lodge at Hollywood Forever,3d62157,Los Angeles,13,11,2022-09-26,2022-12-07
+Clive Davis Theater at the Grammy Museum,3bd7b0e4,Los Angeles,13,12,2022-09-01,2022-10-19
+Monterey County Fairgrounds,73d39e85,Monterey,13,13,2022-09-23,2022-10-15
+JaM Cellars Ballroom,4bd2c302,Napa,13,9,2022-08-26,2022-12-31
+Arlington Theatre,43d6375b,Santa Barbara,13,13,2022-08-24,2022-11-19
+Oxnard Performing Arts & Convention Center,23d398f7,Oxnard,13,13,2022-08-28,2022-12-10
+The Che Cafe,2bd63cc2,La Jolla,12,11,2022-10-14,2022-12-16
+The Sign of the Scorpion,6bde4e06,Los Angeles,12,1,2022-08-29,2022-12-26
+Hollywood Forever Cemetery,2bd7bc1a,Los Angeles,12,8,2022-09-14,2022-12-13
+Shrine Auditorium and Expo Hall,bd251ba,Los Angeles,12,12,2022-09-09,2022-12-22
+Fred Kavli Theatre,13d789f5,Thousand Oaks,12,12,2022-08-26,2022-11-11
+Blue Note Napa at Charles Krug Winery,3d01107,Saint Helena,12,10,2022-08-26,2022-09-24
+The Joe Henderson Lab,5bd2c794,San Francisco,12,5,2022-08-26,2022-11-06
+The Viper Room,23d62c2f,West Hollywood,12,11,2022-08-27,2022-12-31
+Uptown Theatre,bd649ee,Napa,12,12,2022-09-20,2022-12-15
+Ruocco Park,3d3cd17,San Diego,12,12,2022-11-18,2022-11-20
+El Cid,1bd5e974,Los Angeles,12,12,2022-08-25,2022-12-05
+Riverside Municipal Auditorium,23d6c4ab,Riverside,12,11,2022-08-27,2022-10-25
+Thunder Valley Outdoor Amphitheater,3bd07070,Lincoln,11,11,2022-09-02,2022-09-04
+Gold Diggers,63d2be1b,Los Angeles,11,10,2022-09-09,2022-12-20
+Cafe Colonial,4bd4437a,Sacramento,11,11,2022-10-04,2022-12-07
+Arcata Theatre Lounge,33d7c8c9,Arcata,11,10,2022-09-30,2022-12-07
+DNA Lounge,3bd62458,San Francisco,11,11,2022-08-26,2022-11-08
+The Mint,5bd6d788,Los Angeles,11,10,2022-09-01,2022-12-15
+Café du Nord,23d6347f,San Francisco,11,11,2022-09-20,2022-11-07
+924 Gilman Street,43d6635b,Berkeley,11,10,2022-09-24,2022-12-03
+Rose Bowl,1bd62178,Pasadena,11,9,2022-09-24,2022-10-16
+Jerry's Pizza & Pub,13d61155,Bakersfield,11,11,2022-10-19,2022-12-17
+Disneyland,bd62d8a,Anaheim,11,11,2022-11-13,2022-12-31
+SoHo Restaurant and Music Club,53d65b19,Santa Barbara,11,11,2022-09-07,2022-12-31
+The Beverly Hilton,1bd3a51c,Beverly Hills,11,11,2022-10-08,2022-12-11
+Fox Theater Pomona,53d39b95,Pomona,10,10,2022-08-27,2022-11-15
+Veterans Memorial Building,1bd38d8c,Santa Cruz,10,10,2022-09-17,2022-10-22
+Crest Theatre,3bd62c64,Sacramento,10,10,2022-09-21,2022-12-31
+The Rady Shell at Jacobs Park,1bd061e4,San Diego,10,10,2022-08-31,2022-11-04
+Palace of Fine Arts Theatre,5bd62bb0,San Francisco,10,9,2022-09-12,2022-11-18
+B.R. Cohn Winery,4bd63b56,Glen Ellen,10,10,2022-10-08,2022-10-09
+Neck of the Woods,33d7483d,San Francisco,10,10,2022-09-10,2022-12-04
+The Goldfish,73d02221,Los Angeles,10,9,2022-09-16,2022-11-30
+Walt Disney Concert Hall,2bd618ce,Los Angeles,9,7,2022-10-14,2022-12-31
+SOMA Sidestage,53d72fa5,San Diego,9,9,2022-08-26,2022-11-25
+Los Angeles Memorial Coliseum,3bd6642c,Los Angeles,9,7,2022-09-23,2022-12-10
+Non Plus Ultra,3bd5c860,Los Angeles,9,8,2022-08-27,2022-10-29
+Gundlach-Bundschu Winery,43d7fb43,Sonoma,9,9,2022-09-13,2022-12-03
+Thunder Valley Casino,73d65efd,Lincoln,9,9,2022-08-26,2022-10-01
+The Sun Rose,4bd03326,West Hollywood,9,2,2022-10-01,2022-12-16
+Spinnaker Lounge @ Norwegian Jewel,2bd10086,Los Angeles,9,9,2022-11-03,2022-11-07
+Jimmy Kimmel Live,4bd7c3d6,Los Angeles,9,9,2022-09-15,2022-11-01
+Shrine Auditorium,7bd6d2d4,Los Angeles,9,8,2022-09-24,2022-12-22
+Full Circle Brewing Co.,2bd548ba,Fresno,9,9,2022-09-06,2022-10-24
+Club Fox,2bd76c92,Redwood City,9,9,2022-09-30,2022-12-16
+Playback Studios,63d21ab3,San Jose,8,7,2022-10-20,2022-12-15
+MeloMelo Open Mic,4bd06bd6,Santa Cruz,8,1,2022-09-19,2022-11-28
+Hopmonk Tavern,2bd618ee,Sebastopol,8,8,2022-11-13,2022-12-31
+Til-Two Club,73d29a0d,San Diego,8,8,2022-09-06,2022-11-10
+The Late Late Show with James Corden,4bd5bffe,Los Angeles,8,8,2022-09-13,2022-12-13
+Temblor Brewing Company,33d23cf5,Bakersfield,8,8,2022-09-07,2022-12-01
+Shrine Exposition Hall,73d2f271,Los Angeles,8,7,2022-09-17,2022-11-04
+Los Globos Nightclub,63d7ca87,Los Angeles,8,8,2022-10-08,2022-11-05
+Cerritos Center for the Performing Arts,23d220df,Cerritos,8,8,2022-10-21,2022-12-11
+Homestead Bowl & The X Bar,4bd3a7de,Cupertino,8,8,2022-10-04,2022-12-16
+Project Barley Brewery,73d08a05,Lomita,8,7,2022-09-20,2022-10-18
+Cascade Theatre,33d6785d,Redding,8,8,2022-09-08,2022-12-18
+Yaamava' Resort & Casino,63d0621f,Highland,8,7,2022-08-28,2022-12-31
+Morongo Casino Resort & Spa,3bd79cf8,Cabazon,8,8,2022-09-22,2022-11-05
+Programme Skate & Sound,7bd3a23c,Fullerton,8,8,2022-09-14,2022-12-11
+Terrace Theater,1bd27164,Long Beach,8,8,2022-09-02,2022-11-13
+The Paramount,bd3d1be,Los Angeles,8,8,2022-09-09,2022-11-25
+La Santa,73d392c5,Santa Ana,7,7,2022-08-27,2022-09-29
+Paramount Theatre,1bd6d1a4,Oakland,7,7,2022-10-19,2022-12-02
+The Concert Lounge,1bd39538,Riverside,7,7,2022-09-17,2022-12-09
+Adelanto Stadium,73d3aa11,Adelanto,7,7,2022-08-27,2022-08-27
+The Holding Company,bd511fe,San Diego,7,6,2022-09-15,2022-10-26
+Winters Tavern,3bd71008,Pacifica,7,5,2022-09-19,2022-12-05
+Thee Parkside,5bd63364,San Francisco,7,7,2022-08-28,2022-11-06
+The Golden Bull,3bd4504c,Oakland,7,7,2022-08-27,2022-11-12
+Dolby Theatre,23d5a8f7,Los Angeles,7,3,2022-10-09,2022-11-20
+Fox Performing Arts Center,6bd7a6fe,Riverside,7,7,2022-09-13,2022-11-20
+Roaring Camp,63d0968b,Felton,7,6,2022-09-17,2022-09-18
+The Show,bd5e526,Rancho Mirage,7,6,2022-08-26,2022-12-16
+Elks Unocal Event Center,7bd4ae10,Santa Maria,7,7,2022-10-22,2022-10-22
+Mare Island Waterfront,7bd0f2c0,Vallejo,7,7,2022-09-17,2022-09-17
+Bankhead Theater,13d4b5c1,Livermore,7,7,2022-09-17,2022-12-19
+Long Beach Arena,bd63982,Long Beach,7,7,2022-11-20,2022-12-15
+Tiki Bar,23d67443,Costa Mesa,7,6,2022-09-08,2022-12-31
+Jerry Garcia Amphitheatre,4bd397ea,San Francisco,7,7,2022-08-24,2022-10-08
+Alvas Showroom,33d394dd,San Pedro,7,6,2022-08-27,2022-12-10
+Castro Theatre,7bd6cadc,San Francisco,7,5,2022-11-19,2022-12-03
+Thee Stork Club,5bd11fb4,Oakland,7,5,2022-09-17,2022-11-09
+Oracle Park,7bd3aa04,San Francisco,7,7,2022-09-07,2022-09-21
+The Sardine,1bd08920,San Pedro,7,7,2022-08-26,2022-12-09
+Oxbow RiverStage,53d0f305,Napa,7,5,2022-08-26,2022-09-17
+"Walt Disney Concert Hall, REDCAT Theater",6bd3f6aa,Los Angeles,7,7,2022-09-21,2022-10-22
+The Vermont Hollywood,7bd0ee34,Los Angeles,7,7,2022-09-09,2022-12-03
+TRiP Nightclub,6bd77e1e,Santa Monica,6,5,2022-09-03,2022-11-29
+The Parish at House of Blues,7bd55e1c,Anaheim,6,6,2022-09-15,2022-11-13
+The Doll Hut,1bd3a174,Anaheim,6,6,2022-09-16,2022-12-01
+Lake Perris Fairgrounds,13d585ed,Perris,6,6,2022-09-09,2022-09-11
+Rainbow Bar & Grill,bd4c1c2,West Hollywood,6,6,2022-09-04,2022-12-14
+Acrisure Arena,33d1acd9,Thousand Palms,6,6,2022-12-14,2022-12-31
+Bardot,33d7a079,Los Angeles,6,6,2022-09-19,2022-11-14
+Kuumbwa Jazz Center,73d7a6f1,Santa Cruz,6,5,2022-09-13,2022-12-12
+Luther Burbank Center for the Arts,2bd4d40e,Santa Rosa,6,6,2022-09-22,2022-12-21
+Studio City Sound,43d0d313,Los Angeles,6,6,2022-12-17,2022-12-17
+Belching Beaver Brewery,53d12b81,Oceanside,6,6,2022-11-12,2022-11-12
+Lobero Theatre,2bd38c16,Santa Barbara,6,6,2022-09-09,2022-11-20
+Blue Beach Studio,bd15922,Redondo Beach,6,6,2022-09-09,2022-12-30
+Avalon,4bd28776,Los Angeles,6,6,2022-09-09,2022-12-11
+Pala Casino Spa & Resort,3bd398ec,Pala,6,6,2022-08-27,2022-12-03
+Temple Nightclub,7bd7fa80,San Francisco,6,6,2022-10-07,2022-12-31
+ABC Studios,3bd60424,Los Angeles,6,6,2022-12-31,2022-12-31
+Libbey Bowl,3bd5308c,Ojai,6,6,2022-08-27,2022-10-06
+Private Venue,1bd05184,Los Angeles,6,5,2022-09-19,2022-12-02
+The Jennifer Hudson Show,23d1a833,Los Angeles,6,6,2022-09-13,2022-12-05
+Harvard and Stone,23d48cb3,Los Angeles,6,6,2022-09-09,2022-11-18
+Rapid Skateshop,13d1bda5,Simi Valley,6,6,2022-12-15,2022-12-30
+Pacific Amphitheatre,4bd3a73e,Costa Mesa,6,6,2022-08-25,2022-09-03
+The Comedy Store,73d0b60d,West Hollywood,6,3,2022-11-05,2022-12-15
+Save Mart Center,bd639ee,Fresno,5,5,2022-10-01,2022-12-01
+Gray Area Art & Technology Theater,4bd5bbde,San Francisco,5,5,2022-09-08,2022-10-01
+Concord Pavilion,23d62007,Concord,5,5,2022-09-22,2022-09-27
+Exposition Park,1bd66d1c,Los Angeles,5,5,2022-10-16,2022-10-16
+Fantasy Springs Resort Casino,2bd47056,Indio,5,5,2022-09-17,2022-12-17
+Urbani Cellar,4bd073da,Santa Cruz,5,4,2022-08-26,2022-11-26
+The Marsh,3d769e3,Berkeley,5,1,2022-09-14,2022-12-14
+Levi's Stadium,63d4564f,Santa Clara,5,4,2022-08-27,2022-10-09
+The Side Door,13d25575,Sacramento,5,4,2022-10-15,2022-10-16
+Private Venue,3bd3541c,Los Angeles,5,4,2022-10-11,2022-10-29
+Sonoma County Fairgrounds,43d74373,Santa Rosa,5,5,2022-12-10,2022-12-11
+Catalina Bar & Grill,2bd794de,Los Angeles,5,4,2022-09-15,2022-12-29
+The Pour House,53d5ff9d,Oceanside,5,5,2022-08-26,2022-12-08
+The Dip,3d7155b,Redding,5,5,2022-08-24,2022-12-08
+Stay Gold Deli,3bd0c4d4,Oakland,5,5,2022-09-11,2022-12-21
+iHeartRadio Theater,53d41bbd,Burbank,5,5,2022-09-12,2022-11-17
+Xalos Nightclub & Event Center,1bd1817c,Anaheim,5,5,2022-09-15,2022-10-13
+Highlands Jam Studios,73d1b661,Calabasas,5,5,2022-10-01,2022-11-16
+Rancho Nicasio,5bd73368,Nicasio,5,5,2022-09-11,2022-12-17
+Amado's,73d20601,San Francisco,5,5,2022-09-16,2022-11-18
+The Center for the Arts,3d5896b,Grass Valley,5,5,2022-09-14,2022-11-30
+Maui Sugar Mill Saloon,63d4261f,Los Angeles,5,5,2022-09-12,2022-11-19
+Great Star Theater,73d056f5,San Francisco,5,5,2022-10-13,2022-10-15
+SLO Brew,23d394f7,San Luis Obispo,5,5,2022-08-27,2022-10-20
+Heart Health Park,7bd0eeb0,Sacramento,5,5,2022-09-20,2022-09-24
+Silverlake Lounge,73d61eed,Los Angeles,5,5,2022-10-27,2022-11-15
+3 Disciples Brewing,63d3eec7,Santa Rosa,5,5,2022-10-08,2022-12-03
+Younes and Soraya Nazarian Center For The Performing Arts,73d39e49,Northridge,5,5,2022-09-22,2022-12-17
+El Picante,33d04821,Bell Gardens,5,5,2022-11-18,2022-11-18
+The Siren,bd2e12e,Morro Bay,5,5,2022-10-06,2022-11-12
+Sapphire Palace at Blue Lake Casino,3d2457f,Blue Lake,5,3,2022-11-01,2022-12-31
+Segerstrom Concert Hall,33d4e4f1,Costa Mesa,5,5,2022-10-25,2022-12-20
+Tioga-Sequoia Brewing Company,bd39d12,Fresno,5,5,2022-10-15,2022-11-05
+Old Ironsides,53d7f355,Sacramento,5,5,2022-10-06,2022-12-09
+Rock & Brews,73d3be91,Highland,5,4,2022-09-03,2022-12-16
+DTS Sound Space at KROQ,63d08eef,Los Angeles,5,5,2022-08-29,2022-11-27
+Herbst Theatre,73d6c2a1,San Francisco,4,3,2022-09-19,2022-10-01
+1933 Event Center,3bd56460,Bakersfield,4,4,2022-11-01,2022-11-12
+Campus Jax,4bd25312,Newport Beach,4,4,2022-09-30,2022-11-19
+Feather Falls Casino,23d794ff,Oroville,4,4,2022-10-15,2022-11-14
+Time Nightclub,43d2274f,Costa Mesa,4,4,2022-08-27,2022-11-12
+Whiskey Dick's,3bd49c84,South Lake Tahoe,4,4,2022-09-23,2022-12-29
+Castoro Cellars,3bd65860,Templeton,4,4,2022-09-17,2022-09-17
+Antelope Valley Fairgrounds,63d29a6b,Lancaster,4,4,2022-09-23,2022-09-24
+Bandcamp Record Store and Performance Space,bd3ad96,Oakland,4,4,2022-08-24,2022-11-11
+Hueneme Beach Park,43d06b5f,Port Hueneme,4,4,2022-08-27,2022-08-28
+Bob Hope Theatre,23d60c03,Stockton,4,4,2022-09-26,2022-12-14
+Hard Rock Hotel & Casino Sacramento,7bd1fec4,Wheatland,4,4,2022-09-29,2022-11-10
+Five Fingers Pub,3bded0b8,Inyokern,4,2,2022-09-04,2022-10-29
+"DiPiazza's Restaurant, Lounge and Nightclub",6bd39e56,Long Beach,4,3,2022-08-28,2022-11-12
+Vinnie's Bar & Grill,23d3a4ab,Concord,4,4,2022-09-22,2022-12-16
+The Broad,2bd5205a,Los Angeles,4,4,2022-09-24,2022-09-24
+Poway Center for the Performing Arts,4bd39bc6,Poway,4,4,2022-09-02,2022-12-04
+Redding Civic Auditorium,63d71e53,Redding,4,4,2022-08-25,2022-11-05
+Champion Site + Sound,53d033ed,Los Angeles,4,3,2022-11-05,2022-12-10
+Almost Famous Wine Company,1bd03d54,Livermore,4,4,2022-08-26,2022-11-11
+Roccapulco,43d593eb,San Francisco,4,4,2022-09-17,2022-11-12
+Little Saint,bd0798e,Healdsburg,4,4,2022-09-06,2022-11-15
+Powerhouse Pub,4bd183ae,Folsom,4,4,2022-11-13,2022-12-07
+Hollywood Improv,13d7e17d,Los Angeles,4,3,2022-09-18,2022-11-01
+Victoria Gardens Cultural Center,53d1bf35,Rancho Cucamonga,4,4,2022-11-05,2022-12-21
+Moe's Music,2bded0ba,Ridgecrest,4,2,2022-09-10,2022-12-10
+8253 Ronson Rd,1bd1e524,San Diego,4,4,2022-09-11,2022-09-11
+The Westin Bonaventure Hotel and Suites,bd7259e,Los Angeles,4,4,2022-11-08,2022-11-08
+Longboard Margarita Bar,33d234f9,Pacifica,4,3,2022-08-26,2022-10-20
+Pechanga Resort & Casino,4bd65f62,Temecula,4,4,2022-09-16,2022-11-13
+Sacramento Memorial Auditorium,4bd6c3aa,Sacramento,4,4,2022-09-28,2022-11-13
+The Rock - SLO Brew,5bd3ef20,San Luis Obispo,4,4,2022-09-10,2022-10-08
+Henry Miller Memorial Library,4bd4b7ce,Big Sur,4,4,2022-09-21,2022-10-01
+Agua Caliente Casino,63d632e3,Rancho Mirage,4,4,2022-09-10,2022-11-19
+The Rellik Tavern,3d381a3,Benicia,4,2,2022-09-03,2022-12-22
+Mi Ranchito Bar,63d18e5b,Los Angeles,4,4,2022-10-22,2022-12-03
+Grammy Museum,bd061ea,Los Angeles,4,4,2022-09-22,2022-11-02
+Selland Arena,bd63d12,Fresno,4,4,2022-10-04,2022-10-04
+Sidney B. Cushing Memorial Amphitheatre,5bd39fc8,Marin County,4,4,2022-10-22,2022-10-22
+Whistle Stop Bar,33de5c1d,San Diego,4,4,2022-10-14,2022-11-21
+Tower Theatre for the Performing Arts,bd5e1c6,Fresno,4,4,2022-10-22,2022-12-23
+The Boardwalk,6bd63e1e,Orangevale,4,4,2022-10-14,2022-12-03
+Unfair Oaks,33d28831,Pasadena,4,3,2022-10-29,2022-12-16
+Rotary Amphitheater,23d5cc6b,Fresno,4,4,2022-08-24,2022-09-22
+20th St Block Party,3d461e7,San Francisco,4,4,2022-10-15,2022-10-15
+Amazon Music Live,23d1b86b,Los Angeles,4,4,2022-10-27,2022-12-29
+Pechanga Theater,2bd39032,Temecula,4,3,2022-10-22,2022-11-02
+Ironstone Amphitheatre,33d65061,Murphys,4,4,2022-09-16,2022-09-16
+Coffee Gallery Backstage,63d3aa03,Altadena,4,4,2022-09-10,2022-12-16
+Gloria Molina Grand Park,4bd1efb2,Los Angeles,4,4,2022-11-05,2022-11-05
+Lodi Grape Festival Grounds,5bd01348,Lodi,4,4,2022-09-15,2022-10-15
+The Laugh Factory,bd23d5a,Los Angeles,3,1,2022-11-05,2022-11-19
+Stages,bd09d32,Santa Ana,3,3,2022-10-15,2022-12-10
+Crybaby,53d037c5,Oakland,3,3,2022-08-24,2022-11-01
+Luckyduck Bicycle Cafe,53d04321,Oakland,3,3,2022-12-10,2022-12-10
+Phoenix Theatre,bd62572,Petaluma,3,3,2022-09-10,2022-12-03
+Pipeline Church,33d05081,Visalia,3,3,2022-11-03,2022-11-03
+Bricks Rock Bar,6bd0d6fa,Maywood,3,3,2022-09-16,2022-09-17
+Ramona Mainstage,4bd673b6,Ramona,3,3,2022-12-03,2022-12-08
+Chumash Casino,bd64d26,Santa Ynez,3,3,2022-11-18,2022-12-16
+June Lake Jam Fest,33d068b5,June Lake,3,3,2022-09-10,2022-09-11
+Fingerprints Music,6bd39e12,Long Beach,3,3,2022-10-07,2022-11-11
+The Wakehouse,33d2b8d5,Reedley,3,3,2022-09-03,2022-09-30
+Hotel Utah,1bd6714c,San Francisco,3,3,2022-11-27,2022-12-08
+The Abbey Food & Bar,43d0cbd7,West Hollywood,3,3,2022-12-15,2022-12-15
+The Bistro,13d5a9b1,Hayward,3,3,2022-09-03,2022-11-16
+Swedish American Hall,13d6c139,San Francisco,3,3,2022-10-15,2022-10-22
+Characters,23d738b7,Pomona,3,3,2022-10-01,2022-11-26
+Santa Cruz Civic Auditorium,1bd38dc8,Santa Cruz,3,3,2022-10-01,2022-10-01
+Helwig Winery,53d5abdd,Plymouth,3,3,2022-08-27,2022-08-27
+South Coast Winery,bd4758e,Temecula,3,3,2022-09-01,2022-10-06
+The Airliner,13d63d89,Los Angeles,3,3,2022-09-02,2022-12-09
+Oceanside Pier,63d6121f,San Diego,3,3,2022-09-17,2022-09-18
+Yellow Door House Concert,bd0310e,Santa Ana,3,3,2022-09-05,2022-10-21
+Barker Hangar,33d268b1,Santa Monica,3,3,2022-10-08,2022-12-06
+Fox Theater,6bd3a2fa,Bakersfield,3,3,2022-09-17,2022-11-02
+Retro Junkie,23d3e41f,Walnut Creek,3,3,2022-10-21,2022-11-25
+Giggles Night Club,33d44421,Glendale,3,3,2022-09-30,2022-11-06
+Pantages Theatre,63d62afb,Los Angeles,3,1,2022-12-15,2022-12-17
+GiGi's Cocktail Lounge,3bd1f834,Ventura,3,3,2022-09-08,2022-10-11
+The OffBeat,4bd3bf02,Los Angeles,3,3,2022-09-30,2022-10-16
+Private Venue,33d02ce5,Los Angeles,3,3,2022-09-13,2022-10-21
+McCallum Theatre,13d7bd21,Palm Desert,3,3,2022-10-13,2022-12-12
+Carpenter Performing Arts Center,5bd1ff30,Long Beach,3,2,2022-09-24,2022-11-03
+The Voice,63d466ab,Universal City,3,3,2022-11-15,2022-12-14
+Rubycon Records & Tapes,3bd1bc34,Los Angeles,3,3,2022-08-26,2022-12-17
+Surfers Point,33d058d9,Ventura,3,3,2022-10-14,2022-10-14
+Lancaster Performing Arts Center,6bd29a6e,Lancaster,3,3,2022-10-21,2022-11-18
+John Anson Ford Amphitheatre,63d722bb,Los Angeles,3,3,2022-08-25,2022-10-22
+Coaxial Arts Foundation,2bd24c12,Los Angeles,3,3,2022-10-14,2022-11-05
+Golden Gate Park Bandshell,3bd2d474,San Francisco,3,3,2022-11-11,2022-12-07
+Alex Theatre,7bd7f6c0,Glendale,3,3,2022-11-05,2022-11-05
+Haight Street,1bd741cc,San Francisco,3,3,2022-10-16,2022-10-16
+Epstein Family Amphitheater,6bd05a1a,La Jolla,3,3,2022-10-20,2022-10-22
+FTG Warehouse,73d05665,Santa Ana,3,3,2022-11-17,2022-12-15
+Senator Theatre,13d3a1a5,Chico,3,3,2022-11-03,2022-11-03
+1015 Folsom,63d7baf3,San Francisco,3,3,2022-09-23,2022-12-31
+Rebru Spirits,2bd054b6,San Diego,3,3,2022-12-16,2022-12-16
+Raven Theater,23d3a0c7,Healdsburg,3,3,2022-10-13,2022-12-02
+Green Music Center,5bd4f7c0,Rohnert Park,3,3,2022-08-26,2022-08-26
+Palace Theatre,5bd6db5c,Los Angeles,3,3,2022-11-04,2022-11-27
+The Britisher,7bd2f6c0,Lancaster,3,2,2022-11-19,2022-12-17
+Moscone Center,3d6c923,San Francisco,3,3,2022-09-20,2022-09-20
+Gallo Center for the Arts,63d5622f,Modesto,3,3,2022-10-29,2022-11-13
+Quarry Park Amphitheater,3bd1fc08,Rocklin,3,3,2022-08-27,2022-09-30
+The Lodge Barber Shop,63de5653,Long Beach,3,3,2022-12-04,2022-12-04
+Segerstrom Center for the Arts,63d79a9f,Costa Mesa,3,3,2022-12-02,2022-12-23
+Lagunitas Amphitheater,43d0f737,Petaluma,3,2,2022-08-30,2022-09-20
+Kensington Club,7bd41a94,San Diego,3,3,2022-08-28,2022-10-13
+The Knockout,33d628b9,San Francisco,3,3,2022-08-24,2022-10-29
+Winstons Beach Club,33d3ac65,San Diego,3,3,2022-10-04,2022-12-09
+Harvelle's,2bd4a0f2,Santa Monica,3,2,2022-09-16,2022-12-09
+Sycuan Live and Up Close,4bd7332e,El Cajon,3,3,2022-09-15,2022-09-17
+"Bovard Auditorium, University of Southern California",bd2f10a,Los Angeles,3,2,2022-08-26,2022-10-25
+Pacific Design Center,4bd62f0e,West Hollywood,3,3,2022-10-27,2022-10-27
+Paramount Ranch,13d765fd,Agoura Hills,3,3,2022-10-15,2022-10-15
+Amoeba Music,3d671bb,Los Angeles,3,3,2022-09-27,2022-11-15
+Starlight Theater,2bd398e2,Pala,3,3,2022-09-18,2022-10-02
+Gallagher Square,5bd023b0,San Diego,3,3,2022-08-25,2022-09-25
+Feinstein's at the Nikko,73d52e49,San Francisco,3,1,2022-10-21,2022-12-18
+Bar Sinister at Boardner's,2bd66002,Los Angeles,3,3,2022-10-22,2022-12-17
+Oakland Metro Operahouse,3bd398c4,Oakland,3,3,2022-11-05,2022-11-05
+Bricks Restaurant & Sports Bar,4bd3bf7a,Maywood,3,3,2022-12-30,2022-12-30
+Louise M. Davies Symphony Hall,6bd7460e,San Francisco,3,3,2022-11-07,2022-12-29
+The Pad,2bd04cc2,Perris,3,3,2022-11-12,2022-11-12
+BAL Theatre,33d39441,San Leandro,3,3,2022-09-24,2022-12-03
+Mi California,53d06b9d,Hawthorne,3,3,2022-09-03,2022-12-10
+Private Venue,13d09921,Los Angeles,3,3,2022-10-26,2022-12-24
+Private Venue,73d2dae5,Santa Barbara,3,1,2022-09-24,2022-12-30
+McCabe's Guitar Shop,2bd6c016,Santa Monica,3,2,2022-10-01,2022-10-15
+Glen Helen Amphitheater,bd5412e,San Bernardino,3,3,2022-10-01,2022-10-08
+The Back Room,63d556f7,Berkeley,2,2,2022-10-20,2022-11-17
+Samba By The Sea,63d0fed3,Redondo Beach,2,1,2022-12-30,2022-12-31
+Wasteland Weekend,53d0ef25,North Edwards,2,1,2022-09-29,2022-09-29
+Central Park,73d57629,Davis,2,2,2022-10-06,2022-10-27
+Mary Stuart Rogers Theater,3d3992f,Modesto,2,2,2022-10-14,2022-10-23
+Ocean Ale House,1bd52980,San Francisco,2,1,2022-10-02,2022-12-11
+Ribald Brewing,63d07257,Nevada City,2,2,2022-10-27,2022-10-29
+Boardner's,1bd79968,Los Angeles,2,2,2022-08-26,2022-10-14
+Budweiser Pavilion and Stage,6bd20eca,Bakersfield,2,2,2022-09-21,2022-09-22
+The Lodge at The Regency Center,53d77b65,San Francisco,2,2,2022-08-27,2022-09-10
+The Alibi,43d3f34b,Palm Springs,2,2,2022-09-21,2022-10-28
+Commerce Casino,23d57803,Commerce,2,2,2022-08-25,2022-08-25
+B Street Theatre at The Sofia Tsakopoulos Center for the Arts,7bd2ca6c,Sacramento,2,2,2022-09-06,2022-10-13
+Crazy Horse Saloon & Grill,13d39905,Nevada City,2,2,2022-09-09,2022-11-11
+Molly Malone's,5bd233c0,Los Angeles,2,2,2022-10-13,2022-12-31
+Ojai Deer Lodge,4bd2bb9e,Ojai,2,2,2022-09-29,2022-11-22
+The Tower Bar,3bde5c1c,San Diego,2,2,2022-10-22,2022-11-12
+Turlock Community Theatre,2bd390ae,Turlock,2,2,2022-11-30,2022-12-01
+Jam In The Van,6bd56e26,Los Angeles,2,2,2022-10-08,2022-11-11
+Old Princeton Landing,13d20519,Half Moon Bay,2,2,2022-08-27,2022-10-30
+Club Tee Gee,2bd3f04a,Los Angeles,2,2,2022-08-28,2022-08-28
+Audio SF,4bd2e32a,San Francisco,2,2,2022-12-31,2022-12-31
+Performing Arts Center,3bd39438,San Luis Obispo,2,2,2022-11-16,2022-11-16
+Orange County Fairgrounds,2bd548b6,Costa Mesa,2,2,2022-09-03,2022-10-29
+USC McCarthy Quad,73d5caad,Los Angeles,2,2,2022-10-06,2022-10-23
+Desert Empire,6bd2aab2,Ridgecrest,2,1,2022-10-21,2022-10-22
+Harrah's Resort Southern California,53d393e1,Valley Center,2,2,2022-08-27,2022-09-25
+Corazón Performing Arts,5bd0571c,Topanga Canyon,2,2,2022-10-08,2022-10-15
+Coco Beach Presents,43d057d7,Long Beach,2,2,2022-10-25,2022-10-25
+Alex Madonna Expo Center,4bd7dbde,San Luis Obispo,2,2,2022-10-20,2022-10-20
+SAFE Credit Union Performing Arts Center,13d19951,Sacramento,2,2,2022-09-16,2022-10-29
+Huntington City Beach,1bd0ed94,Huntington Beach,2,2,2022-09-13,2022-09-13
+Capos,73d06241,Gilroy,2,2,2022-10-02,2022-10-02
+Protector Brewery,73d136a1,San Diego,2,2,2022-10-15,2022-10-15
+Tamalpais High School,23d26c27,Mill Valley,2,1,2022-10-06,2022-11-29
+Queen Bees,1bd645e8,San Diego,2,2,2022-10-21,2022-11-19
+Visalia Fox Theatre,53d3939d,Visalia,2,2,2022-10-04,2022-10-07
+Pala Events Center,2bd398ae,Pala,2,2,2022-10-14,2022-11-04
+The Miracle Theater,63d3f633,Inglewood,2,1,2022-08-26,2022-08-27
+Twin Pine Casino & Hotel,4bd5773e,Middletown,2,1,2022-12-09,2022-12-10
+Third Window Brewing Co.,1bd1352c,Santa Barbara,2,1,2022-08-28,2022-11-11
+Palo Alto Art Center Auditorium,43d04fbb,Palo Alto,2,2,2022-11-16,2022-11-16
+Social Hall SF,3d589db,San Francisco,2,2,2022-08-26,2022-12-17
+The Crepe Place,2bd6c44e,Santa Cruz,2,2,2022-10-26,2022-10-26
+Toot's Tavern,53d3a7f5,Crockett,2,2,2022-09-10,2022-12-16
+The Lash,bd411e2,Los Angeles,2,2,2022-12-11,2022-12-11
+Liquid Zoo,23d0580b,Los Angeles,2,2,2022-08-27,2022-10-13
+The Arena,4bd547e2,Simi Valley,2,2,2022-09-23,2022-09-23
+Cal Coast Credit Union Amphitheater,5bd07be4,San Diego,2,2,2022-08-24,2022-09-15
+1881,53d057a9,Pasadena,2,1,2022-10-28,2022-12-07
+Private Venue,5bd23770,Oakland,2,2,2022-08-24,2022-12-14
+Trione Vineyards and Winery,7bd066b8,Geyserville,2,1,2022-09-25,2022-09-25
+Fulton 55,13d79da1,Fresno,2,2,2022-10-28,2022-12-18
+Aviator Nation Dreamland,1bd04168,Malibu,2,2,2022-12-03,2022-12-11
+"",63d29ae7,Carlsbad,2,2,2022-09-20,2022-10-16
+Crosscity Christian Church,23d05893,Fresno,2,2,2022-10-14,2022-10-14
+Stanislaus County Fairgrounds,13d29d75,Turlock,2,2,2022-09-17,2022-09-17
+Miners Foundry Cultural Center,1bd39904,Nevada City,2,2,2022-09-15,2022-10-13
+Graton Resort & Casino,73d39a9d,Rohnert Park,2,2,2022-09-23,2022-11-28
+RingCentral Coliseum,43d1b7e3,Oakland,2,2,2022-09-14,2022-09-14
+Norwegian Jewel - Stardust Theater,3d04177,Los Angeles,2,1,2022-10-26,2022-10-31
+Cellar Door,43d39393,Visalia,2,2,2022-09-27,2022-10-08
+The Mint Supperclub,3bd2d874,Los Angeles,2,2,2022-12-09,2022-12-10
+Highpoint Brewing Company,2bd1207a,San Dimas,2,2,2022-09-17,2022-12-17
+Lucca Bar & Grill,3d19d87,Benicia,2,1,2022-09-03,2022-10-01
+Paradise Performing Arts Center,23d3989b,Paradise,2,2,2022-10-21,2022-10-21
+Old Town Blues Club,63d1a21b,Temecula,2,1,2022-09-17,2022-10-30
+Royce Hall,3bd26c38,Los Angeles,2,2,2022-10-16,2022-11-12
+Wilshire Ebell Theatre,13d66d61,Los Angeles,2,1,2022-10-28,2022-10-28
+California Center for the Arts,4bd5c7b2,Escondido,2,2,2022-10-18,2022-10-18
+Vibrato Jazz Club,1bd58128,Los Angeles,2,1,2022-10-18,2022-10-18
+My Place,13d04509,Huntington Beach,2,2,2022-11-19,2022-11-25
+Lytton Plaza,7bd0f634,Palo Alto,2,2,2022-09-09,2022-09-28
+The Great Northern,53d28f3d,San Francisco,2,2,2022-09-14,2022-09-22
+The Church House,7bd062dc,Santa Cruz,2,2,2022-09-30,2022-09-30
+Laughing Monk Brewing,63d06683,San Francisco,2,1,2022-09-23,2022-11-12
+Fernwood Campground and Resort,bd3a50a,Big Sur,2,1,2022-09-23,2022-09-24
+Obsidian Spirits Amphitheater,2bd0149e,Corning,2,2,2022-09-04,2022-09-25
+SacYard Community Tap House,13d1751d,Sacramento,2,1,2022-10-28,2022-12-02
+"",23d67c67,San Diego,2,2,2022-09-14,2022-10-14
+Sham Rock Pop Up Shop,13d195bd,Los Angeles,2,1,2022-12-22,2022-12-23
+The Whiskey Barrel,5bd02fa8,Hesperia,2,2,2022-11-19,2022-11-19
+Adams Avenue Street Fair,1bd515f8,San Diego,2,2,2022-09-24,2022-09-24
+John Van Duzer Theatre,1bd75960,Arcata,2,2,2022-10-08,2022-11-10
+Laxson Auditorium,73d79685,Chico,2,2,2022-09-07,2022-12-13
+The Last Call,43d02b2f,Los Angeles,2,2,2022-09-17,2022-11-30
+Highland Park Bowl,6bd202b2,Los Angeles,2,2,2022-08-27,2022-09-09
+Artist In The Alley,63d026c7,Pomona,2,2,2022-10-08,2022-11-12
+State Theatre,73d39a71,Red Bluff,2,2,2022-10-07,2022-10-28
+The Lab,13d11da9,Hawthorne,2,2,2022-10-27,2022-10-27
+Viejas Casino & Resort,7bd29ae4,Alpine,2,2,2022-10-14,2022-11-26
+Great Change Brewing Company,7bd06a04,Bakersfield,2,2,2022-09-16,2022-09-16
+Hilltop Tavern and Inn,73d206b9,Apple Valley,2,2,2022-09-17,2022-10-21
+Campbell Hall,3d171c3,University of California Santa Barbara Campus,2,2,2022-11-16,2022-11-29
+Cache Creek Casino Resort,73d7fea5,Brooks,2,2,2022-09-09,2022-11-05
+Hubba Wines,23d064a7,Paso Robles,2,2,2022-09-17,2022-09-17
+Vacaville Performing Arts Theatre,3bd67020,Vacaville,2,2,2022-10-15,2022-11-04
+Beach House,bd0fdc2,San Diego,2,2,2022-09-01,2022-10-21
+Milk Bar,2bd7a852,San Francisco,2,2,2022-10-28,2022-12-09
+Corbin Bowl,4bd24b5e,Los Angeles,2,2,2022-09-24,2022-12-23
+Central Park,5bd057c0,Rancho Santa Margarita,2,2,2022-10-08,2022-10-08
+Bob Baker Marionette Theater,2bd2a462,Los Angeles,2,2,2022-09-30,2022-11-20
+Broad Stage,7bd7fea8,Santa Monica,2,2,2022-09-17,2022-12-17
+Ramona Garden Park,5bd303f0,Grover Beach,2,2,2022-08-27,2022-08-27
+Third Street Tavern,73d0565d,Highland,2,2,2022-09-24,2022-10-01
+Sebastiani Theatre,5bd3cb04,Sonoma,2,2,2022-09-03,2022-09-30
+Madera County Fairgrounds,43d29b83,Madera,2,2,2022-09-08,2022-09-10
+Private Venue,1bd3518c,Los Angeles,2,1,2022-10-25,2022-11-01
+Drinx Bar & Grill,73d042d5,Lakeport,2,2,2022-12-10,2022-12-10
+Silent Valley Studios,5bd02b1c,Temecula,2,1,2022-10-01,2022-10-29
+Paramount Theatre,33d31c05,Los Angeles,2,2,2022-09-09,2022-10-07
+San Diego Convention Center,4bd0c79a,San Diego,2,2,2022-10-08,2022-10-09
+The Slipper Clutch,73d05a85,Los Angeles,2,2,2022-10-22,2022-10-22
+Aldrich Park,3d62d8f,Irvine,2,2,2022-09-20,2022-09-20
+Private Venue,73d05a51,East Los Angeles,2,2,2022-09-03,2022-09-03
+Rodney Strong Vineyards,7bd39234,Healdsburg,2,2,2022-08-27,2022-09-10
+Windmill Cove Bar & Grill,63d09e67,Stockton,2,2,2022-09-11,2022-09-17
+The Blue Lagoon,23d72c77,Santa Cruz,2,2,2022-09-21,2022-10-15
+Dignity Health Amphitheatre,3d0f5f7,Bakersfield,2,2,2022-08-26,2022-10-11
+Brain Dead Studios,33d080d5,Los Angeles,2,2,2022-09-20,2022-11-14
+St. James Park,13d4c185,San Jose,2,2,2022-10-16,2022-10-16
+Humbrews,4bd72f8a,Arcata,2,2,2022-09-30,2022-10-12
+Good Times at Davey Wayne's,33d294e5,Los Angeles,2,1,2022-09-28,2022-11-17
+Rock and Roll,6bd33612,San Diego,2,2,2022-09-04,2022-12-18
+Boulevard Music,23d21cef,Los Angeles,2,2,2022-11-05,2022-11-19
+Spin,13d63d0d,San Diego,2,2,2022-10-21,2022-10-22
+Palmdale Amphitheater,2bd398a6,Palmdale,2,2,2022-09-10,2022-09-10
+Cobb's Comedy Club,43d65727,San Francisco,2,2,2022-09-24,2022-10-08
+Private Event,1bd09d74,Los Angeles,2,2,2022-10-22,2022-11-27
+Burbank Hilton,bd6c54a,Burbank,2,2,2022-10-27,2022-10-27
+Permanent Records Roadhouse,5bde37cc,Los Angeles,2,2,2022-09-24,2022-12-14
+Cold Spring Tavern,1bd2d99c,Santa Barbara,2,1,2022-08-27,2022-11-27
+Spa Montage Healdsburg,2bd0649a,Healdsburg,2,1,2022-09-18,2022-09-18
+Zellerbach Hall,73d4be7d,Berkeley,2,2,2022-11-03,2022-11-12
+E. Claire Raley Studios for the Performing Arts,13de95b1,Sacramento,2,1,2022-10-01,2022-10-06
+Bristol’s Cider House,5bd0770c,Atascadero,2,2,2022-10-16,2022-11-13
+Hotel Ziggy,1bd0659c,West Hollywood,2,2,2022-09-14,2022-10-17
+Sound Room,23d26887,Oakland,2,2,2022-11-05,2022-11-11
+The Grape,7bd06a8c,Ventura,2,2,2022-08-29,2022-09-17
+Ruby's Nightclub,43d09f2f,Oxnard,2,2,2022-09-29,2022-09-29
+UCSF Mission Bay,13d05529,San Francisco,2,2,2022-10-18,2022-10-18
+Collective 47,33d35c39,Apple Valley,2,2,2022-12-08,2022-12-08
+Capitol Mall,5bd42bcc,Sacramento,2,2,2022-09-24,2022-09-24
+Gilmore Music,13d079f5,Long Beach,2,2,2022-10-22,2022-12-18
+Warner Bros. Studios,13d71545,Burbank,2,2,2022-09-21,2022-12-15
+Odd Fellows Hall,1bd259c4,Auburn,2,1,2022-12-16,2022-12-17
+Affliction Studios,6bd2aea6,Seal Beach,1,1,2022-12-31,2022-12-31
+Chabot Space and Science Center,bd43d6e,Oakland,1,1,2022-09-02,2022-09-02
+Empress Theatre,23d478af,Vallejo,1,1,2022-12-31,2022-12-31
+Lake Forest Sports Park and Recreation Center,1bd595f0,Lake Forest,1,1,2022-08-27,2022-08-27
+Building 43,73d04241,Alameda,1,1,2022-12-09,2022-12-09
+Punch Line San Francisco,73de62e1,San Francisco,1,1,2022-11-11,2022-11-11
+Private Venue,73d05205,Lancaster,1,1,2022-10-28,2022-10-28
+War Memorial Opera House,3d63d0f,San Francisco,1,1,2022-11-29,2022-11-29
+Papermill Creek Saloon,4bd0c756,Forest Knolls,1,1,2022-12-11,2022-12-11
+Roxx On Main,33d0f419,Martinez,1,1,2022-11-19,2022-11-19
+Minnow Arts,23d068eb,Santa Cruz,1,1,2022-09-02,2022-09-02
+South Central Farm,43d32797,Los Angeles,1,1,2022-11-27,2022-11-27
+Gerstle Park Neighborhood,53d3ebb9,San Rafael,1,1,2022-09-18,2022-09-18
+Parq Restaurant & Nightclub,5bd20b1c,San Diego,1,1,2022-10-07,2022-10-07
+Newport Dunes Waterfront Resort & Marina,73d77e4d,Newport Beach,1,1,2022-10-22,2022-10-22
+Permanent Records,33d2d8d9,Los Angeles,1,1,2022-09-14,2022-09-14
+Chinatown,63d2fa77,Los Angeles,1,1,2022-10-28,2022-10-28
+Simi Valley Town Center,2bde3006,Simi Valley,1,1,2022-10-15,2022-10-15
+Arion Press,33deac25,San Francisco,1,1,2022-11-06,2022-11-06
+Tackle Box Bar & Grill,43d3a34f,Chico,1,1,2022-10-20,2022-10-20
+Stirring Coffeehouse,13de59ad,Redding,1,1,2022-11-20,2022-11-20
+Kern County Fairgrounds,5bd70b80,Bakersfield,1,1,2022-09-29,2022-09-29
+Maranatha Chapel,6bd31256,San Diego,1,1,2022-12-11,2022-12-11
+The Stone House,7bd25a14,Nevada City,1,1,2022-10-14,2022-10-14
+Sunny Hill House,3bd10c20,Petaluma,1,1,2022-11-10,2022-11-10
+Dublab,3bd4d4a4,Los Angeles,1,1,2022-12-19,2022-12-19
+KQED Studios,43d64fc3,San Francisco,1,1,2022-09-15,2022-09-15
+Private Venue,43d3634b,Santa Cruz,1,1,2022-11-06,2022-11-06
+The Union,33d0fc55,Oroville,1,1,2022-11-11,2022-11-11
+Gold Country Casino & Hotel,3bd39800,Oroville,1,1,2022-12-31,2022-12-31
+Wylde Works,73d042c9,Santa Barbara,1,1,2022-12-13,2022-12-13
+Tap & Vine,7bde2e44,Auburn,1,1,2022-09-03,2022-09-03
+American Legion Hall 206,53d5d3f5,Los Angeles,1,1,2022-11-18,2022-11-18
+Woodbridge Crossing,53d01341,Woodbridge,1,1,2022-09-24,2022-09-24
+ApCal Winery,3bd42824,Madera,1,1,2022-09-09,2022-09-09
+Orpheum Theatre,1bd6c9c4,San Francisco,1,1,2022-11-12,2022-11-12
+Red Studios,1bd5c99c,Los Angeles,1,1,2022-12-15,2022-12-15
+Sonny McLeans,43d3bfe7,West Hollywood,1,1,2022-11-19,2022-11-19
+Museum of Contemporary Art San Diego,23d478cb,La Jolla,1,1,2022-09-10,2022-09-10
+Capital Christian Center,53d7fbb5,Sacramento,1,1,2022-12-08,2022-12-08
+Marines' Memorial Theatre,43d397ef,San Francisco,1,1,2022-11-12,2022-11-12
+St. Charles Borromeo Church,1bd1b900,Los Angeles,1,1,2022-12-23,2022-12-23
+The Autry,73d52291,Los Angeles,1,1,2022-09-03,2022-09-03
+The Wicked Shamrock,2bd0e4fe,Lompoc,1,1,2022-11-25,2022-11-25
+Kinky Kontrol,73d042e5,Los Angeles,1,1,2022-12-10,2022-12-10
+BL Dancehall and Saloon,3d03d1b,Agoura Hills,1,1,2022-08-26,2022-08-26
+Curran Theatre,5bd40390,San Francisco,1,1,2022-12-09,2022-12-09
+Sagebrush Cantina,bd095b6,Calabasas,1,1,2022-10-08,2022-10-08
+Bel Air Bay Club,2bd7448a,Los Angeles,1,1,2022-09-04,2022-09-04
+Private Venue,33d0e0c9,Rancho Santa Fe,1,1,2022-08-26,2022-08-26
+State Social House,13d2b14d,West Hollywood,1,1,2022-09-16,2022-09-16
+Private Venue,6bd34a6a,Napa,1,1,2022-10-27,2022-10-27
+Memorial Park,6bd20a22,Albany,1,1,2022-08-27,2022-08-27
+Old Towne Pub,3d6757b,Pasadena,1,1,2022-09-24,2022-09-24
+Sound Nightclub,43d4f383,Los Angeles,1,1,2022-10-15,2022-10-15
+The Hollywood Comedy,63d04e87,Los Angeles,1,1,2022-10-01,2022-10-01
+Pageant Theatre,6bd06636,Chico,1,1,2022-09-13,2022-09-13
+Hoopa Valley High School,13d05945,Hoopa,1,1,2022-10-12,2022-10-12
+"",73d44a0d,West Hollywood,1,1,2022-11-03,2022-11-03
+Dying Breed Brewing,53d01b11,Oakdale,1,1,2022-11-12,2022-11-12
+Emerald Glen Park,7bd0e688,Dublin,1,1,2022-09-10,2022-09-10
+The Merc,4bd48b96,Temecula,1,1,2022-12-09,2022-12-09
+Salton City Surf Club,13d13555,Salton City,1,1,2022-12-10,2022-12-10
+"",7bd4bec0,Santa Clara,1,1,2022-10-07,2022-10-07
+Moraga Commons Park,3bd48cd8,Moraga,1,1,2022-09-10,2022-09-10
+Private venue,1bdfa97c,Porterville,1,1,2022-12-17,2022-12-17
+Happy Hour SC,4bd153ea,Los Angeles,1,1,2022-10-21,2022-10-21
+Treasure Island,4bd6db1a,San Francisco,1,1,2022-10-15,2022-10-15
+Yost Theater,4bd3977a,Santa Ana,1,1,2022-10-28,2022-10-28
+Zipper Concert Hall at the Colburn School,43d473d7,Los Angeles,1,1,2022-11-04,2022-11-04
+Pink Haus,33d134fd,San Diego,1,1,2022-11-12,2022-11-12
+Revel Revel,1bd059c4,San Diego,1,1,2022-10-09,2022-10-09
+Private Venue,1bd2e14c,San Francisco,1,1,2022-10-16,2022-10-16
+Bach Dynamite & Dancing Society,4bd26f56,Half Moon Bay,1,1,2022-11-20,2022-11-20
+Mateel Community Center,4bd79356,Redway,1,1,2022-09-11,2022-09-11
+Pico Union Project,13d2a1b1,Los Angeles,1,1,2022-11-16,2022-11-16
+Honda Stage at the iHeartRadio Theater,63d2529b,Burbank,1,1,2022-09-09,2022-09-09
+San Francisco Conservatory of Music,1bd67dc4,San Francisco,1,1,2022-09-20,2022-09-20
+Musiclandria,bde297e,Sacramento,1,1,2022-11-18,2022-11-18
+The Garage Bar,23d1f837,Ventura,1,1,2022-10-22,2022-10-22
+"",23d67c3b,Santa Barbara,1,1,2022-08-26,2022-08-26
+Frogee's Cocktail,6bd53e32,Apple Valley,1,1,2022-10-07,2022-10-07
+The North End,4bd00702,Los Angeles,1,1,2022-09-28,2022-09-28
+El Rey Theater,13d3a19d,Chico,1,1,2022-10-07,2022-10-07
+Urban MO’s Bar & Grill,bde19a2,San Diego,1,1,2022-12-29,2022-12-29
+Constellation,1bd5d558,San Diego,1,1,2022-12-15,2022-12-15
+Footsies,1bd0d168,Los Angeles,1,1,2022-09-25,2022-09-25
+Anaheim Convention Center,43d667f3,Anaheim,1,1,2022-09-10,2022-09-10
+Special Events Center,73d182e5,Indio,1,1,2022-10-08,2022-10-08
+Forli Restaurant,6bd186f2,Alamo,1,1,2022-09-08,2022-09-08
+"University of California, Santa Cruz",1bd38d84,Santa Cruz,1,1,2022-11-19,2022-11-19
+The Greenway Amphitheatre,73d04e8d,Los Angeles,1,1,2022-11-13,2022-11-13
+Impulse Music Co.,33d1bc89,Santa Clarita,1,1,2022-12-17,2022-12-17
+Grant & Green Saloon,2bd7100e,San Francisco,1,1,2022-12-02,2022-12-02
+Benchmark Climbing,63d0522f,Berkeley,1,1,2022-11-05,2022-11-05
+KCRW Studios,23d6d00f,Santa Monica,1,1,2022-10-27,2022-10-27
+SoCal Sound Studios,7bdeb228,Los Angeles,1,1,2022-09-15,2022-09-15
+Flight Deck Sports Bar & Grill,23d05c63,South Lake Tahoe,1,1,2022-08-24,2022-08-24
+No Vacancy,6bd5be12,Los Angeles,1,1,2022-11-01,2022-11-01
+Joshua Tree Lake RV & Campground,bd39dae,Joshua Tree,1,1,2022-10-07,2022-10-07
+San Jose Improv,53d77b39,San Jose,1,1,2022-09-24,2022-09-24
+Zeitgeist,6bd092fe,San Francisco,1,1,2022-09-04,2022-09-04
+Historic Hemet Theater,6bd0fa42,Hemet,1,1,2022-11-19,2022-11-19
+Rök House Brewing Company,43d007d7,Upland,1,1,2022-08-26,2022-08-26
+The Best Show,53d05705,Los Angeles,1,1,2022-10-25,2022-10-25
+Agape International Spiritual Center,23d4108f,Culver City,1,1,2022-09-19,2022-09-19
+Cold Crush,7bd11688,Lancaster,1,1,2022-09-07,2022-09-07
+Thornton Winery,53d7e3e5,Temecula,1,1,2022-10-08,2022-10-08
+Naggiar Vineyards,3bdec4ac,Grass Valley,1,1,2022-10-15,2022-10-15
+Naughty Pine Brewing Company,43deefaf,Thousand Oaks,1,1,2022-11-19,2022-11-19
+The Marjorie Luke Theatre,43d50b8b,Santa Barbara,1,1,2022-12-08,2022-12-08
+The Pearl,2bd0402a,Locke,1,1,2022-12-09,2022-12-09
+Private Venue,3bd0508c,Los Angeles,1,1,2022-12-02,2022-12-02
+Loomis Park Plaza,4bd063c2,Loomis,1,1,2022-10-01,2022-10-01
+Musicians Institute Auditorium,73d4e6f9,Los Angeles,1,1,2022-09-15,2022-09-15
+The Baltic Kiss,4bd1e7f2,Richmond,1,1,2022-09-16,2022-09-16
+Arcata Playhouse,7bd44a04,Arcata,1,1,2022-10-23,2022-10-23
+The Lab,43d6335b,San Francisco,1,1,2022-08-26,2022-08-26
+The Gardens on El Paseo,6bd212f2,Palm Desert,1,1,2022-12-30,2022-12-30
+World Records,1bd23550,Bakersfield,1,1,2022-12-03,2022-12-03
+Port of Redwood City,43d06bff,Redwood City,1,1,2022-11-19,2022-11-19
+Gnarly Deli,6bd05652,Chico,1,1,2022-10-05,2022-10-05
+Stone Junction,63d0164f,Garberville,1,1,2022-08-24,2022-08-24
+Dynasty Typewriter At The Hayworth,3d2d197,Los Angeles,1,1,2022-09-23,2022-09-23
+Copper Blues,7bd3e204,Brea,1,1,2022-10-01,2022-10-01
+Lighthouse Restaurant & Bar,43d06be7,Canyon Lake,1,1,2022-08-27,2022-08-27
+Mission Bay Park,63d0f2f7,San Diego,1,1,2022-09-24,2022-09-24
+"Delta Room, House of Blues",1bd595a8,San Diego,1,1,2022-12-03,2022-12-03
+River Theater,53d7f325,Guerneville,1,1,2022-12-31,2022-12-31
+Frandy Park Campground,73d0e2b9,Kernville,1,1,2022-09-28,2022-09-28
+Auburn State Theatre,1bd181e0,Auburn,1,1,2022-10-28,2022-10-28
+"",bd3998e,Northridge,1,1,2022-08-26,2022-08-26
+Private Venue,33d2d0ed,West Hollywood,1,1,2022-10-08,2022-10-08
+Silverado Park,33d0cc81,Long Beach,1,1,2022-08-28,2022-08-28
+Drop84,7bd052d8,Berkeley,1,1,2022-09-12,2022-09-12
+Berkeley Horticulture Nursery,6bde2e3a,Berkeley,1,1,2022-10-29,2022-10-29
+The Golden Squirrel,43d17bc7,Oakland,1,1,2022-09-10,2022-09-10
+Kentucky Mine Museum,63de2e2f,Sierra City,1,1,2022-08-27,2022-08-27
+Ruth Finley Person Theatre,4bd4fb0e,Santa Rosa,1,1,2022-09-09,2022-09-09
+Auburn Odd Fellows Lodge,73d15e59,Auburn,1,1,2022-11-19,2022-11-19
+Murphys Irish Pub,3bd0d4c8,Murphys,1,1,2022-11-12,2022-11-12
+Traffic Records,3bd064a4,Atascadero,1,1,2022-09-17,2022-09-17
+"",4bd1af06,Angwin,1,1,2022-09-10,2022-09-10
+Denmark Street Barn,1bd00d9c,Sonoma,1,1,2022-10-09,2022-10-09
+Sydney Goldstein Theater,4bd397da,San Francisco,1,1,2022-11-28,2022-11-28
+The New Scotland Yard Pub,3bd1cc5c,Los Angeles,1,1,2022-12-17,2022-12-17
+Black Oak Casino,23d454f3,Tuolumne,1,1,2022-10-29,2022-10-29
+The Pearl,53d06315,San Francisco,1,1,2022-09-20,2022-09-20
+Central Park at Mill Creek,53d073b1,Bakersfield,1,1,2022-08-25,2022-08-25
+Garcia Center For The Arts,6bd18a86,San Bernardino,1,1,2022-09-16,2022-09-16
+Black Cat Bar,4bd47fbe,San Diego,1,1,2022-11-18,2022-11-18
+Boom Boom Room,3bd4600c,San Francisco,1,1,2022-09-16,2022-09-16
+The Caviar Co.,7bd06618,Tiburon,1,1,2022-09-23,2022-09-23
+Santa Fe Springs Swap Meet,53d4d721,Santa Fe Springs,1,1,2022-10-01,2022-10-01
+Rancho Bernardo Community Presbyterian Church,53d05bcd,San Diego,1,1,2022-10-16,2022-10-16
+King Bar,1bd1e1fc,Lancaster,1,1,2022-10-01,2022-10-01
+Private Venue,5bd25f0c,Los Angeles,1,1,2022-10-29,2022-10-29
+The King,23d0588b,Lancaster,1,1,2022-10-01,2022-10-01
+Book Passage,3d255bf,Corte Madera,1,1,2022-10-17,2022-10-17
+Whammy! Analog Media,2bd04c46,Los Angeles,1,1,2022-11-09,2022-11-09
+Ojai Underground Exchange,23d2706b,Ojai,1,1,2022-11-05,2022-11-05
+Poppy,33d04c35,Los Angeles,1,1,2022-11-10,2022-11-10
+San Francisco Botanical Garden,63d22ecb,San Francisco,1,1,2022-09-17,2022-09-17
+Haugh Performing Arts Center,4bd5db9a,Glendora,1,1,2022-10-15,2022-10-15
+5th Avenue Landing,7bd04eb0,San Diego,1,1,2022-11-18,2022-11-18
+Boulevard Park Neighborhood,53d063c1,Sacramento,1,1,2022-10-01,2022-10-01
+Maxson Road House,3d185ab,South El Monte,1,1,2022-10-23,2022-10-23
+Solaris Beer & Blending,1bd05d58,Murrieta,1,1,2022-10-01,2022-10-01
+"VMware, Inc",bd29146,Palo Alto,1,1,2022-10-21,2022-10-21
+Bird School,53def345,San Francisco,1,1,2022-11-21,2022-11-21
+Svedale,53d067b1,Morgan Hill,1,1,2022-09-17,2022-09-17
+South Bay Customs,4bd5931e,El Segundo,1,1,2022-08-28,2022-08-28
+Improv Comedy Club,73d2c2f1,Irvine,1,1,2022-11-21,2022-11-21
+Bogies Bar,6bd2a68a,Westlake Village,1,1,2022-11-17,2022-11-17
+Private Venue,53d36331,Mill Valley,1,1,2022-10-29,2022-10-29
+Hard Rock Cafe,7bd7f200,Los Angeles,1,1,2022-10-21,2022-10-21
+Los Encinos State Historic Park,13d53d6d,Los Angeles,1,1,2022-09-17,2022-09-17
+Arlene Francis Center,73d7ce2d,Santa Rosa,1,1,2022-10-26,2022-10-26
+City Nights Club,4bd56b6a,San Francisco,1,1,2022-10-21,2022-10-21
+Pike Restaurant and Bar,63d29243,Long Beach,1,1,2022-10-26,2022-10-26
+Hapa's Brewing Company,1bd1d560,San Jose,1,1,2022-12-17,2022-12-17
+Cathedral City Community Amphitheater,1bd04908,Cathedral City,1,1,2022-11-18,2022-11-18
+Daddy Diamonds,4bd1bf62,Los Angeles,1,1,2022-12-17,2022-12-17
+Den of Sin,5bd2e76c,Sacramento,1,1,2022-12-09,2022-12-09
+Spoke bicycle cafe,23d0e8a3,Los Angeles,1,1,2022-09-02,2022-09-02
+Los Angeles Marriott Burbank Airport,2bd37c8e,Burbank,1,1,2022-10-15,2022-10-15
+Ascendo Coffee,2bd12c46,San Luis Obispo,1,1,2022-11-24,2022-11-24
+The Saloon,73d71215,San Francisco,1,1,2022-09-04,2022-09-04
+SmileFest,6bd06e62,Los Angeles,1,1,2022-09-03,2022-09-03
+Carriage House Theatre,6bd39602,Saratoga,1,1,2022-09-27,2022-09-27
+Tao,3bd05040,Los Angeles,1,1,2022-10-31,2022-10-31
+Chapman University,3bd39854,Orange,1,1,2022-10-05,2022-10-05
+The Stowaway,23d05023,Los Angeles,1,1,2022-10-31,2022-10-31
+Fort Mason Center for the Arts & Culture,33d554b9,San Francisco,1,1,2022-12-31,2022-12-31
+The Lost Church Santa Rosa,7bd32af4,Santa Rosa,1,1,2022-10-19,2022-10-19
+ATA Gallery,bd7c98a,San Francisco,1,1,2022-09-03,2022-09-03
+Rhythm n Vibes,53de6381,Los Angeles,1,1,2022-11-13,2022-11-13
+Coyote Sonoma,33d06811,Healdsburg,1,1,2022-09-10,2022-09-10
+The Del Monte Townhouse,5bd7ebc0,Venice,1,1,2022-10-20,2022-10-20
+ETA,4bd05bd6,Los Angeles,1,1,2022-10-19,2022-10-19
+Magic Box,53d0cf3d,Los Angeles,1,1,2022-08-28,2022-08-28
+Shepherd of the Hills UMC,73d06659,Mission Viejo,1,1,2022-09-16,2022-09-16
+Outer Sunset Farmers Market & Mercantile,43d0b36b,San Francisco,1,1,2022-09-17,2022-09-17
+The Thirsty Axe,2bd0241a,Ukiah,1,1,2022-08-26,2022-08-26
+Rava Wines + Events,53d3bb69,Paso Robles,1,1,2022-11-12,2022-11-12
+LA Center Studios,4bd6530e,Los Angeles,1,1,2022-10-01,2022-10-01
+Palos Verdes Performing Arts,33d398a5,Rolling Hills Estates,1,1,2022-12-10,2022-12-10
+Alamitos Beach,53d41f5d,Long Beach,1,1,2022-09-08,2022-09-08
+Sausalito Cruising Club,2bd2a0d2,Sausalito,1,1,2022-12-30,2022-12-30
+The Awe Bar,3bd1b894,Yucca Valley,1,1,2022-12-16,2022-12-16
+The Crac Brewery,63d0565f,Carson,1,1,2022-10-08,2022-10-08
+Balboa Park,1bd7710c,San Diego,1,1,2022-10-05,2022-10-05
+Hollywood Pantages Theatre,53d1bfb9,Los Angeles,1,1,2022-12-23,2022-12-23
+The Riptide,7bd2521c,San Francisco,1,1,2022-09-17,2022-09-17
+House Show,7bd1769c,Santa Cruz,1,1,2022-10-08,2022-10-08
+Gre Records & Coffee,6bd066e6,Palm Springs,1,1,2022-09-21,2022-09-21
+USS Hornet Museum,7bd3aa14,Alameda,1,1,2022-10-14,2022-10-14
+KALX-FM,53d2975d,Berkeley,1,1,2022-12-17,2022-12-17
+Newport Civic Center,73d1ba71,Newport Beach,1,1,2022-09-18,2022-09-18
+Fox Theater,7bd2e298,San Francisco,1,1,2022-11-18,2022-11-18
+Junior High,7bd56a44,Los Angeles,1,1,2022-09-04,2022-09-04
+Spectrum Amphitheatre,73d23a21,Bakersfield,1,1,2022-09-17,2022-09-17
+Dark Thirty (house concerts),33d06021,Lakeside,1,1,2022-09-25,2022-09-25
+Spaghettini,7bd28ebc,Seal Beach,1,1,2022-11-28,2022-11-28
+Tooth & Nail Winery,43d517af,Paso Robles,1,1,2022-09-02,2022-09-02
+Birch North Park Theatre,53d6dbbd,San Diego,1,1,2022-09-30,2022-09-30
+The Inn at Spanish Bay,1bd02d4c,Pebble Beach,1,1,2022-10-16,2022-10-16
+Halvorsen Park,53d29bf5,Eureka,1,1,2022-10-16,2022-10-16
+Lewis Family Playhouse,4bd45f72,Rancho Cucamonga,1,1,2022-11-25,2022-11-25
+Palomar Medical Center Escondido,63d05e0b,Escondido,1,1,2022-10-08,2022-10-08
+Irvine Barclay Theatre,2bd770fe,Irvine,1,1,2022-10-08,2022-10-08
+Torch Club,43d7336b,Sacramento,1,1,2022-10-14,2022-10-14
+Silverado Country Club,3bd064f4,Napa,1,1,2022-09-17,2022-09-17
+Oakland Secret,5bd243dc,Oakland,1,1,2022-11-05,2022-11-05
+"F.O.E. Hall,",4bd05bf6,National City,1,1,2022-10-15,2022-10-15
+Bawir Retreat,73d06a95,Loomis,1,1,2022-09-17,2022-09-17
+Poor Richards Pizza,7bdfae88,Springville,1,1,2022-12-31,2022-12-31
+Agua Caliente Casino,3bd0e040,Palm Springs,1,1,2022-08-31,2022-08-31
+The Bancroft Bar,3d39117,Spring Valley,1,1,2022-08-27,2022-08-27
+Five Suns Brewery,63d04edb,Martinez,1,1,2022-10-28,2022-10-28
+All Kinds Studios,73d00e31,Ventura,1,1,2022-08-26,2022-08-26
+Fox Wine Co.,23d07c8b,Santa Barbara,1,1,2022-11-12,2022-11-12
+The Russ Room,1bd361d0,Sacramento,1,1,2022-12-17,2022-12-17
+The Haven,43d0fbdf,Pomona,1,1,2022-10-08,2022-10-08
+Burton Middle School,13dfa97d,Porterville,1,1,2022-11-08,2022-11-08
+Mondavi Center for the Performing Arts,3bd27c7c,Davis,1,1,2022-09-24,2022-09-24
+Kresge Town Hall,3d0ad73,Santa Cruz,1,1,2022-10-01,2022-10-01
+Community Farmer's Market,53d063cd,Ojai,1,1,2022-09-29,2022-09-29
+Siren's Song Tavern,13d0e191,Eureka,1,1,2022-09-18,2022-09-18
+Berkley Sound,bd05d02,San Diego,1,1,2022-10-02,2022-10-02
+Wilson Creek Winery,6bd2967e,Temecula,1,1,2022-09-21,2022-09-21
+Village Recording Studios,3bd638a4,Los Angeles,1,1,2022-09-25,2022-09-25
+SiriusXM Studios,63d31a8b,Los Angeles,1,1,2022-08-25,2022-08-25
+Private Venue,53d2d701,San Diego,1,1,2022-10-20,2022-10-20
+The Red Museum,bd1f95e,Sacramento,1,1,2022-12-18,2022-12-18
+Madame Siam,4bd5bbf6,Los Angeles,1,1,2022-09-22,2022-09-22
+Tromaville,43d0cb03,Los Angeles,1,1,2022-10-14,2022-10-14
+The New Farm,73d0ea59,San Francisco,1,1,2022-11-26,2022-11-26
+Oscar's,4bd097d6,Palm Springs,1,1,2022-11-05,2022-11-05
+Lab Social Speakeasy,23d134d7,Santa Barbara,1,1,2022-11-23,2022-11-23
+Festival of the Arts Ground,4bd36fae,Laguna Beach,1,1,2022-08-30,2022-08-30
+Live House Hollywood,43d24313,Los Angeles,1,1,2022-08-25,2022-08-25
+University of Southern California,13d62165,Los Angeles,1,1,2022-09-10,2022-09-10
+Chico Women's Club,bd469e2,Chico,1,1,2022-11-18,2022-11-18
+Sheraton-Universal Hotel,5bd4a754,Los Angeles,1,1,2022-10-16,2022-10-16
+Folsom Hotel Saloon,63d0faa7,Folsom,1,1,2022-12-22,2022-12-22
+Player One Arcade Bar,1bd051d4,Los Angeles,1,1,2022-10-29,2022-10-29
+Walt Disney Studios,5bd5bf18,Burbank,1,1,2022-12-13,2022-12-13
+Secret Island,1bd029f8,Long Beach,1,1,2022-09-16,2022-09-16
+Pilgrim United Church of Christ,6bd04a8a,Carlsbad,1,1,2022-10-30,2022-10-30
+Malainey's Grill,73d0d699,Long Beach,1,1,2022-11-06,2022-11-06
+"",5bd36f90,Vista,1,1,2022-11-12,2022-11-12
+Herb Alpert's Vibrato Grill Jazz,33d38ca9,Los Angeles,1,1,2022-11-23,2022-11-23
+The Eagle,33d3e8cd,Los Angeles,1,1,2022-09-25,2022-09-25
+No Name Bar,13d26d9d,Sausalito,1,1,2022-11-24,2022-11-24
+Lost Chord Guitars,13d0c5d9,Solvang,1,1,2022-10-28,2022-10-28
+The Center For New Music,1bd56d40,San Francisco,1,1,2022-10-13,2022-10-13
+Public Square Coffee House,23d0189b,La Mesa,1,1,2022-10-14,2022-10-14
+Ashkenaz Music & Dance Community Center,53d3a30d,Berkeley,1,1,2022-09-01,2022-09-01
+Warner Grand Theatre,2bd394d6,San Pedro,1,1,2022-10-01,2022-10-01
+Blue Mountain Event Center,73d196e1,Wilseyville,1,1,2022-09-22,2022-09-22
+Harris Center for the Arts,1bd3a184,Folsom,1,1,2022-11-03,2022-11-03
+Poplar Creek Golf Course,3dfa1fb,San Mateo,1,1,2022-09-08,2022-09-08
+Popscene,23d63c13,San Francisco,1,1,2022-09-29,2022-09-29
+The Sycamore,23d1bc7f,San Francisco,1,1,2022-12-17,2022-12-17
+Tennessee Jack's,33d0502d,Long Beach,1,1,2022-08-28,2022-08-28
+Narducci's Cafe,73d482c5,Bakersfield,1,1,2022-12-30,2022-12-30
+Rideau Vineyard,2bd134d6,Solvang,1,1,2022-11-26,2022-11-26
+Giant Rock,7bd00e30,Joshua Tree,1,1,2022-10-18,2022-10-18
+Libretto,1bd1b96c,Paso Robles,1,1,2022-12-16,2022-12-16
+Reds Meadow,13de2969,Mammoth,1,1,2022-08-26,2022-08-26
+Kool Deth Headquarters,2bd1f462,Soquel,1,1,2022-11-23,2022-11-23
+Sunset Center,1bd71d4c,Carmel-by-the-Sea,1,1,2022-09-22,2022-09-22
+Long Beach Convention Center,7bd7a63c,Long Beach,1,1,2022-11-12,2022-11-12
+Grand Theatre Center for the Arts,23d390c7,Tracy,1,1,2022-09-23,2022-09-23
+Whiskey Richards,53d583d9,Santa Barbara,1,1,2022-08-27,2022-08-27
+Audiowild Studios,3d051e7,Idyllwild,1,1,2022-10-28,2022-10-28
+Tirebiter Brewery,5bd153f4,Los Angeles,1,1,2022-09-28,2022-09-28
+Alila Marea Beach Resort,13d01d99,Encinitas,1,1,2022-11-10,2022-11-10
+Sonoma-Marin Fairgrounds,7bd2b62c,Petaluma,1,1,2022-10-01,2022-10-01
+Wildwood Skate Shop,43d1938f,Lodi,1,1,2022-11-12,2022-11-12
+Santa Clarita Performing Arts Center at College of the Canyons,73d592a9,Santa Clarita,1,1,2022-09-17,2022-09-17
+Simi Valley Cultural Arts Center,3bd064f0,Simi Valley,1,1,2022-12-07,2022-12-07
+California State Capitol,13d539f1,Sacramento,1,1,2022-09-21,2022-09-21
+Oracle Tavern Bar,1bd00958,Los Angeles,1,1,2022-10-06,2022-10-06
+HITKOR,4bd04b42,Los Angeles,1,1,2022-11-20,2022-11-20
+Ruhstaller Farm and Beer Brewery,13d0f505,Dixon,1,1,2022-12-17,2022-12-17
+Alameda County Fairgrounds,63d54263,Pleasanton,1,1,2022-09-17,2022-09-17
+"",7bd35eac,Garden Grove,1,1,2022-10-28,2022-10-28
+201 Marin Street,6bd10a3a,San Rafael,1,1,2022-09-25,2022-09-25
+Seven Grand,13d13551,Los Angeles,1,1,2022-10-28,2022-10-28
+The Mondrian,4bd5d7fa,West Hollywood,1,1,2022-10-27,2022-10-27
+Sans Souci Cocktail Lounge,2bd5101e,Ventura,1,1,2022-09-17,2022-09-17
+West Hollywood Park,4bd7535a,West Hollywood,1,1,2022-12-08,2022-12-08
+WildCat Studios,7bd06e68,Escondido,1,1,2022-09-02,2022-09-02
+Coachella Crossroads,7bd182e4,Coachella,1,1,2022-11-11,2022-11-11
+The Locker Room,13d2eded,Garden Grove,1,1,2022-08-25,2022-08-25
+Taylor Junction,2bd0449e,Joshua Tree,1,1,2022-09-10,2022-09-10
+Riverside County Fairgrounds,7bd5862c,Indio,1,1,2022-11-12,2022-11-12
+Redding Roots Revival,2bd1c0ee,Redding,1,1,2022-09-23,2022-09-23
+"",53d4d3b5,Walnut Creek,1,1,2022-10-29,2022-10-29
+The Hood,13d73d49,Palm Desert,1,1,2022-11-26,2022-11-26
+La Salles,4bd18326,Chico,1,1,2022-11-03,2022-11-03
+Wilson Theater,1bd39d58,Fresno,1,1,2022-09-20,2022-09-20
+Presqu'ile Winery,5bd2b778,Santa Maria,1,1,2022-09-30,2022-09-30
+Hatch Workshop,3bd1f474,Stockton,1,1,2022-10-22,2022-10-22
+Sofar Sounds,bd44996,Los Angeles,1,1,2022-09-30,2022-09-30
+The Smell,3bd618a8,Los Angeles,1,1,2022-09-18,2022-09-18
+The Complex,43d293ab,Oakland,1,1,2022-12-09,2022-12-09
+Pure Nightclub,23d38c03,Sunnyvale,1,1,2022-10-22,2022-10-22
+The Granada Theatre,33d38c55,Santa Barbara,1,1,2022-12-01,2022-12-01
+The Majestic Downtown,7bd0e27c,Los Angeles,1,1,2022-09-10,2022-09-10
+Montgomery Theater,7bd5ae4c,San Jose,1,1,2022-10-05,2022-10-05
+Inkonsiderate Boardwalk,2bd194e2,Riverside,1,1,2022-12-17,2022-12-17
+Tales from the Tavern,6bd7a23a,Santa Ynez,1,1,2022-10-12,2022-10-12
+Que Sera,53d79fed,Long Beach,1,1,2022-09-29,2022-09-29
+House Concert,73de2e21,Castro Valley,1,1,2022-09-25,2022-09-25
+The Green Room Social Club,53d0dbbd,Placerville,1,1,2022-10-14,2022-10-14
+Green Hills Country Club,3bd050d0,Millbrae,1,1,2022-10-01,2022-10-01
+Calaveras County Fairgrounds,2bd6309a,Angels Camp,1,1,2022-09-24,2022-09-24
+The Vine,73d26201,Ojai,1,1,2022-11-27,2022-11-27
+Rock Church,43d7c7f7,San Diego,1,1,2022-10-08,2022-10-08
+The Whiskey Tip,33dee8bd,Santa Rosa,1,1,2022-10-01,2022-10-01
+Toby's Feed Barn,33d1ac5d,Point Reyes Station,1,1,2022-11-19,2022-11-19
+Montalvo Arts Center,3d3ed4f,Saratoga,1,1,2022-12-04,2022-12-04
+Heritage Theatre,23d67027,Campbell,1,1,2022-11-06,2022-11-06
+Amoeba Records,53d6c7e1,San Francisco,1,1,2022-10-08,2022-10-08
+Little Yellow House,4bd1bb4e,Corona,1,1,2022-12-30,2022-12-30
+Universal Studios Hollywood,2bd39086,Universal City,1,1,2022-12-08,2022-12-08
+Broadway Pier,6bd272e2,San Diego,1,1,2022-10-29,2022-10-29
+Marin Country Club,33d23481,Novato,1,1,2022-12-31,2022-12-31
+San Diego Civic Theatre,5bd0c780,San Diego,1,1,2022-12-11,2022-12-11
+Private Venue,33d30865,Los Angeles,1,1,2022-10-29,2022-10-29
+Highland Park Ebell Club,6bd552d2,Los Angeles,1,1,2022-11-10,2022-11-10
+Chukchansi Park,73d6da29,Fresno,1,1,2022-10-01,2022-10-01
+Skyloft,33d39c01,Laguna Beach,1,1,2022-12-16,2022-12-16
+Vroman's Bookstore,43d0531f,Pasadena,1,1,2022-11-03,2022-11-03
+The Big Easy,5bd2ffdc,Petaluma,1,1,2022-12-16,2022-12-16
+MakeOutMusic,73d0725d,Los Angeles,1,1,2022-10-29,2022-10-29
+Santa Lucia Preserve,53dfabbd,Carmel-by-the-Sea,1,1,2022-09-10,2022-09-10
+Mare Island Brewing Co.,5bd27384,Vallejo,1,1,2022-09-24,2022-09-24
+Los Arcos Night Club,7bde8680,Fresno,1,1,2022-11-11,2022-11-11
+Dougherty Valley Performing Arts Center,bd729da,San Ramon,1,1,2022-11-05,2022-11-05
+Ireland's 32,63d54e8f,Los Angeles,1,1,2022-09-17,2022-09-17
+3D Live And Capture Studios,2bd18c5e,Los Angeles,1,1,2022-10-29,2022-10-29
+Hungarian Cultural Alliance - Magtár,2bd05c56,Los Angeles,1,1,2022-10-07,2022-10-07
+Ventura County Fairgrounds,1bd6c92c,Ventura,1,1,2022-09-03,2022-09-03
+Private Venue,4bd053e2,Los Angeles,1,1,2022-11-04,2022-11-04
+The Epic Lounge,23d59c23,Downey,1,1,2022-11-26,2022-11-26
+Oakdale Rodeo Grounds,23d06c7f,Oakdale,1,1,2022-08-27,2022-08-27
+Monty Bar,13d5c1f1,Los Angeles,1,1,2022-09-11,2022-09-11
+Twin Lotus Thai,2bd040b6,Sacramento,1,1,2022-12-10,2022-12-10
+Old World,33d46055,Huntington Beach,1,1,2022-09-10,2022-09-10
+Abbott Square,63d1f2bb,Santa Cruz,1,1,2022-12-04,2022-12-04
+Licorice Pizza Record Store,23d2707f,Los Angeles,1,1,2022-10-20,2022-10-20
+The Last Call,6bd07e82,Los Angeles,1,1,2022-10-07,2022-10-07
+Bazaar Cafe,6bd5ae46,San Francisco,1,1,2022-11-05,2022-11-05
+The Satellite,33d7a4e1,Los Angeles,1,1,2022-09-21,2022-09-21
+Luckman Fine Arts Complex,53d79b0d,Los Angeles,1,1,2022-11-19,2022-11-19
+Blue Owl,1bd061b0,Santa Barbara,1,1,2022-09-18,2022-09-18
+Downtown,53d42fd9,San Jose,1,1,2022-09-10,2022-09-10
+The Observatory Grounds,23d5185f,Santa Ana,1,1,2022-10-15,2022-10-15
+L.A. River Studios,6bd5fafa,Los Angeles,1,1,2022-12-03,2022-12-03
+Cascade Lounge,bd13556,Palm Springs,1,1,2022-10-13,2022-10-13
+Dominican University of California,1bd1fd78,San Rafael,1,1,2022-11-30,2022-11-30
+California Botanic Garden,53d04fa9,Claremont,1,1,2022-11-13,2022-11-13
+Los Angeles Convention Center,33d4e481,Los Angeles,1,1,2022-10-19,2022-10-19
+Twin Oaks Roadhouse,23d2a453,Penngrove,1,1,2022-08-28,2022-08-28
+Silverlake Conservatory of Music,23d4f89b,Los Angeles,1,1,2022-10-29,2022-10-29
+Rock & Roll Pizza at Harley's Valley Bowl,33d10471,Simi Valley,1,1,2022-12-16,2022-12-16
+Drake's: The Barn,33d0503d,West Sacramento,1,1,2022-11-03,2022-11-03
+McClaren Hall Room 252,53d04305,San Francisco,1,1,2022-08-25,2022-08-25
+Devils Parlor,3d16d3f,Oakland,1,1,2022-12-21,2022-12-21
+UC Santa Barbara Events Center,bd171aa,University of California Santa Barbara Campus,1,1,2022-10-15,2022-10-15
+Fireside Lounge,3bd2049c,Alameda,1,1,2022-12-23,2022-12-23
