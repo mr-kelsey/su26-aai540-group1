@@ -60,6 +60,21 @@ cdtfa_y AS (
   FROM aai540_silver.cdtfa_taxable_sales
   WHERE business_type = 'Total All Outlets'
   GROUP BY county_fips, table_year, quarter
+),
+-- Festivals are a separate event signal from setlist.fm concerts: they're
+-- big multi-day, multi-act events whose total attendance is published in
+-- press releases / Wikipedia. The Gold layer exposes festival attendance
+-- separately from concert attendance so the model can learn different
+-- per-attendee impact coefficients for each.
+festivals_agg AS (
+  SELECT
+    county_fips,
+    year AS fest_year,
+    quarter AS fest_quarter,
+    COUNT(*) AS n_festivals,
+    SUM(attendance) AS total_festival_attendance
+  FROM aai540_silver.festivals
+  GROUP BY county_fips, year, quarter
 )
 SELECT
   c.county_fips,
@@ -76,6 +91,8 @@ SELECT
   COALESCE(e.total_est_attendance, 0) AS total_est_attendance,
   COALESCE(e.n_setlistfm, 0) AS n_setlistfm,
   COALESCE(e.n_ticketmaster, 0) AS n_ticketmaster,
+  COALESCE(f.n_festivals, 0) AS n_festivals,
+  COALESCE(f.total_festival_attendance, 0) AS total_festival_attendance,
   q.total_wages_usd,
   q.avg_employment,
   q.establishment_count,
@@ -88,6 +105,8 @@ FROM cdtfa_y y
 JOIN aai540_silver.dim_county c ON c.county_fips = y.county_fips
 LEFT JOIN events_agg e
   ON e.county_fips = y.county_fips AND e.evt_year = y.y_year AND e.evt_quarter = y.y_quarter
+LEFT JOIN festivals_agg f
+  ON f.county_fips = y.county_fips AND f.fest_year = y.y_year AND f.fest_quarter = y.y_quarter
 LEFT JOIN qcew_agg q
   ON q.county_fips = y.county_fips AND q.qcew_year = y.y_year AND q.qcew_quarter = y.y_quarter
 LEFT JOIN aai540_silver.census_acs_county a

@@ -1,0 +1,93 @@
+festival_id,festival_name,event_date,venue_name,county_fips,state_code,attendance,category,source_notes
+coachella_2018,Coachella Valley Music & Arts Festival,2018-04-13,Empire Polo Club,06065,CA,250000,music_festival,Wikipedia: ~125K/weekend x 2 weekends
+coachella_2019,Coachella Valley Music & Arts Festival,2019-04-12,Empire Polo Club,06065,CA,250000,music_festival,Wikipedia
+coachella_2022,Coachella Valley Music & Arts Festival,2022-04-15,Empire Polo Club,06065,CA,250000,music_festival,Wikipedia (post-COVID return)
+coachella_2023,Coachella Valley Music & Arts Festival,2023-04-14,Empire Polo Club,06065,CA,250000,music_festival,Wikipedia
+stagecoach_2018,Stagecoach Festival,2018-04-27,Empire Polo Club,06065,CA,225000,music_festival,Wikipedia: ~75K/day x 3 days
+stagecoach_2019,Stagecoach Festival,2019-04-26,Empire Polo Club,06065,CA,225000,music_festival,Wikipedia
+stagecoach_2022,Stagecoach Festival,2022-04-29,Empire Polo Club,06065,CA,225000,music_festival,Wikipedia
+stagecoach_2023,Stagecoach Festival,2023-04-28,Empire Polo Club,06065,CA,225000,music_festival,Wikipedia
+outsidelands_2018,Outside Lands,2018-08-10,Golden Gate Park,06075,CA,225000,music_festival,Wikipedia: ~75K/day x 3 days
+outsidelands_2019,Outside Lands,2019-08-09,Golden Gate Park,06075,CA,225000,music_festival,Wikipedia
+outsidelands_2021,Outside Lands,2021-10-29,Golden Gate Park,06075,CA,225000,music_festival,Wikipedia (delayed post-COVID)
+outsidelands_2022,Outside Lands,2022-08-05,Golden Gate Park,06075,CA,225000,music_festival,Wikipedia
+outsidelands_2023,Outside Lands,2023-08-11,Golden Gate Park,06075,CA,225000,music_festival,Wikipedia
+bottlerock_2018,BottleRock Napa Valley,2018-05-25,Napa Valley Expo,06055,CA,120000,music_festival,Wikipedia: ~40K/day x 3 days
+bottlerock_2019,BottleRock Napa Valley,2019-05-24,Napa Valley Expo,06055,CA,120000,music_festival,Wikipedia
+bottlerock_2021,BottleRock Napa Valley,2021-09-03,Napa Valley Expo,06055,CA,120000,music_festival,Wikipedia (delayed post-COVID)
+bottlerock_2022,BottleRock Napa Valley,2022-05-27,Napa Valley Expo,06055,CA,120000,music_festival,Wikipedia
+bottlerock_2023,BottleRock Napa Valley,2023-05-26,Napa Valley Expo,06055,CA,120000,music_festival,Wikipedia
+aftershock_2018,Aftershock Festival,2018-10-13,Discovery Park,06067,CA,75000,music_festival,Festival site: pre-expansion attendance
+aftershock_2019,Aftershock Festival,2019-10-12,Discovery Park,06067,CA,90000,music_festival,Festival site
+aftershock_2021,Aftershock Festival,2021-10-07,Discovery Park,06067,CA,160000,music_festival,Festival site: 40K/day x 4 days
+aftershock_2022,Aftershock Festival,2022-10-06,Discovery Park,06067,CA,160000,music_festival,Festival site
+aftershock_2023,Aftershock Festival,2023-10-05,Discovery Park,06067,CA,180000,music_festival,Festival site
+kaaboo_2018,KAABOO Del Mar,2018-09-14,Del Mar Fairgrounds,06073,CA,120000,music_festival,Wikipedia: ~40K/day x 3 days (discontinued after 2021)
+kaaboo_2019,KAABOO Del Mar,2019-09-13,Del Mar Fairgrounds,06073,CA,120000,music_festival,Wikipedia
+kaaboo_2021,KAABOO Del Mar,2021-09-17,Del Mar Fairgrounds,06073,CA,90000,music_festival,Reduced post-COVID; last year
+hardsummer_2018,HARD Summer Music Festival,2018-08-04,Auto Club Speedway,06071,CA,80000,music_festival,Wikipedia: ~40K/day x 2 days
+hardsummer_2019,HARD Summer Music Festival,2019-08-03,Auto Club Speedway,06071,CA,80000,music_festival,Wikipedia
+hardsummer_2021,HARD Summer Music Festival,2021-07-31,NOS Events Center,06071,CA,80000,music_festival,Wikipedia (San Bernardino)
+hardsummer_2022,HARD Summer Music Festival,2022-07-30,NOS Events Center,06071,CA,80000,music_festival,Wikipedia
+hardsummer_2023,HARD Summer Music Festival,2023-08-05,Hollywood Park,06037,CA,80000,music_festival,Wikipedia (moved to Inglewood)
+portola_2022,Portola Music Festival,2022-09-24,Pier 80,06075,CA,70000,music_festival,Festival site: 35K/day x 2 days
+portola_2023,Portola Music Festival,2023-09-30,Pier 80,06075,CA,70000,music_festival,Festival site
+cruelworld_2022,Cruel World Festival,2022-05-14,Brookside Park,06037,CA,30000,music_festival,Festival site: single-day
+cruelworld_2023,Cruel World Festival,2023-05-20,Brookside Park,06037,CA,30000,music_festival,Festival site
+justlikeheaven_2019,Just Like Heaven Festival,2019-05-04,Queen Mary Events Park,06037,CA,30000,music_festival,Festival site
+justlikeheaven_2022,Just Like Heaven Festival,2022-05-21,Brookside Park,06037,CA,30000,music_festival,Festival site
+justlikeheaven_2023,Just Like Heaven Festival,2023-05-13,Brookside Park,06037,CA,30000,music_festival,Festival site
+campfloggnaw_2018,Camp Flog Gnaw Carnival,2018-11-10,Dodger Stadium,06037,CA,60000,music_festival,Wikipedia: ~30K/day x 2 days
+campfloggnaw_2019,Camp Flog Gnaw Carnival,2019-11-09,Dodger Stadium,06037,CA,60000,music_festival,Wikipedia
+campfloggnaw_2022,Camp Flog Gnaw Carnival,2022-11-12,Dodger Stadium,06037,CA,60000,music_festival,Wikipedia
+campfloggnaw_2023,Camp Flog Gnaw Carnival,2023-11-11,Dodger Stadium,06037,CA,60000,music_festival,Wikipedia
+caliivibes_2022,Cali Vibes Festival,2022-02-04,Marina Green Park,06037,CA,60000,music_festival,Festival site: 20K/day x 3 days (Long Beach)
+caliivibes_2023,Cali Vibes Festival,2023-02-03,Marina Green Park,06037,CA,60000,music_festival,Festival site
+thisaintnopicnic_2022,This Ain't No Picnic,2022-08-27,Brookside Park,06037,CA,60000,music_festival,Festival site: 30K/day x 2 days
+snowglobe_2018,Snow Globe Music Festival,2018-12-29,Lake Tahoe Community College,06017,CA,60000,music_festival,Festival site: 20K/day x 3 days
+snowglobe_2019,Snow Globe Music Festival,2019-12-29,Lake Tahoe Community College,06017,CA,60000,music_festival,Festival site
+snowglobe_2021,Snow Globe Music Festival,2021-12-29,Lake Tahoe Community College,06017,CA,60000,music_festival,Festival site
+snowglobe_2022,Snow Globe Music Festival,2022-12-29,Lake Tahoe Community College,06017,CA,60000,music_festival,Festival site
+lightninginabottle_2018,Lightning in a Bottle,2018-05-23,Buena Vista Lake,06029,CA,25000,music_festival,Festival site (Kern County)
+lightninginabottle_2019,Lightning in a Bottle,2019-05-22,Buena Vista Lake,06029,CA,25000,music_festival,Festival site
+lightninginabottle_2022,Lightning in a Bottle,2022-05-25,Buena Vista Lake,06029,CA,30000,music_festival,Festival site
+lightninginabottle_2023,Lightning in a Bottle,2023-05-24,Buena Vista Lake,06029,CA,30000,music_festival,Festival site
+splashhouse_2018,Splash House Festival,2018-06-08,Palm Springs Resorts,06065,CA,25000,music_festival,Festival site (multi-weekend Aug)
+splashhouse_2019,Splash House Festival,2019-06-07,Palm Springs Resorts,06065,CA,25000,music_festival,Festival site
+splashhouse_2022,Splash House Festival,2022-06-10,Palm Springs Resorts,06065,CA,25000,music_festival,Festival site
+splashhouse_2023,Splash House Festival,2023-06-09,Palm Springs Resorts,06065,CA,25000,music_festival,Festival site
+crssd_spring_2018,CRSSD Festival (Spring),2018-03-03,Waterfront Park,06073,CA,25000,music_festival,Festival site (San Diego)
+crssd_fall_2018,CRSSD Festival (Fall),2018-09-29,Waterfront Park,06073,CA,25000,music_festival,Festival site
+crssd_spring_2019,CRSSD Festival (Spring),2019-03-02,Waterfront Park,06073,CA,25000,music_festival,Festival site
+crssd_fall_2019,CRSSD Festival (Fall),2019-09-28,Waterfront Park,06073,CA,25000,music_festival,Festival site
+crssd_spring_2022,CRSSD Festival (Spring),2022-03-05,Waterfront Park,06073,CA,25000,music_festival,Festival site
+crssd_fall_2022,CRSSD Festival (Fall),2022-09-24,Waterfront Park,06073,CA,25000,music_festival,Festival site
+crssd_spring_2023,CRSSD Festival (Spring),2023-03-04,Waterfront Park,06073,CA,25000,music_festival,Festival site
+crssd_fall_2023,CRSSD Festival (Fall),2023-09-23,Waterfront Park,06073,CA,25000,music_festival,Festival site
+soundonsound_2022,Sound on Sound Music Festival,2022-09-24,Marina Green,06073,CA,30000,music_festival,Festival site (San Diego)
+soundonsound_2023,Sound on Sound Music Festival,2023-09-30,Marina Green,06073,CA,30000,music_festival,Festival site
+burgerboogaloo_2018,Burger Boogaloo,2018-07-07,Mosswood Park,06001,CA,15000,music_festival,Festival site (Oakland)
+burgerboogaloo_2019,Burger Boogaloo,2019-07-06,Mosswood Park,06001,CA,15000,music_festival,Festival site
+burgerboogaloo_2022,Burger Boogaloo,2022-07-02,Mosswood Park,06001,CA,15000,music_festival,Festival site
+burgerboogaloo_2023,Burger Boogaloo,2023-07-01,Mosswood Park,06001,CA,15000,music_festival,Festival site
+sdcc_2018,San Diego Comic-Con International,2018-07-19,San Diego Convention Center,06073,CA,130000,conference_festival,Wikipedia: ~130K attendees + ~30K outside
+sdcc_2019,San Diego Comic-Con International,2019-07-18,San Diego Convention Center,06073,CA,130000,conference_festival,Wikipedia
+sdcc_2022,San Diego Comic-Con International,2022-07-21,San Diego Convention Center,06073,CA,130000,conference_festival,Wikipedia (post-COVID return)
+sdcc_2023,San Diego Comic-Con International,2023-07-20,San Diego Convention Center,06073,CA,130000,conference_festival,Wikipedia
+anime_expo_2018,Anime Expo,2018-07-05,Los Angeles Convention Center,06037,CA,110000,conference_festival,Wikipedia
+anime_expo_2019,Anime Expo,2019-07-04,Los Angeles Convention Center,06037,CA,115000,conference_festival,Wikipedia
+anime_expo_2022,Anime Expo,2022-07-01,Los Angeles Convention Center,06037,CA,108000,conference_festival,Wikipedia (post-COVID)
+anime_expo_2023,Anime Expo,2023-07-01,Los Angeles Convention Center,06037,CA,100000,conference_festival,Wikipedia
+wondercon_2018,WonderCon,2018-03-23,Anaheim Convention Center,06059,CA,60000,conference_festival,Wikipedia
+wondercon_2019,WonderCon,2019-03-29,Anaheim Convention Center,06059,CA,60000,conference_festival,Wikipedia
+wondercon_2022,WonderCon,2022-04-01,Anaheim Convention Center,06059,CA,55000,conference_festival,Wikipedia
+wondercon_2023,WonderCon,2023-03-24,Anaheim Convention Center,06059,CA,60000,conference_festival,Wikipedia
+e3_2018,Electronic Entertainment Expo,2018-06-12,Los Angeles Convention Center,06037,CA,69200,conference_festival,Wikipedia (discontinued after 2019 in-person)
+e3_2019,Electronic Entertainment Expo,2019-06-11,Los Angeles Convention Center,06037,CA,66100,conference_festival,Wikipedia (last in-person)
+treasure_island_2018,Treasure Island Music Festival,2018-10-13,Middle Harbor Shoreline,06001,CA,20000,music_festival,Wikipedia (last year; moved off Treasure Island)
+once_upon_time_2018,Once Upon a Time in LA,2018-12-15,Banc of California Stadium,06037,CA,40000,music_festival,Festival site
+once_upon_time_2021,Once Upon a Time in LA,2021-12-18,Banc of California Stadium,06037,CA,40000,music_festival,Festival site
+mountain_winery_summer_2018,Mountain Winery Summer Series,2018-08-15,The Mountain Winery,06085,CA,40000,music_festival,Operator (Saratoga; 2.5K x 16 nights)
+mountain_winery_summer_2019,Mountain Winery Summer Series,2019-08-15,The Mountain Winery,06085,CA,40000,music_festival,Operator
+mountain_winery_summer_2022,Mountain Winery Summer Series,2022-08-15,The Mountain Winery,06085,CA,40000,music_festival,Operator
+mountain_winery_summer_2023,Mountain Winery Summer Series,2023-08-15,The Mountain Winery,06085,CA,40000,music_festival,Operator
