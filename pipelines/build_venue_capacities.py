@@ -26,9 +26,10 @@ from pathlib import Path
 
 import polars as pl
 
-CURATED   = Path("data/curated")
-RAW_CSV   = CURATED / "_ca_venues_raw.csv"      # input: from Athena query
-FINAL_CSV = CURATED / "venue_capacities.csv"    # output: canonical reference
+CURATED        = Path("data/curated")
+RAW_CSV        = CURATED / "_ca_venues_raw.csv"          # input: from Athena query
+WIKIDATA_CSV   = CURATED / "_wikidata_venues.csv"        # optional: scraped via pipelines/scrape_wikidata_venues.py
+FINAL_CSV      = CURATED / "venue_capacities.csv"        # output: canonical reference
 
 DEFAULT_CAPACITY = 500  # median small-club capacity, used when no other rule fires
 
@@ -261,8 +262,31 @@ def main() -> int:
 
     out = src.join(seed_df, on=["venue_name", "city_name"], how="left")
 
-    # For rows with no SEED match, try the name-keyword heuristic next, then
-    # fall back to the flat default. Build heuristic columns row-by-row.
+    # Tier 2: WikiData-sourced capacities. Joins on (venue_name, city_name)
+    # exactly — fuzzy matching is too risky (the WikiData set is mostly
+    # stadiums/arenas, and a coincidental name match would massively
+    # over-estimate a small club). Run pipelines/scrape_wikidata_venues.py
+    # to (re)generate the input CSV; if it's missing, we skip this tier.
+    if WIKIDATA_CSV.exists():
+        wd = pl.read_csv(WIKIDATA_CSV)
+        wd = wd.rename({"capacity": "_wd_cap", "capacity_source": "_wd_src"})
+        wd = wd.select(["venue_name", "city_name", "_wd_cap", "_wd_src"])
+        # Deduplicate: WikiData sometimes has multiple bindings per venue;
+        # take the median capacity (defends against stale or wrong entries).
+        wd = wd.group_by(["venue_name", "city_name"]).agg([
+            pl.col("_wd_cap").median().cast(pl.Int64).alias("_wd_cap"),
+            pl.col("_wd_src").first().alias("_wd_src"),
+        ])
+        out = out.join(wd, on=["venue_name", "city_name"], how="left")
+        print(f"  wikidata pool: {wd.height} venues; {out.filter(pl.col('_wd_cap').is_not_null()).height} matched setlistfm venues")
+    else:
+        out = out.with_columns([
+            pl.lit(None).cast(pl.Int64).alias("_wd_cap"),
+            pl.lit(None).cast(pl.Utf8).alias("_wd_src"),
+        ])
+        print(f"  wikidata CSV missing: skipping WikiData tier")
+
+    # Tier 3: name-keyword heuristic. Build row-by-row.
     heur_cap: list[int | None] = []
     heur_src: list[str | None] = []
     for vn in out["venue_name"]:
@@ -278,15 +302,16 @@ def main() -> int:
         pl.Series("_heur_cap", heur_cap, dtype=pl.Int64),
         pl.Series("_heur_src", heur_src, dtype=pl.Utf8),
     ])
+    # Tier resolution: SEED > WikiData > heuristic > flat default.
     out = out.with_columns([
-        # 1. Use SEED if available, else 2. name heuristic, else 3. flat default.
-        pl.coalesce(["capacity", "_heur_cap", pl.lit(DEFAULT_CAPACITY)]).alias("capacity"),
+        pl.coalesce(["capacity", "_wd_cap", "_heur_cap", pl.lit(DEFAULT_CAPACITY)]).alias("capacity"),
         pl.coalesce([
             "capacity_source",
+            "_wd_src",
             "_heur_src",
             pl.lit("default_small_club"),
         ]).alias("capacity_source"),
-    ]).drop(["_heur_cap", "_heur_src"])
+    ]).drop(["_wd_cap", "_wd_src", "_heur_cap", "_heur_src"])
     out = out.select([
         "venue_id", "venue_name", "city_name", "n_events", "n_artists",
         "capacity", "capacity_source",
@@ -295,15 +320,21 @@ def main() -> int:
     out.write_csv(FINAL_CSV)
 
     total_ev  = out["n_events"].sum()
-    seeded    = out.filter(~pl.col("capacity_source").str.starts_with("heuristic_") &
-                            (pl.col("capacity_source") != "default_small_club"))
+    wikidata  = out.filter(pl.col("capacity_source") == "wikidata_sparql")
     heuristic = out.filter(pl.col("capacity_source").str.starts_with("heuristic_"))
     defaulted = out.filter(pl.col("capacity_source") == "default_small_club")
+    seeded    = out.filter(
+        ~pl.col("capacity_source").str.starts_with("heuristic_")
+        & (pl.col("capacity_source") != "default_small_club")
+        & (pl.col("capacity_source") != "wikidata_sparql")
+    )
 
     print(f"\nseeded:    {seeded.height:>4} venues  ({seeded['n_events'].sum():>5,} events,"
-          f" {seeded['n_events'].sum() / total_ev:.1%})")
+          f" {seeded['n_events'].sum() / total_ev:.1%})  -- hand-curated SEED dict")
+    print(f"wikidata:  {wikidata.height:>4} venues  ({wikidata['n_events'].sum():>5,} events,"
+          f" {wikidata['n_events'].sum() / total_ev:.1%})  -- WikiData SPARQL")
     print(f"heuristic: {heuristic.height:>4} venues  ({heuristic['n_events'].sum():>5,} events,"
-          f" {heuristic['n_events'].sum() / total_ev:.1%})  -- via name-keyword fallback")
+          f" {heuristic['n_events'].sum() / total_ev:.1%})  -- name-keyword fallback")
     print(f"defaulted: {defaulted.height:>4} venues  ({defaulted['n_events'].sum():>5,} events,"
           f" {defaulted['n_events'].sum() / total_ev:.1%}) @ {DEFAULT_CAPACITY}")
     print(f"\nwrote {FINAL_CSV}")

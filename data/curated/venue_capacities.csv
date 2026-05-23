@@ -123,10 +123,10 @@ bd5d53a,Goldfield Trading Post,Sacramento,108,107,1500,operator
 6bd39e96,The Canyon - Montclair,Montclair,85,73,450,operator
 53d6dbcd,The Hotel Cafe,Los Angeles,82,71,150,heuristic_cafe
 23d62c2f,The Viper Room,West Hollywood,80,69,500,default_small_club
-23d5a8f7,Dolby Theatre,Los Angeles,78,67,1200,heuristic_theater
+23d5a8f7,Dolby Theatre,Los Angeles,78,67,3332,wikidata_sparql
 43d66703,The New Parish,Oakland,78,77,400,operator
 4bd39bea,Brookside Park,Pasadena,77,77,30000,festival_cruelworld
-53d21f69,Oakland Coliseum,Oakland,77,69,20000,heuristic_coliseum
+53d21f69,Oakland Coliseum,Oakland,77,69,49094,wikidata_sparql
 73d53a3d,Embarcadero Marina Park North,San Diego,75,71,10000,operator
 43d6635b,924 Gilman Street,Berkeley,75,61,500,default_small_club
 23d6347f,Café du Nord,San Francisco,75,72,150,heuristic_cafe
@@ -134,7 +134,7 @@ bd5d53a,Goldfield Trading Post,Sacramento,108,107,1500,operator
 73d65efd,Thunder Valley Casino,Lincoln,74,63,500,default_small_club
 3d441c7,Waterfront Park,San Diego,74,71,500,default_small_club
 bd63986,Petco Park,San Diego,73,68,42000,wikipedia
-53d63781,Santa Barbara Bowl,Santa Barbara,72,65,200,heuristic_bar
+53d63781,Santa Barbara Bowl,Santa Barbara,72,65,4562,wikidata_sparql
 3bd62458,DNA Lounge,San Francisco,71,68,300,heuristic_lounge
 6bd2dae2,Elbo Room Jack London,Oakland,71,63,500,default_small_club
 33d5902d,El Dorado County Fairgrounds,Placerville,70,50,8000,heuristic_fairgrounds
@@ -150,8 +150,8 @@ bd38d22,Toyota Arena,Ontario,69,61,11000,wikipedia
 3bd7c020,Los Angeles Theatre,Los Angeles,65,60,2000,operator
 23d3a403,Camp Navarro,Navarro,64,20,500,default_small_club
 3bd2f008,The Baked Potato,Los Angeles,64,25,500,default_small_club
-43d6dbe3,Viejas Arena,San Diego,63,57,12000,heuristic_arena
-23d220df,Cerritos Center for the Performing Arts,Cerritos,63,53,500,default_small_club
+43d6dbe3,Viejas Arena,San Diego,63,57,12414,wikidata_sparql
+23d220df,Cerritos Center for the Performing Arts,Cerritos,63,53,1721,wikidata_sparql
 4bd7db92,Bethel Church,Irvine,62,5,500,default_small_club
 63d33287,Voodoo Room,San Diego,62,62,500,default_small_club
 73d5d6e5,The Hi-Hat,Los Angeles,61,58,500,default_small_club
@@ -162,16 +162,16 @@ bd38d22,Toyota Arena,Ontario,69,61,11000,wikipedia
 53d78b55,Saban Theater,Beverly Hills,59,58,1200,heuristic_theater
 63d5c627,Resident,Los Angeles,58,56,300,operator
 5bd23770,Private Venue,Oakland,57,16,500,default_small_club
-73d62245,Orpheum Theatre,Los Angeles,55,48,1200,heuristic_theater
+73d62245,Orpheum Theatre,Los Angeles,55,48,2000,wikidata_sparql
 63d72e9b,Brick & Mortar Music Hall,San Francisco,55,55,1200,heuristic_music_hall
 6bd63e1e,The Boardwalk,Orangevale,54,53,500,default_small_club
 13d61949,The Ellen DeGeneres Show,Burbank,53,48,500,default_small_club
-3bd62c64,Crest Theatre,Sacramento,53,47,1200,heuristic_theater
+3bd62c64,Crest Theatre,Sacramento,53,47,975,wikidata_sparql
 bd63572,Bimbo's 365 Club,San Francisco,52,34,500,default_small_club
 7bd23e0c,Marty's On Newport,Tustin,51,44,500,default_small_club
 3d60df7,Auto Club Speedway,Fontana,51,51,500,default_small_club
 6bd00e9e,The Slidebar Rock-n-Roll Kitchen,Fullerton,50,46,500,default_small_club
-63d3966b,San Jose Civic,San Jose,49,45,500,default_small_club
+63d3966b,San Jose Civic,San Jose,49,45,2850,wikidata_sparql
 bd649ee,Uptown Theatre,Napa,49,41,1200,heuristic_theater
 2bd548ba,Full Circle Brewing Co.,Fresno,49,43,500,default_small_club
 73d2f271,Shrine Exposition Hall,Los Angeles,49,37,800,heuristic_hall
@@ -194,18 +194,18 @@ bd5412e,Glen Helen Amphitheater,San Bernardino,46,42,8000,heuristic_amphitheatre
 7bd3ea2c,The Magnolia,El Cajon,45,43,500,default_small_club
 23d62007,Concord Pavilion,Concord,45,43,6000,heuristic_pavilion
 3d2210b,Private Venue,Long Beach,45,4,500,default_small_club
-bd639ee,Save Mart Center,Fresno,45,40,500,default_small_club
+bd639ee,Save Mart Center,Fresno,45,40,15544,wikidata_sparql
 1bd60190,Saint Rocke,Hermosa Beach,45,36,500,default_small_club
 53d55b15,The Redwood Bar,Los Angeles,45,38,200,heuristic_bar
 5bd1ff94,Lake Tahoe Community College,South Lake Tahoe,44,43,500,default_small_club
-2bd38c16,Lobero Theatre,Santa Barbara,44,40,1200,heuristic_theater
+2bd38c16,Lobero Theatre,Santa Barbara,44,40,604,wikidata_sparql
 6bd35a56,Supply and Demand,Long Beach,44,38,500,default_small_club
 3d39977,Golden State Theatre,Monterey,43,38,1200,heuristic_theater
 63d2be1b,Gold Diggers,Los Angeles,43,38,500,default_small_club
 6bd21e4a,ROW DTLA,Los Angeles,43,43,500,default_small_club
 5bd2c794,The Joe Henderson Lab,San Francisco,43,16,500,default_small_club
 43d667f3,Anaheim Convention Center,Anaheim,42,39,5000,heuristic_convention
-7bd67268,Balboa Theatre,San Diego,42,36,1200,heuristic_theater
+7bd67268,Balboa Theatre,San Diego,42,36,1339,wikidata_sparql
 13d5b989,Toyota Amphitheatre,Wheatland,42,40,8000,heuristic_amphitheatre
 1bd05184,Private Venue,Los Angeles,42,29,500,default_small_club
 63d6365f,Mayan Theatre,Los Angeles,41,39,1200,heuristic_theater
@@ -226,7 +226,7 @@ bd639ee,Save Mart Center,Fresno,45,40,500,default_small_club
 4bd25312,Campus Jax,Newport Beach,37,26,500,default_small_club
 1bd6d1a4,Paramount Theatre,Oakland,36,32,1200,heuristic_theater
 5bd62bb0,Palace of Fine Arts Theatre,San Francisco,36,33,1200,heuristic_theater
-13d7bd21,McCallum Theatre,Palm Desert,36,25,1200,heuristic_theater
+13d7bd21,McCallum Theatre,Palm Desert,36,25,1127,wikidata_sparql
 53d77b59,The Irenic,San Diego,36,36,500,default_small_club
 13d2a1b1,Pico Union Project,Los Angeles,36,32,500,default_small_club
 7bd3a23c,Programme Skate & Sound,Fullerton,36,34,500,default_small_club
@@ -257,15 +257,15 @@ bd2e12e,The Siren,Morro Bay,32,32,500,default_small_club
 5bd6d788,The Mint,Los Angeles,30,25,200,operator
 7bd55e1c,The Parish at House of Blues,Anaheim,30,30,500,default_small_club
 4bd65f62,Pechanga Resort & Casino,Temecula,30,29,500,default_small_club
-1bd62178,Rose Bowl,Pasadena,30,24,500,default_small_club
+1bd62178,Rose Bowl,Pasadena,30,24,92542,wikidata_sparql
 7bd77a18,Golden Gate Theater,San Francisco,30,5,1200,heuristic_theater
 53d29f01,Papa Murphy's Park,Sacramento,29,27,500,default_small_club
 3bd13088,Oak Canyon Park,Silverado,29,29,15000,festival_outdoor
 7bd6d2d4,Shrine Auditorium,Los Angeles,29,27,6300,wikipedia
 53d41bbd,iHeartRadio Theater,Burbank,29,25,1200,heuristic_theater
-23d6c4ab,Riverside Municipal Auditorium,Riverside,29,28,2500,heuristic_auditorium
+23d6c4ab,Riverside Municipal Auditorium,Riverside,29,28,1400,wikidata_sparql
 63d466ab,The Voice,Universal City,29,22,500,default_small_club
-43d6375b,Arlington Theatre,Santa Barbara,28,28,1200,heuristic_theater
+43d6375b,Arlington Theatre,Santa Barbara,28,28,2018,wikidata_sparql
 1bd03564,Ventura Music Hall,Ventura,28,28,500,operator
 33d7cc59,Marina Green,Long Beach,28,28,500,default_small_club
 13d0b545,SoFi Stadium,Inglewood,28,15,70000,wikipedia
@@ -299,7 +299,7 @@ bd2e12e,The Siren,Morro Bay,32,32,500,default_small_club
 4bd3a7de,Homestead Bowl & The X Bar,Cupertino,24,24,200,heuristic_bar
 43d11f37,Dorothy Chandler Pavilion,Los Angeles,24,12,6000,heuristic_pavilion
 3bd618a8,The Smell,Los Angeles,24,23,500,default_small_club
-6bd3a2fa,Fox Theater,Bakersfield,23,21,1200,heuristic_theater
+6bd3a2fa,Fox Theater,Bakersfield,23,21,1500,wikidata_sparql
 53d393e1,Harrah's Resort Southern California,Valley Center,23,21,500,default_small_club
 1bd38de4,King Gillette Ranch,Calabasas,23,23,500,default_small_club
 63d3a65f,Sycuan Casino Resort,El Cajon,23,20,500,default_small_club
@@ -309,7 +309,7 @@ bd2e12e,The Siren,Morro Bay,32,32,500,default_small_club
 63d722bb,John Anson Ford Amphitheatre,Los Angeles,23,23,8000,heuristic_amphitheatre
 bd251ba,Shrine Auditorium and Expo Hall,Los Angeles,22,20,2500,heuristic_auditorium
 63d45ac3,The Blue Whale,Los Angeles,22,16,500,default_small_club
-33d6785d,Cascade Theatre,Redding,22,22,1200,heuristic_theater
+33d6785d,Cascade Theatre,Redding,22,22,1348,wikidata_sparql
 5bd6db5c,Palace Theatre,Los Angeles,22,19,1200,heuristic_theater
 6bd2a68a,Bogies Bar,Westlake Village,22,18,200,heuristic_bar
 4bd2c302,JaM Cellars Ballroom,Napa,22,18,1200,heuristic_ballroom
@@ -380,7 +380,7 @@ bd4c1c2,Rainbow Bar & Grill,West Hollywood,18,18,200,heuristic_bar
 4bd4b7ce,Henry Miller Memorial Library,Big Sur,17,16,500,default_small_club
 33de5c1d,Whistle Stop Bar,San Diego,17,17,200,heuristic_bar
 33d7483d,Neck of the Woods,San Francisco,17,17,500,default_small_club
-bd63d12,Selland Arena,Fresno,17,17,12000,heuristic_arena
+bd63d12,Selland Arena,Fresno,17,17,11300,wikidata_sparql
 3d021af,Knucklehead Hollywood,Los Angeles,16,16,500,default_small_club
 2bd7a852,Milk Bar,San Francisco,16,14,200,heuristic_bar
 bd64d26,Chumash Casino,Santa Ynez,16,16,500,default_small_club
@@ -391,7 +391,7 @@ bd5e526,The Show,Rancho Mirage,16,14,500,default_small_club
 bd211aa,Golden Road Brewing,Los Angeles,16,16,500,default_small_club
 53d6c7e1,Amoeba Records,San Francisco,16,16,500,default_small_club
 63d556f7,The Back Room,Berkeley,16,14,500,default_small_club
-6bd7460e,Louise M. Davies Symphony Hall,San Francisco,16,14,800,heuristic_hall
+6bd7460e,Louise M. Davies Symphony Hall,San Francisco,16,14,2743,wikidata_sparql
 53d277e5,Private Venue,Chico,16,4,500,default_small_club
 13df8d29,Flog Stage,Los Angeles,16,16,500,default_small_club
 4bd5bbde,Gray Area Art & Technology Theater,San Francisco,16,16,1200,heuristic_theater
@@ -454,10 +454,10 @@ bdf8d2a,Camp Stage,Los Angeles,12,12,500,default_small_club
 3bd71008,Winters Tavern,Pacifica,12,10,250,heuristic_tavern
 2bd3a046,French's Camp,Garberville,12,12,500,default_small_club
 bd315e2,Private Venue,Pioneertown,12,1,500,default_small_club
-73d6c2a1,Herbst Theatre,San Francisco,12,10,1200,heuristic_theater
+73d6c2a1,Herbst Theatre,San Francisco,12,10,928,wikidata_sparql
 1bd67564,El Rio,San Francisco,12,9,500,default_small_club
 3d0f923,Private Venue,San Francisco,12,9,500,default_small_club
-1bd27164,Terrace Theater,Long Beach,12,11,1200,heuristic_theater
+1bd27164,Terrace Theater,Long Beach,12,11,3051,wikidata_sparql
 3bd07070,Thunder Valley Outdoor Amphitheater,Lincoln,12,12,8000,heuristic_amphitheatre
 13d39145,HopMonk Tavern Sonoma,Sonoma,12,2,250,heuristic_tavern
 6bd3f6aa,"Walt Disney Concert Hall, REDCAT Theater",Los Angeles,12,12,1200,heuristic_theater
@@ -506,12 +506,12 @@ bd39d12,Tioga-Sequoia Brewing Company,Fresno,11,11,500,default_small_club
 63d3be73,Private Venue,Sacramento,10,7,500,default_small_club
 7bd28ebc,Spaghettini,Seal Beach,10,5,500,default_small_club
 33d76c9d,Lagunitas Brewing Company,Petaluma,10,8,500,default_small_club
-53d3939d,Visalia Fox Theatre,Visalia,10,9,1200,heuristic_theater
+53d3939d,Visalia Fox Theatre,Visalia,10,9,1275,wikidata_sparql
 3d461e7,20th St Block Party,San Francisco,10,10,500,default_small_club
 6bd1b62e,1756 Naud Street,Los Angeles,10,10,500,default_small_club
 4bd24b5e,Corbin Bowl,Los Angeles,10,9,500,default_small_club
 53d79fed,Que Sera,Long Beach,10,10,500,default_small_club
-7bd3aa04,Oracle Park,San Francisco,10,10,500,default_small_club
+7bd3aa04,Oracle Park,San Francisco,10,10,41915,wikidata_sparql
 2bd50c1e,Light Rail Studios,San Francisco,10,10,500,default_small_club
 7bd0d22c,Barbara Morrison Performing Arts Center,Los Angeles,10,6,200,heuristic_bar
 23d738b7,Characters,Pomona,10,9,500,default_small_club
@@ -520,7 +520,7 @@ bd39d12,Tioga-Sequoia Brewing Company,Fresno,11,11,500,default_small_club
 2bd534e2,House of Rock,Santa Rosa,10,7,500,default_small_club
 6bd39e12,Fingerprints Music,Long Beach,10,10,500,default_small_club
 13d4ed09,Bing Concert Hall,Stanford,10,9,1500,heuristic_concert_hall
-1bd061e4,The Rady Shell at Jacobs Park,San Diego,10,10,500,default_small_club
+1bd061e4,The Rady Shell at Jacobs Park,San Diego,10,10,10000,wikidata_sparql
 2bd318e2,Rufus Wainwright's House,Los Angeles,10,1,500,default_small_club
 23d454f3,Black Oak Casino,Tuolumne,10,9,500,default_small_club
 73d0beb1,Santa Ana Civic Center,Santa Ana,10,10,500,default_small_club
@@ -535,7 +535,7 @@ bd39d12,Tioga-Sequoia Brewing Company,Fresno,11,11,500,default_small_club
 7bd502dc,James Corden's Carpool Karaoke,Los Angeles,9,9,500,default_small_club
 13d7e17d,Hollywood Improv,Los Angeles,9,8,500,default_small_club
 73d61281,Velvet Jones,Santa Barbara,9,9,500,default_small_club
-5bd0c780,San Diego Civic Theatre,San Diego,9,8,1200,heuristic_theater
+5bd0c780,San Diego Civic Theatre,San Diego,9,8,2967,wikidata_sparql
 4bd4fb0e,Ruth Finley Person Theatre,Santa Rosa,9,9,1200,heuristic_theater
 73d08a05,Project Barley Brewery,Lomita,9,7,200,heuristic_bar
 3d769e3,The Marsh,Berkeley,9,1,500,default_small_club
@@ -584,7 +584,7 @@ bd4e926,Mozambique,Laguna Beach,9,8,500,default_small_club
 3bd7c444,Lesher Center for the Arts,Walnut Creek,8,8,500,default_small_club
 4bd72f8a,Humbrews,Arcata,8,8,500,default_small_club
 4bd3bf02,The OffBeat,Los Angeles,8,7,500,default_small_club
-4bd3977a,Yost Theater,Santa Ana,8,8,1200,heuristic_theater
+4bd3977a,Yost Theater,Santa Ana,8,8,1000,wikidata_sparql
 7bd33228,Peace and Justice House,San Jose,8,7,500,default_small_club
 1bd5e178,M3 Live Event Center,Anaheim,8,8,500,default_small_club
 23d6140b,Embarcadero Marina Park South,San Diego,8,8,500,default_small_club
@@ -710,7 +710,7 @@ bd535c6,Casa Escobar Malibu,Malibu,6,6,500,default_small_club
 73d3aa0d,Soka Performing Arts Center,Aliso Viejo,6,6,500,default_small_club
 2bd2a462,Bob Baker Marionette Theater,Los Angeles,6,6,1200,heuristic_theater
 bd391ce,RAREHOUSE,Los Angeles,6,6,500,default_small_club
-73d392ed,Lincoln Theater Napa Valley,Yountville,6,6,1200,heuristic_theater
+73d392ed,Lincoln Theater Napa Valley,Yountville,6,6,1200,wikidata_sparql
 5bde37cc,Permanent Records Roadhouse,Los Angeles,6,6,500,default_small_club
 3bd60424,ABC Studios,Los Angeles,6,6,500,default_small_club
 73d39a71,State Theatre,Red Bluff,6,6,1200,heuristic_theater
@@ -800,9 +800,9 @@ bd3a1ba,Oak Canyon Nature Center,Anaheim,5,5,500,default_small_club
 23d2706b,Ojai Underground Exchange,Ojai,5,5,500,default_small_club
 43d78bef,Colonial Theater,Sacramento,5,5,1200,heuristic_theater
 43d7c7df,Conan,Burbank,5,5,500,default_small_club
-7bd0eeb0,Heart Health Park,Sacramento,5,5,500,default_small_club
+7bd0eeb0,Heart Health Park,Sacramento,5,5,9784,wikidata_sparql
 6bd4062a,Wiens Family Cellars,Temecula,5,5,500,default_small_club
-5bd1ff30,Carpenter Performing Arts Center,Long Beach,5,4,500,default_small_club
+5bd1ff30,Carpenter Performing Arts Center,Long Beach,5,4,1054,wikidata_sparql
 73d4e6f9,Musicians Institute Auditorium,Los Angeles,5,3,2500,heuristic_auditorium
 3bd0c4d4,Stay Gold Deli,Oakland,5,5,500,default_small_club
 63d60633,"",Berkeley,5,1,500,default_small_club
@@ -892,7 +892,7 @@ bd23d5a,The Laugh Factory,Los Angeles,4,2,500,default_small_club
 2bd398a6,Palmdale Amphitheater,Palmdale,4,4,8000,heuristic_amphitheatre
 5bd4a374,Rio Nido Roadhouse,Rio Nido,4,3,500,default_small_club
 1bd6c58c,Rainbow Ballroom,Fresno,4,4,1200,heuristic_ballroom
-73d6da29,Chukchansi Park,Fresno,4,4,500,default_small_club
+73d6da29,Chukchansi Park,Fresno,4,4,12500,wikidata_sparql
 1bd0e53c,Paul Dresher Ensemble Studio,Oakland,4,4,500,default_small_club
 13d63d89,The Airliner,Los Angeles,4,4,500,default_small_club
 7bd1fec4,Hard Rock Hotel & Casino Sacramento,Wheatland,4,4,500,default_small_club
@@ -926,7 +926,7 @@ bd7ddbe,TAIX,Los Angeles,4,4,500,default_small_club
 13d38965,3F Gallery,San Jose,4,4,500,default_small_club
 53d3ebb9,Gerstle Park Neighborhood,San Rafael,4,3,500,default_small_club
 43d3c75b,The Well,Bakersfield,4,4,500,default_small_club
-3d6310b,Fox Theatre,Redwood City,4,4,1200,heuristic_theater
+3d6310b,Fox Theatre,Redwood City,4,4,1400,wikidata_sparql
 63d286d7,Blonde Bar,San Diego,4,4,200,heuristic_bar
 13d415b1,Hermosa Beach,Hermosa Beach,4,4,500,default_small_club
 43d3a30b,Sierra Nevada Brewing Co.,Chico,4,4,500,default_small_club
@@ -1065,7 +1065,7 @@ bd1f95e,The Red Museum,Sacramento,3,3,500,default_small_club
 13d39905,Crazy Horse Saloon & Grill,Nevada City,3,2,500,default_small_club
 3d08123,West Side Theatre,Newman,3,2,1200,heuristic_theater
 2bd054b6,Rebru Spirits,San Diego,3,3,500,default_small_club
-43d7371f,El Capitan Theatre,Los Angeles,3,3,1200,heuristic_theater
+43d7371f,El Capitan Theatre,Los Angeles,3,3,1100,wikidata_sparql
 63de5653,The Lodge Barber Shop,Long Beach,3,3,200,heuristic_bar
 33d2048d,Avaya Stadium Grounds,San Jose,3,3,30000,heuristic_stadium
 13d62165,University of Southern California,Los Angeles,3,3,500,default_small_club
@@ -1095,7 +1095,7 @@ bd2f10a,"Bovard Auditorium, University of Southern California",Los Angeles,3,2,2
 7bd2f6c0,The Britisher,Lancaster,3,2,500,default_small_club
 6bd2aab2,Desert Empire,Ridgecrest,3,1,500,default_small_club
 63d27263,"Capistrano Concert Hall, Sacramento State School of Music",Sacramento,3,2,1500,heuristic_concert_hall
-5bd653b4,Starlight Bowl,Burbank,3,3,500,default_small_club
+5bd653b4,Starlight Bowl,Burbank,3,3,5000,wikidata_sparql
 bd2754e,Tinhorn Flats,Burbank,3,1,500,default_small_club
 73d4baa1,Venice Beach,Venice,3,3,500,default_small_club
 5bd7731c,Jack London Square,Oakland,3,3,500,default_small_club
@@ -1174,7 +1174,7 @@ bdedd52,Mullet Death HQ,San Rafael,2,2,500,default_small_club
 3bd36080,JBC HQ,Vernon,2,1,500,default_small_club
 63d3122b,Disney Singalong,Los Angeles,2,2,500,default_small_club
 4bd56f9a,Drifters Cocktails,Santa Clarita,2,2,500,default_small_club
-53d7e729,California Theatre of the Performing Arts,San Bernardino,2,1,1200,heuristic_theater
+53d7e729,California Theatre of the Performing Arts,San Bernardino,2,1,1718,wikidata_sparql
 73d36631,Private Venue,Anaheim,2,2,500,default_small_club
 7bd6c2f4,William Saroyan Theatre,Fresno,2,2,1200,heuristic_theater
 6bd53e32,Frogee's Cocktail,Apple Valley,2,2,500,default_small_club
@@ -1214,7 +1214,7 @@ bd44976,Rabobank Theater,Bakersfield,2,2,1200,heuristic_theater
 bd2b95e,The Press,Claremont,2,2,500,default_small_club
 7bd65a2c,Regent Beverly Wilshire Hotel,Beverly Hills,2,2,500,default_small_club
 7bd42e50,PJ's Roadhouse,Placerville,2,2,500,default_small_club
-5bd40390,Curran Theatre,San Francisco,2,2,1200,heuristic_theater
+5bd40390,Curran Theatre,San Francisco,2,2,1667,wikidata_sparql
 4bd0e75a,Private Venue,Malibu,2,2,500,default_small_club
 5bd4a754,Sheraton-Universal Hotel,Los Angeles,2,1,500,default_small_club
 5bd5b358,Lucky Strike Live,Los Angeles,2,2,500,default_small_club
@@ -1612,7 +1612,7 @@ bd3e10e,Mission Tiki Drive in,Montclair,1,1,500,default_small_club
 4bd367f2,Simi Valley Drive-In,Simi Valley,1,1,500,default_small_club
 6bd05652,Gnarly Deli,Chico,1,1,500,default_small_club
 53deaf49,Stanley Recordings,Los Angeles,1,1,500,default_small_club
-63d5b6fb,Alcazar Theatre,San Francisco,1,1,1200,heuristic_theater
+63d5b6fb,Alcazar Theatre,San Francisco,1,1,511,wikidata_sparql
 43d097a3,The Getty,Los Angeles,1,1,500,default_small_club
 2bde3006,Simi Valley Town Center,Simi Valley,1,1,500,default_small_club
 23d004ff,Dwellpoint,Sacramento,1,1,500,default_small_club
@@ -2046,7 +2046,7 @@ bd21d3e,Plant Food Supper Club,Idyllwild,1,1,500,default_small_club
 33d18061,UCSC Trading Post,Santa Cruz,1,1,500,default_small_club
 2bd3a8a6,Craneway Pavilion,Richmond,1,1,6000,heuristic_pavilion
 3bd39860,Dancing Oak Ranch,Ventura,1,1,500,default_small_club
-1bd67184,Vista Theatre,Los Angeles,1,1,1200,heuristic_theater
+1bd67184,Vista Theatre,Los Angeles,1,1,658,wikidata_sparql
 4bd05bda,Grandmaster Records,Los Angeles,1,1,500,default_small_club
 bd7a93a,Throckmorton Theatre,Mill Valley,1,1,1200,heuristic_theater
 1bd4d92c,KCSB Radio,Santa Barbara,1,1,500,default_small_club
@@ -2270,7 +2270,7 @@ bde297e,Musiclandria,Sacramento,1,1,500,default_small_club
 4bd153ea,Happy Hour SC,Los Angeles,1,1,500,default_small_club
 73d3aa9d,Eureka Municipal Auditorium,Eureka,1,1,2500,heuristic_auditorium
 6bd06636,Pageant Theatre,Chico,1,1,1200,heuristic_theater
-7bd39ee8,Dignity Health Sports Park,Carson,1,1,500,default_small_club
+7bd39ee8,Dignity Health Sports Park,Carson,1,1,30510,wikidata_sparql
 73d182e5,Special Events Center,Indio,1,1,500,default_small_club
 4bd3db66,Maguey's,Commerce,1,1,500,default_small_club
 2bd73c96,Silver Dollar Fairgrounds,Chico,1,1,8000,heuristic_fairgrounds
@@ -2375,7 +2375,7 @@ bd171aa,UC Santa Barbara Events Center,University of California Santa Barbara Ca
 63d0fa6f,Townhouse Cocktail Lounge,Vallejo,1,1,300,heuristic_lounge
 23d5c4a7,The Hub,Colton,1,1,500,default_small_club
 53df8b99,Juicefest,Los Angeles,1,1,500,default_small_club
-33d4f031,Nuart Theatre,Los Angeles,1,1,1200,heuristic_theater
+33d4f031,Nuart Theatre,Los Angeles,1,1,303,wikidata_sparql
 73d33a29,Pipa Event Center,Winterhaven,1,1,500,default_small_club
 43d16b4b,Downtown Ale House,Red Bluff,1,1,500,default_small_club
 73d74ee9,Pauley Ballroom,Berkeley,1,1,1200,heuristic_ballroom
@@ -2598,7 +2598,7 @@ bd095b6,Sagebrush Cantina,Calabasas,1,1,500,default_small_club
 63d4c667,Hertz Hall,Berkeley,1,1,800,heuristic_hall
 6bd07e82,The Last Call,Los Angeles,1,1,500,default_small_club
 73d32ecd,Del Mar Town Hall,Del Mar,1,1,800,heuristic_hall
-1bd6c9c4,Orpheum Theatre,San Francisco,1,1,1200,heuristic_theater
+1bd6c9c4,Orpheum Theatre,San Francisco,1,1,2203,wikidata_sparql
 43d263e3,Union Jewel,Los Angeles,1,1,500,default_small_club
 1bd3f16c,The Grange,Orangevale,1,1,500,default_small_club
 23d2c8ef,Adelphia Studios,East Los Angeles,1,1,500,default_small_club
