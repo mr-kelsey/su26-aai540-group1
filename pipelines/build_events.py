@@ -87,6 +87,21 @@ def _read_ticketmaster(wh: Warehouse) -> pl.DataFrame:
     return df.select(EVENTS_COLUMNS)
 
 
+def _read_runsignup(wh: Warehouse) -> pl.DataFrame:
+    """Pull RunSignUp race rows; already events-shaped (source emits in the
+    unified schema). Categories: marathon, half_marathon, 10k, 5k."""
+    if not _table_exists(wh, "runsignup_races"):
+        return pl.DataFrame(schema={c: pl.Utf8 for c in EVENTS_COLUMNS})
+    df = wh.query("SELECT * FROM runsignup_races")
+    if df.is_empty():
+        return pl.DataFrame(schema={c: pl.Utf8 for c in EVENTS_COLUMNS})
+    for col in EVENTS_COLUMNS:
+        if col not in df.columns:
+            df = df.with_columns(pl.lit(None).alias(col))
+    df = _normalize_fetched_at(df)
+    return df.select(EVENTS_COLUMNS)
+
+
 def _read_setlistfm(wh: Warehouse) -> pl.DataFrame:
     """Pull Setlist.fm staging rows and map onto the events schema."""
     if not _table_exists(wh, "setlistfm_setlists"):
@@ -140,17 +155,16 @@ def main() -> int:
 
     tm = _read_ticketmaster(wh)
     sfm = _read_setlistfm(wh)
+    rsu = _read_runsignup(wh)
     console.print(f"Ticketmaster staging: {tm.height} rows")
     console.print(f"Setlist.fm staging:   {sfm.height} rows")
-    if tm.is_empty() and sfm.is_empty():
-        console.print("[yellow]Both staging tables empty. Nothing to build.[/yellow]")
+    console.print(f"RunSignUp staging:    {rsu.height} rows")
+    sources = [df for df in (tm, sfm, rsu) if not df.is_empty()]
+    if not sources:
+        console.print("[yellow]All staging tables empty. Nothing to build.[/yellow]")
         return 0
 
-    combined = (
-        pl.concat([tm, sfm], how="vertical_relaxed")
-        if (not tm.is_empty() and not sfm.is_empty())
-        else (tm if not tm.is_empty() else sfm)
-    )
+    combined = pl.concat(sources, how="vertical_relaxed") if len(sources) > 1 else sources[0]
     # Deduplicate on event_id (sources prefix their ids to keep namespaces disjoint).
     if combined.height > 0:
         combined = combined.unique(subset=["event_id"], keep="first")

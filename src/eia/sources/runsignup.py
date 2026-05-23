@@ -21,15 +21,26 @@ from eia.sources.registry import register
 
 class RunSignUp(Source):
     name = "runsignup"
-    target_table = "events"
+    # Staging table (NOT the unified `events` table). build_events.py will
+    # UNION rows from here into `events` alongside setlistfm and ticketmaster.
+    target_table = "runsignup_races"
     raw_format = "json"
 
     BASE_URL = "https://runsignup.com"
     PAGE_SIZE = 100  # API max per page
 
-    # RunSignUp event-type IDs of interest. 1=marathon, 2=half marathon, 3=10k...
-    # See: https://runsignup.com/API/race
-    EVENT_TYPE_IDS_OF_INTEREST: ClassVar[list[int]] = [1, 2]  # marathons + half marathons
+    # RunSignUp event-type IDs of interest. The published mapping (per
+    # https://runsignup.com/API/race) is:
+    #   1 = marathon            (~30-50K participants for majors)
+    #   2 = half marathon       (~20-40K)
+    #   3 = 10K                 (~5-15K)
+    #   4 = 5K                  (~3-15K; by far the most common race format)
+    #   5 = relay/team
+    #   ...higher = ultras, trail, kids, virtual, etc.
+    # 5Ks are the highest-volume category in the US — including them roughly
+    # 10xs the race count. Lift this list to broaden coverage once we have
+    # API access to validate the exact IDs (which can drift over time).
+    EVENT_TYPE_IDS_OF_INTEREST: ClassVar[list[int]] = [1, 2, 3, 4]
 
     def __init__(
         self,
@@ -38,7 +49,10 @@ class RunSignUp(Source):
     ) -> None:
         self.api_key = settings.runsignup_api_key
         self.api_secret = settings.runsignup_api_secret
-        self.start_date = start_date or (date.today() - timedelta(days=365))
+        # Default to the panel's full historical window. Override via constructor
+        # args for ad-hoc pulls. The CLI's auto-generated `eia pull runsignup`
+        # uses these defaults.
+        self.start_date = start_date or date(2015, 1, 1)
         self.end_date = end_date or date.today()
 
     def _check_keys(self) -> None:
@@ -116,11 +130,33 @@ class RunSignUp(Source):
             type_id = ev.get("event_type_id")
             if type_id not in self.EVENT_TYPE_IDS_OF_INTEREST:
                 continue
+
+            # Prefer ACTUAL attendance signals over capacity. For past races the
+            # API usually exposes a `registration_count` (actual sign-ups); for
+            # future races we fall back to `max_capacity` (the cap, an upper
+            # bound). The model can treat these differently via a confidence
+            # flag if needed.
+            actual = (
+                ev.get("registration_count")
+                or ev.get("registrants_count")
+                or ev.get("participants_count")
+                or ev.get("finishers")
+            )
+            capacity = ev.get("max_capacity")
+            expected = actual if actual is not None else capacity
+
+            category = {
+                1: "marathon",
+                2: "half_marathon",
+                3: "10k",
+                4: "5k",
+            }.get(type_id, f"race_type_{type_id}")
+
             out.append(
                 {
                     "event_id": f"rsu_{race.get('race_id')}_{ev.get('event_id')}",
                     "source": "runsignup",
-                    "category": "marathon" if type_id == 1 else "half_marathon",
+                    "category": category,
                     "event_name": race.get("name"),
                     "event_date": (ev.get("start_time") or "")[:10] or None,
                     "venue_name": race.get("name"),
@@ -132,7 +168,7 @@ class RunSignUp(Source):
                     "venue_lon": float(lon) if lon else None,
                     "county_fips": None,
                     "period_id": None,
-                    "expected_attendance": ev.get("max_capacity"),
+                    "expected_attendance": expected,
                     "ticket_min_usd": None,
                     "ticket_max_usd": None,
                     "raw_payload": json.dumps({"race": race, "event": ev}),
