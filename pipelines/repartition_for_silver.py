@@ -155,6 +155,32 @@ def repartition_tx() -> None:
     )
 
 
+def copy_curated_reference_tables() -> None:
+    """Copy hand-curated reference parquets (venue_capacities, festivals)
+    into the staging dir so they survive `aws s3 sync --delete`. These are
+    built by separate pipelines (build_venue_capacities.py and
+    build_festivals_reference.py) into `data/curated/*.parquet`, and need
+    to land in the same Silver layout as the auto-generated tables.
+    """
+    curated = Path("data/curated")
+    for table_name, parquet_name in [
+        ("venue_capacities", "venue_capacities.parquet"),
+        ("festivals", "festivals.parquet"),
+    ]:
+        src_path = curated / parquet_name
+        if not src_path.exists():
+            log.warning(
+                "  %s: missing %s — run the builder pipeline first; skipping",
+                table_name, src_path,
+            )
+            continue
+        out = STAGING / table_name
+        out.mkdir(parents=True, exist_ok=True)
+        shutil.copy(src_path, out / parquet_name)
+        df = pl.read_parquet(src_path)
+        log.info("  %s: %d rows (copied from %s)", table_name, df.height, src_path)
+
+
 def main() -> int:
     log.info("Resetting staging dir at %s", STAGING)
     reset_staging()
@@ -177,6 +203,9 @@ def main() -> int:
     repartition_cdtfa()
     repartition_census_stc()
     repartition_tx()
+
+    log.info("--- Curated reference tables (hand-built) ---")
+    copy_curated_reference_tables()
 
     log.info("\nStaging output at %s", STAGING.resolve())
     log.info("Ready to upload: aws s3 sync data/silver_staging/ s3://jonno-lucas-steve-bucket/usd-aai540-group1/silver/")

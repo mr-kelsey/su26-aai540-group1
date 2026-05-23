@@ -113,45 +113,60 @@ def normalize(bindings: list[dict], state_code: str) -> list[dict]:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--state-code", default="CA", help="2-letter state code")
+    ap.add_argument(
+        "--state-codes",
+        default="CA",
+        help="Comma-separated 2-letter state codes (default: CA). Use 'all' to pull every state in STATE_QIDS.",
+    )
     ap.add_argument(
         "--output",
         default="data/curated/_wikidata_venues.csv",
-        help="Output CSV path",
+        help="Output CSV path (all states UNIONed)",
     )
     args = ap.parse_args()
 
-    state_qid = STATE_QIDS.get(args.state_code.upper())
-    if not state_qid:
-        raise SystemExit(
-            f"unknown state {args.state_code!r}; add a QID to STATE_QIDS"
-        )
+    if args.state_codes.lower() == "all":
+        states = list(STATE_QIDS.keys())
+    else:
+        states = [s.strip().upper() for s in args.state_codes.split(",") if s.strip()]
 
-    print(f"querying WikiData for venues in {args.state_code} (QID {state_qid})...")
-    t0 = time.time()
-    bindings = fetch(state_qid)
-    print(f"  got {len(bindings)} raw bindings in {time.time() - t0:.1f}s")
-
-    rows = normalize(bindings, args.state_code.upper())
-    print(f"  {len(rows)} venues after dedup/filter")
+    all_rows: list[dict] = []
+    for state in states:
+        qid = STATE_QIDS.get(state)
+        if not qid:
+            print(f"  [skip] unknown state {state!r}")
+            continue
+        print(f"querying WikiData for venues in {state} (QID {qid})...")
+        t0 = time.time()
+        try:
+            bindings = fetch(qid)
+        except Exception as e:
+            print(f"  [skip] {state} query failed: {e}")
+            continue
+        rows = normalize(bindings, state)
+        print(f"  {state}: {len(rows)} venues (raw={len(bindings)}) in {time.time() - t0:.1f}s")
+        all_rows.extend(rows)
+        # Polite pacing between SPARQL queries
+        time.sleep(2)
 
     out = Path(args.output)
     out.parent.mkdir(parents=True, exist_ok=True)
 
-    # Write CSV without polars dependency (this is a small one-off)
     import csv
-    if rows:
-        keys = list(rows[0].keys())
+    if all_rows:
+        keys = list(all_rows[0].keys())
         with out.open("w", newline="") as f:
             w = csv.DictWriter(f, fieldnames=keys)
             w.writeheader()
-            for r in rows:
+            for r in all_rows:
                 w.writerow(r)
-        print(f"wrote {out}")
-        # Quick top-10
-        print("\n=== top 10 by capacity ===")
-        for r in rows[:10]:
-            print(f"  {r['capacity']:>8,}  {r['venue_name']}  ({r['city_name']})")
+        print(f"\nwrote {out}  ({len(all_rows)} venues total)")
+        # Summary by state
+        by_state: dict[str, int] = {}
+        for r in all_rows:
+            by_state[r["state_code"]] = by_state.get(r["state_code"], 0) + 1
+        for s, n in sorted(by_state.items(), key=lambda x: -x[1]):
+            print(f"  {s}: {n}")
     else:
         print("no rows; CSV not written")
     return 0
