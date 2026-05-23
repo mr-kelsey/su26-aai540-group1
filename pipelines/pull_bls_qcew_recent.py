@@ -96,18 +96,29 @@ def clean_year(year: int) -> None:
     )
     log.info("  filtered: %s rows", f"{df.height:,}")
 
-    # Conform to canonical schema (matches the existing 2015-2023 parquets).
+    # Conform to canonical schema (matches the existing 2015-2023 parquets
+    # built by src/eia/sources/bls_qcew.py). Critical types:
+    #   - quarter:             Int32  (NOT Int16)
+    #   - establishment_count: Int32  (NOT Int64)
+    #   - avg_employment:      Int32, computed as SUM of three monthly
+    #                          employment levels (despite the name — quirky
+    #                          original definition, kept for partition union)
+    #   - total_wages_usd:     Int64  (NOT Float64)
+    #   - avg_weekly_wage_usd: Int32  (NOT Float64)
+    # Schema mismatch on any of these triggers HIVE_PARTITION_SCHEMA_MISMATCH
+    # when Athena queries across old + new partitions.
     df = df.select(
         pl.col("area_fips").str.zfill(5).alias("county_fips"),
         pl.col("industry_code").alias("naics_code"),
         (pl.col("year").cast(pl.Utf8) + pl.lit("Q") + pl.col("qtr").cast(pl.Utf8)).alias("period_id"),
         pl.col("year").cast(pl.Int32),
-        pl.col("qtr").cast(pl.Int16).alias("quarter"),
+        pl.col("qtr").cast(pl.Int32).alias("quarter"),
         pl.col("own_code").cast(pl.Int16).alias("ownership_code"),
-        pl.col("qtrly_estabs").cast(pl.Int64).alias("establishment_count"),
-        pl.col("month3_emplvl").cast(pl.Int64).alias("avg_employment"),
-        pl.col("total_qtrly_wages").cast(pl.Float64).alias("total_wages_usd"),
-        pl.col("avg_wkly_wage").cast(pl.Float64).alias("avg_weekly_wage_usd"),
+        pl.col("qtrly_estabs").cast(pl.Int32).alias("establishment_count"),
+        (pl.col("month1_emplvl") + pl.col("month2_emplvl") + pl.col("month3_emplvl"))
+            .cast(pl.Int32).alias("avg_employment"),
+        pl.col("total_qtrly_wages").cast(pl.Int64).alias("total_wages_usd"),
+        pl.col("avg_wkly_wage").cast(pl.Int32).alias("avg_weekly_wage_usd"),
         pl.lit(datetime.now(UTC)).alias("fetched_at"),
     )
 

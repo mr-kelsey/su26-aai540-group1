@@ -29,7 +29,8 @@ import polars as pl
 CURATED        = Path("data/curated")
 RAW_CSV        = CURATED / "_ca_venues_raw.csv"          # input: from Athena query
 WIKIDATA_CSV   = CURATED / "_wikidata_venues.csv"        # optional: scraped via pipelines/scrape_wikidata_venues.py
-FINAL_CSV      = CURATED / "venue_capacities.csv"        # output: canonical reference
+FINAL_CSV      = CURATED / "venue_capacities.csv"        # output: canonical reference (human-editable)
+FINAL_PARQUET  = CURATED / "venue_capacities.parquet"    # output: machine-readable, picked up by repartition_for_silver.py
 
 DEFAULT_CAPACITY = 500  # median small-club capacity, used when no other rule fires
 
@@ -318,6 +319,9 @@ def main() -> int:
     ])
     FINAL_CSV.parent.mkdir(parents=True, exist_ok=True)
     out.write_csv(FINAL_CSV)
+    # Also write parquet so pipelines/repartition_for_silver.py picks it up
+    # into data/silver_staging/venue_capacities/ (survives s3 sync --delete).
+    out.with_columns(pl.col("venue_id").cast(pl.Utf8)).write_parquet(FINAL_PARQUET)
 
     total_ev  = out["n_events"].sum()
     wikidata  = out.filter(pl.col("capacity_source") == "wikidata_sparql")
