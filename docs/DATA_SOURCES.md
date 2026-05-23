@@ -112,22 +112,41 @@ Tax-revenue data the model regresses event activity against. **All three layers 
 
 ---
 
-## 3.5 `venue_capacities` (Silver, reference) — 999 rows
+## 3.5 `venue_capacities` (Silver, reference) — 2,673 rows
 
-- **Source:** Hand-curated. Top 999 CA venues by event count from `setlistfm_setlists` joined to a curated lookup of known capacities (Wikipedia infoboxes, operator websites, festival capacity records).
+- **Source:** Hand-curated SEED dict + WikiData SPARQL scrape + name-keyword heuristic. Every distinct CA venue appearing in `setlistfm_setlists` gets a capacity estimate, attributed to one of four tiers (in priority order: SEED, WikiData, heuristic, flat default).
 - **What it is:** A row per CA venue (keyed by Setlist.fm `venue_id`) with an estimated attendance capacity and the source of that estimate.
 - **Granularity:** one row per (`venue_id`, `venue_name`, `city_name`) — venues with the same name in different cities (e.g., "Goldfield Trading Post" in Roseville vs. Sacramento) are separate rows.
 - **Why we have it:** **The whole reason event magnitude is observable.** Setlist.fm doesn't publish attendance — it's a post-concert listing service — so without this table we'd have no signal for event *size*. The Gold layer multiplies `capacity * 0.80` (the sell-through assumption) to derive `total_est_attendance` per county-quarter.
-- **Coverage by source (~10K CA events):**
-  - 65% of events have a named-source capacity (wikipedia + operator + festival lookups)
-  - 35% default to 500 (median small-club CA capacity) — these are the long-tail small clubs where each venue typically hosts 1-5 events
-  - 118 venues have explicit capacities; 881 fall back to the default
-- **`capacity_source` values:** `wikipedia`, `operator`, `festival_*` (festival-specific lookups), `cruise_show_theater`, `tv_studio_audience`, `default_small_club`. Filter the table on `capacity_source` to see which classification a row got.
-- **Reproducibility:** [`pipelines/build_venue_capacities.py`](../pipelines/build_venue_capacities.py) holds the SEED dict and the build logic; re-run when new venues appear in the setlistfm panel.
+- **Coverage by source (~39K CA events across 2018-2022):**
+  - **50.5%** seeded — hand-curated `SEED` dict in `pipelines/build_venue_capacities.py` (Wikipedia, operator websites, festival records)
+  - **2.5%** WikiData — auto-discovered via SPARQL scrape against `wdt:P1083` (max capacity)
+  - **13.5%** heuristic — name-keyword fallback (`Stadium` → 30K, `Arena` → 12K, `Theatre` → 1.2K, `Bar` → 200, etc.)
+  - **33.5%** default — flat 500 (median small-CA-club capacity)
+- **`capacity_source` values:** `wikipedia`, `operator`, `festival_*` (festival-specific lookups), `wikidata_sparql`, `heuristic_<keyword>` (e.g. `heuristic_stadium`), `cruise_show_theater`, `tv_studio_audience`, `default_small_club`. Filter the table on `capacity_source` to see which classification a row got.
+- **Reproducibility:**
+  - [`pipelines/scrape_wikidata_venues.py`](../pipelines/scrape_wikidata_venues.py) — re-run to refresh WikiData cache
+  - [`pipelines/build_venue_capacities.py`](../pipelines/build_venue_capacities.py) — builds the canonical table from SEED + WikiData + heuristic
 - **Caveats:**
   - Capacity is an *upper bound* on attendance. The 0.80 sell-through factor is a fixed prior; PyMC can learn it as a latent later.
   - Default-500 venues add noise to the long tail. The Bayesian model handles this via a measurement-error term.
-  - Currently CA-only. Extend to other states when broadening the Gold panel.
+  - Currently CA-only. Extend to other states by running the WikiData scrape per state and extending the SEED dict for state-specific venues.
+
+---
+
+## 3.6 `festivals` (Silver, reference) — ~92 rows
+
+- **Source:** Hand-curated, from Wikipedia infoboxes / festival operator websites / trade-press reports. Maintained in [`data/curated/festivals.csv`](../data/curated/festivals.csv).
+- **What it is:** Major CA festivals 2018-2023 (Coachella, Stagecoach, Outside Lands, BottleRock, Aftershock, KAABOO, HARD Summer, Camp Flog Gnaw, Cruel World, SDCC, Anime Expo, WonderCon, etc.) with total attendance per instance.
+- **Granularity:** one row per festival per year. Multi-weekend festivals (e.g., Coachella has 2 weekends) are summed into a single row.
+- **Why we have it:** **Setlist.fm only captures per-act setlists**, so a single festival like Coachella shows up as ~50 individual concerts of 5,000-attendance each, dramatically understating the actual ~125K/weekend headcount. The Gold layer joins this table separately to expose `total_festival_attendance` per county-quarter alongside `total_est_attendance` from concerts.
+- **Categories:** `music_festival` (78 rows) and `conference_festival` (14 rows — SDCC, Anime Expo, WonderCon, E3).
+- **2020 is intentionally sparse** — most major festivals were canceled due to COVID. This is captured correctly as a real-world event-magnitude shock the model can learn from.
+- **Reproducibility:** [`pipelines/build_festivals_reference.py`](../pipelines/build_festivals_reference.py) — read CSV → write parquet to `s3://.../silver/festivals/`.
+- **Caveats:**
+  - CA-only for now. Phase C work expands to nationwide top 200.
+  - Attendance figures are public estimates; some are organizer-reported (likely overstated) vs. trade-press estimates (more conservative).
+  - Doesn't capture small local festivals (community events, art walks, etc.). The model's "baseline" county economy from QCEW + ACS should absorb that signal.
 
 ---
 
@@ -183,8 +202,8 @@ LIMIT 10;
 | Local economy | `bls_qcew` | **104,075,464** |
 | Multipliers | `bea_io_use`, `bea_io_make` | 279,882 |
 | Geocoding fallback | `hud_zip_county` | 6 (placeholder) |
-| Events (X) | `events` (unified), `ticketmaster_events`, `setlistfm_setlists` | 135,615 unified |
-| Reference | `venue_capacities` (CA venues w/ capacity) | 999 |
+| Events (X) | `events` (unified), `ticketmaster_events`, `setlistfm_setlists` | 164,399 unified |
+| Reference | `venue_capacities` (CA venues w/ capacity), `festivals` (curated major CA festivals) | 2,673 + 92 |
 | Y target | `census_state_tax_collections`, `cdtfa_taxable_sales`, `tx_comptroller_county_allocations` | 64,785 |
 | **Warehouse total** | 13 main tables | **~104.6M rows** |
 
