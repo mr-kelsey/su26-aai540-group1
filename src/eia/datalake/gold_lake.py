@@ -23,6 +23,6 @@ boto3.setup_default_session(region_name=REGION)
 def read_gold_data() -> pd.DataFrame:
     """Pull Gold data training matrix data"""
     return wr.athena.read_sql_query(
-        "SELECT * FROM model_training_matrix LIMIT 2",
+        "SELECT * FROM model_training_matrix",
         database=GOLD_DB, s3_output=ATHENA_OUT
         )

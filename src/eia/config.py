@@ -58,6 +58,7 @@ class Settings(BaseSettings):
     aws_project: str | None = None
     aws_silver_db: str | None = None
     aws_gold_db: str | None = None
+    aws_role_arn: str | None = None
 
     # ---- Convenience ----
     @property
