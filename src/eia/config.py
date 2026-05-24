@@ -52,6 +52,13 @@ class Settings(BaseSettings):
     setlistfm_api_key: str | None = None
     fred_api_key: str | None = None
 
+    # ---- AWS configuration ----
+    aws_region: str | None = None
+    aws_bucket: str | None = None
+    aws_project: str | None = None
+    aws_silver_db: str | None = None
+    aws_gold_db: str | None = None
+
     # ---- Convenience ----
     @property
     def raw_dir(self) -> Path:

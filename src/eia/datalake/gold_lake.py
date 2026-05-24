@@ -8,12 +8,14 @@ import boto3
 import awswrangler as wr
 import pandas as pd
 
+from eia.config import settings
+
 # ---- Constants ----
-REGION     = "us-east-2"
-BUCKET     = "jonno-lucas-steve-bucket"
-PROJECT    = "usd-aai540-group1"
-SILVER_DB  = "aai540_silver"
-GOLD_DB    = "aai540_gold"
+REGION     = settings.aws_region
+BUCKET     = settings.aws_bucket
+PROJECT    = settings.aws_project
+SILVER_DB  = settings.aws_silver_db
+GOLD_DB    = settings.aws_gold_db
 ATHENA_OUT = f"s3://{BUCKET}/{PROJECT}/athena-results/"
 
 boto3.setup_default_session(region_name=REGION)

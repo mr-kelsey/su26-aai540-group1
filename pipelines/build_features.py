@@ -9,15 +9,17 @@ import pandas as pd
 
 from rich.console import Console
 from rich.table import Table
+from sagemaker.core.helper.session_helper import Session, get_execution_role
 from sagemaker.mlops.feature_store.feature_definition import FeatureDefinition, FeatureTypeEnum
 from sagemaker.mlops.feature_store import FeatureGroup
 from sys import exit as sys_exit
 from time import sleep
 
+from eia.config import settings
 from eia.features.single_input_baseline import Single_Input_Baseline
 
 
-region = boto3.Session().region_name
+region = settings.aws_region
 #  boto3.setup_default_session(region_name=region) # Seems to be the way Claude is making sessions
 boto_session = boto3.Session(region_name=region)
 
@@ -81,7 +83,7 @@ def load_feature_definitions(final_features, feature_group_name,
     wait_for_feature_group_creation_complete(feature_group_name=feature_group_name)
 
 def main() -> int:
-    # ----- Build Store
+    # ------ Build Store ------
     console.rule("[bold]Building feature store")
 
     feature_engine = Single_Input_Baseline()
@@ -91,7 +93,7 @@ def main() -> int:
     load_feature_definitions(base_data, feature_group_name, "", "")
     console.print(sagemaker_client.list_feature_groups())
 
-    # ------ Push data
+    # ------ Push data ------
     console.rule("[bold]Ingesting data")
 
     t = Table(title="Single Input Single Output (Sample)")
@@ -121,7 +123,5 @@ if __name__ == "__main__":
     sys_exit(main())
 
 """
-Add an aws optional-dependency group (boto3, sagemaker, awswrangler, pandas).
 Rewrite build_features.py against the real SDK: correct imports, a passed-in/get_execution_role() role, valid hyphenated group name, dedicated offline-store prefix, feature_group.ingest(df) instead of the row-by-row put_record loop.
-Centralize the AWS constants; add .env.example entries and a make build-features target.
 """
