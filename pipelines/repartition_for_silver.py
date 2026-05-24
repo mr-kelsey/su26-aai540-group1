@@ -207,6 +207,18 @@ def main() -> int:
     log.info("--- Curated reference tables (hand-built) ---")
     copy_curated_reference_tables()
 
+    # Defensive: iCloud-Desktop sometimes creates conflict-copy directories
+    # like "events 2/", "bls_qcew 3/" with drwx------ perms while files are
+    # being written. They break downstream `aws s3 sync --delete` (sync
+    # cannot read them and partially aborts). Strip them out before we hand
+    # the staging dir off to the next step.
+    import re
+    pat = re.compile(r" \d+$")
+    dups = [p for p in STAGING.iterdir() if p.is_dir() and pat.search(p.name)]
+    for dup in dups:
+        log.warning("  removing iCloud conflict dir: %s", dup.name)
+        shutil.rmtree(dup, ignore_errors=True)
+
     log.info("\nStaging output at %s", STAGING.resolve())
     log.info("Ready to upload: aws s3 sync data/silver_staging/ s3://jonno-lucas-steve-bucket/usd-aai540-group1/silver/")
     return 0
