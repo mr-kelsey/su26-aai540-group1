@@ -227,6 +227,7 @@ data/curated/_tmp*
 *.duckdb
 *.duckdb.wal
 *.parquet
+!data/curated/*.parquet
 
 # Local env (API keys)
 .env

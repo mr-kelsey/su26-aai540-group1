@@ -91,3 +91,84 @@ mountain_winery_summer_2018,Mountain Winery Summer Series,2018-08-15,The Mountai
 mountain_winery_summer_2019,Mountain Winery Summer Series,2019-08-15,The Mountain Winery,06085,CA,40000,music_festival,Operator
 mountain_winery_summer_2022,Mountain Winery Summer Series,2022-08-15,The Mountain Winery,06085,CA,40000,music_festival,Operator
 mountain_winery_summer_2023,Mountain Winery Summer Series,2023-08-15,The Mountain Winery,06085,CA,40000,music_festival,Operator
+lollapalooza_2018,Lollapalooza,2018-08-02,Grant Park,17031,IL,400000,music_festival,Wikipedia: ~100K/day x 4 days (Chicago)
+lollapalooza_2019,Lollapalooza,2019-08-01,Grant Park,17031,IL,400000,music_festival,Wikipedia
+lollapalooza_2021,Lollapalooza,2021-07-29,Grant Park,17031,IL,385000,music_festival,Wikipedia (post-COVID return)
+lollapalooza_2022,Lollapalooza,2022-07-28,Grant Park,17031,IL,400000,music_festival,Wikipedia
+lollapalooza_2023,Lollapalooza,2023-08-03,Grant Park,17031,IL,400000,music_festival,Wikipedia
+bonnaroo_2018,Bonnaroo Music & Arts Festival,2018-06-07,Great Stage Park,47031,TN,80000,music_festival,Wikipedia: ~80K (Manchester)
+bonnaroo_2019,Bonnaroo Music & Arts Festival,2019-06-13,Great Stage Park,47031,TN,80000,music_festival,Wikipedia
+bonnaroo_2022,Bonnaroo Music & Arts Festival,2022-06-16,Great Stage Park,47031,TN,80000,music_festival,Wikipedia (2020/2021 cancelled - COVID/flood)
+bonnaroo_2023,Bonnaroo Music & Arts Festival,2023-06-15,Great Stage Park,47031,TN,80000,music_festival,Wikipedia
+acl_2018_w1,Austin City Limits Music Festival (Weekend 1),2018-10-05,Zilker Park,48453,TX,75000,music_festival,Wikipedia: 75K/day x 3 days x 2 weekends = 450K total
+acl_2018_w2,Austin City Limits Music Festival (Weekend 2),2018-10-12,Zilker Park,48453,TX,75000,music_festival,Wikipedia
+acl_2019_w1,Austin City Limits Music Festival (Weekend 1),2019-10-04,Zilker Park,48453,TX,75000,music_festival,Wikipedia
+acl_2019_w2,Austin City Limits Music Festival (Weekend 2),2019-10-11,Zilker Park,48453,TX,75000,music_festival,Wikipedia
+acl_2021_w1,Austin City Limits Music Festival (Weekend 1),2021-10-01,Zilker Park,48453,TX,75000,music_festival,Wikipedia
+acl_2021_w2,Austin City Limits Music Festival (Weekend 2),2021-10-08,Zilker Park,48453,TX,75000,music_festival,Wikipedia
+acl_2022_w1,Austin City Limits Music Festival (Weekend 1),2022-10-07,Zilker Park,48453,TX,75000,music_festival,Wikipedia
+acl_2022_w2,Austin City Limits Music Festival (Weekend 2),2022-10-14,Zilker Park,48453,TX,75000,music_festival,Wikipedia
+acl_2023_w1,Austin City Limits Music Festival (Weekend 1),2023-10-06,Zilker Park,48453,TX,75000,music_festival,Wikipedia
+acl_2023_w2,Austin City Limits Music Festival (Weekend 2),2023-10-13,Zilker Park,48453,TX,75000,music_festival,Wikipedia
+sxsw_2018,South by Southwest,2018-03-09,Austin Convention Center,48453,TX,160000,conference_festival,Wikipedia: ~80K music + ~80K interactive (Austin)
+sxsw_2019,South by Southwest,2019-03-08,Austin Convention Center,48453,TX,160000,conference_festival,Wikipedia
+sxsw_2022,South by Southwest,2022-03-11,Austin Convention Center,48453,TX,110000,conference_festival,Wikipedia (post-COVID; reduced)
+sxsw_2023,South by Southwest,2023-03-10,Austin Convention Center,48453,TX,140000,conference_festival,Wikipedia
+edc_lv_2018,EDC Las Vegas,2018-05-18,Las Vegas Motor Speedway,32003,NV,400000,music_festival,Wikipedia: ~135K/day x 3 days
+edc_lv_2019,EDC Las Vegas,2019-05-17,Las Vegas Motor Speedway,32003,NV,400000,music_festival,Wikipedia
+edc_lv_2021,EDC Las Vegas,2021-10-22,Las Vegas Motor Speedway,32003,NV,400000,music_festival,Wikipedia (delayed)
+edc_lv_2022,EDC Las Vegas,2022-05-20,Las Vegas Motor Speedway,32003,NV,440000,music_festival,Wikipedia
+edc_lv_2023,EDC Las Vegas,2023-05-19,Las Vegas Motor Speedway,32003,NV,475000,music_festival,Wikipedia
+electric_zoo_2018,Electric Zoo,2018-08-31,Randall's Island,36061,NY,120000,music_festival,Wikipedia: ~40K/day x 3 days (NYC)
+electric_zoo_2019,Electric Zoo,2019-08-30,Randall's Island,36061,NY,120000,music_festival,Wikipedia
+electric_zoo_2021,Electric Zoo,2021-09-03,Randall's Island,36061,NY,120000,music_festival,Wikipedia
+electric_zoo_2022,Electric Zoo,2022-09-02,Randall's Island,36061,NY,120000,music_festival,Wikipedia
+electric_zoo_2023,Electric Zoo,2023-09-01,Randall's Island,36061,NY,120000,music_festival,Wikipedia
+governors_ball_2018,Governors Ball,2018-06-01,Randall's Island,36061,NY,150000,music_festival,Wikipedia (NYC)
+governors_ball_2019,Governors Ball,2019-05-31,Randall's Island,36061,NY,150000,music_festival,Wikipedia
+governors_ball_2022,Governors Ball,2022-06-10,Citi Field,36081,NY,150000,music_festival,Wikipedia (moved to Citi Field)
+governors_ball_2023,Governors Ball,2023-06-09,Flushing Meadows,36081,NY,150000,music_festival,Wikipedia
+firefly_2018,Firefly Music Festival,2018-06-14,The Woodlands,10001,DE,90000,music_festival,Wikipedia (discontinued after 2022)
+firefly_2019,Firefly Music Festival,2019-06-21,The Woodlands,10001,DE,80000,music_festival,Wikipedia
+firefly_2021,Firefly Music Festival,2021-09-23,The Woodlands,10001,DE,70000,music_festival,Wikipedia
+firefly_2022,Firefly Music Festival,2022-09-22,The Woodlands,10001,DE,60000,music_festival,Wikipedia
+ultra_miami_2018,Ultra Music Festival,2018-03-23,Bayfront Park,12086,FL,165000,music_festival,Wikipedia: ~55K/day x 3 days
+ultra_miami_2019,Ultra Music Festival,2019-03-29,Virginia Key,12086,FL,170000,music_festival,Wikipedia
+ultra_miami_2022,Ultra Music Festival,2022-03-25,Bayfront Park,12086,FL,170000,music_festival,Wikipedia
+ultra_miami_2023,Ultra Music Festival,2023-03-24,Bayfront Park,12086,FL,170000,music_festival,Wikipedia
+rolling_loud_miami_2018,Rolling Loud Miami,2018-05-04,Hard Rock Stadium,12086,FL,160000,music_festival,Wikipedia
+rolling_loud_miami_2019,Rolling Loud Miami,2019-05-10,Hard Rock Stadium,12086,FL,200000,music_festival,Wikipedia
+rolling_loud_miami_2022,Rolling Loud Miami,2022-07-22,Hard Rock Stadium,12086,FL,225000,music_festival,Wikipedia
+rolling_loud_miami_2023,Rolling Loud Miami,2023-07-21,Hard Rock Stadium,12086,FL,220000,music_festival,Wikipedia
+osheaga_chicago_2018,Pitchfork Music Festival,2018-07-20,Union Park,17031,IL,55000,music_festival,Wikipedia (Chicago)
+osheaga_chicago_2019,Pitchfork Music Festival,2019-07-19,Union Park,17031,IL,55000,music_festival,Wikipedia
+osheaga_chicago_2022,Pitchfork Music Festival,2022-07-15,Union Park,17031,IL,55000,music_festival,Wikipedia
+riot_fest_2018,Riot Fest,2018-09-14,Douglas Park,17031,IL,150000,music_festival,Wikipedia: 50K/day x 3 days (Chicago)
+riot_fest_2019,Riot Fest,2019-09-13,Douglas Park,17031,IL,150000,music_festival,Wikipedia
+riot_fest_2021,Riot Fest,2021-09-17,Douglas Park,17031,IL,150000,music_festival,Wikipedia
+riot_fest_2022,Riot Fest,2022-09-16,Douglas Park,17031,IL,150000,music_festival,Wikipedia
+riot_fest_2023,Riot Fest,2023-09-15,Douglas Park,17031,IL,150000,music_festival,Wikipedia
+nyccc_2018,New York Comic Con,2018-10-04,Javits Center,36061,NY,250000,conference_festival,Wikipedia: 250K (largest US comic con)
+nyccc_2019,New York Comic Con,2019-10-03,Javits Center,36061,NY,260000,conference_festival,Wikipedia
+nyccc_2022,New York Comic Con,2022-10-06,Javits Center,36061,NY,200000,conference_festival,Wikipedia (post-COVID)
+nyccc_2023,New York Comic Con,2023-10-12,Javits Center,36061,NY,200000,conference_festival,Wikipedia
+ces_2018,Consumer Electronics Show,2018-01-09,Las Vegas Convention Center,32003,NV,180000,conference_festival,Wikipedia (Las Vegas)
+ces_2019,Consumer Electronics Show,2019-01-08,Las Vegas Convention Center,32003,NV,175000,conference_festival,Wikipedia
+ces_2022,Consumer Electronics Show,2022-01-05,Las Vegas Convention Center,32003,NV,45000,conference_festival,Wikipedia (COVID-reduced)
+ces_2023,Consumer Electronics Show,2023-01-05,Las Vegas Convention Center,32003,NV,115000,conference_festival,Wikipedia
+new_orleans_jazz_2018,New Orleans Jazz & Heritage Festival,2018-04-27,Fair Grounds Race Course,22071,LA,425000,music_festival,Wikipedia: 425-475K total (7 days)
+new_orleans_jazz_2019,New Orleans Jazz & Heritage Festival,2019-04-25,Fair Grounds Race Course,22071,LA,475000,music_festival,Wikipedia
+new_orleans_jazz_2022,New Orleans Jazz & Heritage Festival,2022-04-29,Fair Grounds Race Course,22071,LA,460000,music_festival,Wikipedia
+new_orleans_jazz_2023,New Orleans Jazz & Heritage Festival,2023-04-28,Fair Grounds Race Course,22071,LA,480000,music_festival,Wikipedia
+mardi_gras_2018,Mardi Gras,2018-02-13,New Orleans,22071,LA,1400000,festival_other,Wikipedia: ~1.4M total visitors over Carnival season
+mardi_gras_2019,Mardi Gras,2019-03-05,New Orleans,22071,LA,1400000,festival_other,Wikipedia
+mardi_gras_2022,Mardi Gras,2022-03-01,New Orleans,22071,LA,1000000,festival_other,Wikipedia (COVID-reduced)
+mardi_gras_2023,Mardi Gras,2023-02-21,New Orleans,22071,LA,1300000,festival_other,Wikipedia
+burning_man_2018,Burning Man,2018-08-26,Black Rock City,32031,NV,70000,music_festival,Wikipedia: 70K population (Pershing County NV)
+burning_man_2019,Burning Man,2019-08-25,Black Rock City,32031,NV,79000,music_festival,Wikipedia
+burning_man_2022,Burning Man,2022-08-28,Black Rock City,32031,NV,80000,music_festival,Wikipedia
+burning_man_2023,Burning Man,2023-08-27,Black Rock City,32031,NV,73000,music_festival,Wikipedia
+art_basel_miami_2018,Art Basel Miami Beach,2018-12-06,Miami Beach Convention Center,12086,FL,80000,conference_festival,Wikipedia
+art_basel_miami_2019,Art Basel Miami Beach,2019-12-05,Miami Beach Convention Center,12086,FL,80000,conference_festival,Wikipedia
+art_basel_miami_2022,Art Basel Miami Beach,2022-12-01,Miami Beach Convention Center,12086,FL,80000,conference_festival,Wikipedia
+art_basel_miami_2023,Art Basel Miami Beach,2023-12-07,Miami Beach Convention Center,12086,FL,80000,conference_festival,Wikipedia
