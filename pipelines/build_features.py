@@ -74,7 +74,7 @@ def load_feature_definitions(final_features, feature_group_name,
         online_store_config={"enable_online_store": True},
         offline_store_config={
             "s3_storage_config": {
-                "s3_uri": "s3://jonno-lucas-steve-bucket/usd-aai540-group1"
+                "s3_uri": "s3://jonno-lucas-steve-bucket/usd-aai540-group1/feature-store/"
             }
         }
     )
@@ -119,3 +119,9 @@ def wait_for_feature_group_creation_complete(feature_group_name, sleep_time=5):
 
 if __name__ == "__main__":
     sys_exit(main())
+
+"""
+Add an aws optional-dependency group (boto3, sagemaker, awswrangler, pandas).
+Rewrite build_features.py against the real SDK: correct imports, a passed-in/get_execution_role() role, valid hyphenated group name, dedicated offline-store prefix, feature_group.ingest(df) instead of the row-by-row put_record loop.
+Centralize the AWS constants; add .env.example entries and a make build-features target.
+"""
