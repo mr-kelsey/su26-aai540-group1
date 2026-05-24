@@ -23,7 +23,6 @@ feature_store_client = boto3.client("sagemaker-featurestore-runtime", region_nam
 
 console = Console()
 
-
 def ingest_dataframe(feature_group_name, df):
     for _, row in df.iterrows():
         record = []
