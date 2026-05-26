@@ -13,7 +13,7 @@ from sys import exit as sys_exit
 from time import sleep
 
 from eia.config import settings
-from eia.features.single_input_baseline import Single_Input_Baseline
+from eia.features.single_input_food import SingleInputFoodBaseline
 
 
 region = settings.aws_region
@@ -50,7 +50,7 @@ def load_feature_definitions(feature_group_name, record_identifier_name, event_t
             {"FeatureName": record_identifier_name, "FeatureType": "String"},
             {"FeatureName": event_time_feature_name, "FeatureType": "String"},
             {"FeatureName": "total-est-attendance", "FeatureType": "Integral"},
-            {"FeatureName": "taxable-sales-usd", "FeatureType": "Integral"},
+            {"FeatureName": "food-services-sales-usd", "FeatureType": "Integral"},
         ],
         RoleArn=role_arn,
         OfflineStoreConfig={
@@ -74,7 +74,7 @@ def main() -> int:
     # ------ Build Store ------
     console.rule("[bold]Building feature store")
 
-    feature_engine = Single_Input_Baseline()
+    feature_engine = SingleInputFoodBaseline()
     feature_group_name = str(feature_engine)
     existing_feature_groups = sagemaker_client.list_feature_groups()
     for group in existing_feature_groups["FeatureGroupSummaries"]:

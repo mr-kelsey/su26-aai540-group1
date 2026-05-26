@@ -60,6 +60,21 @@ cdtfa_y AS (
   FROM aai540_silver.cdtfa_taxable_sales
   WHERE business_type = 'Total All Outlets'
   GROUP BY county_fips, table_year, quarter
+),
+-- Parallel to cdtfa_y, but isolating the single event-relevant food sector
+-- (restaurants + bars). Feeds the X-Attendance-Y-Food-Sales feature group.
+-- NOTE: 'Food Services and Drinking Places' has more disclosure-suppressed
+-- (DisclosureFlag='D') county-quarter cells than 'Total All Outlets', so the
+-- LEFT JOIN below will leave some rows with NULL food_services_sales_usd.
+cdtfa_food AS (
+  SELECT
+    county_fips,
+    table_year AS f_year,
+    quarter AS f_quarter,
+    SUM(taxable_sales_usd) AS food_services_sales_usd
+  FROM aai540_silver.cdtfa_taxable_sales
+  WHERE business_type = 'Food Services and Drinking Places'
+  GROUP BY county_fips, table_year, quarter
 )
 SELECT
   c.county_fips,
@@ -71,6 +86,7 @@ SELECT
   y.y_quarter AS quarter,
   CONCAT(CAST(y.y_year AS VARCHAR), 'Q', CAST(y.y_quarter AS VARCHAR)) AS period_id,
   y.taxable_sales_usd,
+  f.food_services_sales_usd,
   COALESCE(e.n_events, 0) AS n_events,
   COALESCE(e.total_expected_attendance, 0) AS total_expected_attendance,
   COALESCE(e.total_est_attendance, 0) AS total_est_attendance,
@@ -86,6 +102,8 @@ SELECT
   y.y_year AS year
 FROM cdtfa_y y
 JOIN aai540_silver.dim_county c ON c.county_fips = y.county_fips
+LEFT JOIN cdtfa_food f
+  ON f.county_fips = y.county_fips AND f.f_year = y.y_year AND f.f_quarter = y.y_quarter
 LEFT JOIN events_agg e
   ON e.county_fips = y.county_fips AND e.evt_year = y.y_year AND e.evt_quarter = y.y_quarter
 LEFT JOIN qcew_agg q
