@@ -223,6 +223,7 @@ __marimo__/
 # reference data (e.g. venue_capacities.csv) under data/curated/ to be checked in.
 data/*
 !data/curated/
+!data/model
 data/curated/_tmp*
 *.duckdb
 *.duckdb.wal

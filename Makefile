@@ -111,6 +111,10 @@ warehouse-health:  ## List all warehouse tables with row counts + freshness.
 notebook:  ## Open the warehouse-explorer notebook in JupyterLab.
 	$(UVRUN) jupyter lab notebooks/explore.ipynb
 
+# ----- AWS infrastructure code -----
+build-feature-store:  ## Build feature store based on provided features
+	$(UVRUN) python pipelines/build_features.py
+
 # ----- Cleanup -----
 clean:  ## Remove caches.
 	find . -type d -name __pycache__ -exec rm -rf {} +
