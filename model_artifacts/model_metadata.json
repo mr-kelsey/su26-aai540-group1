@@ -1,0 +1,55 @@
+{
+  "target": "food_svc_taxable_sales_usd",
+  "log_target": true,
+  "feature_cols": [
+    "avg_employment",
+    "bachelor_or_higher_pct",
+    "covid",
+    "establishment_count",
+    "land_area_sqmi",
+    "latitude",
+    "longitude",
+    "median_age",
+    "median_household_income",
+    "n_events",
+    "n_festivals",
+    "n_setlistfm",
+    "n_ticketmaster",
+    "population",
+    "quarter",
+    "total_est_attendance",
+    "total_expected_attendance",
+    "total_festival_attendance",
+    "total_wages_usd"
+  ],
+  "best_iteration": 399,
+  "train_years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021
+  ],
+  "val_years": [
+    2022
+  ],
+  "test_years": [
+    2023
+  ],
+  "metrics": {
+    "val": {
+      "rmse_usd": 149363034.43025157,
+      "mae_usd": 55114426.972454205,
+      "mape_pct": 13.162227971160052,
+      "r2": 0.9790236484403326
+    },
+    "test": {
+      "rmse_usd": 198594001.52334744,
+      "mae_usd": 72468249.29323815,
+      "mape_pct": 15.37212590419273,
+      "r2": 0.96645579589996
+    }
+  }
+}
