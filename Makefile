@@ -115,6 +115,9 @@ notebook:  ## Open the warehouse-explorer notebook in JupyterLab.
 build-feature-store:  ## Build feature store based on provided features
 	$(UVRUN) python pipelines/build_features.py
 
+create-model-monitor:  ## Spin up an endpoint for capture and start monitoring
+	$(UVRUN) python pipelines/enable_model_monitoring.py
+
 # ----- Cleanup -----
 clean:  ## Remove caches.
 	find . -type d -name __pycache__ -exec rm -rf {} +
