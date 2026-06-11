@@ -14,7 +14,7 @@ from time import sleep
 
 from eia.config import settings
 
-MODEL_NAME = "xgb-foodsvc"
+MODEL_NAME = "eia-foodsvc-xgb-v2"
 DATA_PATH = Path(__file__).parents[1] / "data" / "model" / "xgboost" / "validation_data.csv"
 FEATURE_NAMES = ["avg_employment", "bachelor_or_higher_pct", "covid",
         "establishment_count", "land_area_sqmi", "latitude", "longitude",
@@ -114,7 +114,7 @@ def _make_dummy_ground_truth():
     baseline_s3_key = f"{baseline_prefix}/data/{baseline_csv}"
     s3.upload_file(baseline_csv, settings.aws_bucket, baseline_s3_key)
     
-    baseline_s3_uri = f"s3://{settings.aws_bucketket}/{settings.aws_project}/{baseline_s3_key}"
+    baseline_s3_uri = f"s3://{settings.aws_bucket}/{settings.aws_project}/{baseline_s3_key}"
     
     return baseline_s3_uri
 
@@ -149,7 +149,7 @@ def _create_monitoring_job(model_name, baseline_s3_uri):
     sagemaker.create_processing_job(
         ProcessingJobName=baseline_job_name,
         AppSpecification={
-            "ImageUri": "763104351884.dkr.ecr.us-east-1.amazonaws.com/sagemaker-clarify-processing:latest"
+            "ImageUri": "763104351884.dkr.ecr.us-east-2.amazonaws.com/sagemaker-clarify-processing:latest"
         },
         RoleArn=role_arn,
         ProcessingInputs=[
