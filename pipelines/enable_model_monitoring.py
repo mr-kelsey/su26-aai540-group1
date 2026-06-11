@@ -5,6 +5,7 @@ Model monitoring
 from __future__ import annotations
 
 import boto3
+import json
 import pandas as pd
 
 from pathlib import Path
@@ -108,48 +109,60 @@ def _make_dummy_ground_truth():
     baseline_df.head()
 
     baseline_csv = DATA_PATH.parent / "bias_baseline.csv"
-    baseline_df.to_csv(baseline_csv, index=False)
+    # No header row: column names are declared via "headers" in the analysis config.
+    baseline_df.to_csv(baseline_csv, index=False, header=False)
 
     baseline_prefix = f"{settings.aws_project}/bias-baseline"
-    baseline_s3_key = f"{baseline_prefix}/data/{baseline_csv}"
-    s3.upload_file(baseline_csv, settings.aws_bucket, baseline_s3_key)
-    
-    baseline_s3_uri = f"s3://{settings.aws_bucket}/{settings.aws_project}/{baseline_s3_key}"
-    
-    return baseline_s3_uri
+    baseline_s3_key = f"{baseline_prefix}/data/{baseline_csv.name}"
+    s3.upload_file(str(baseline_csv), settings.aws_bucket, baseline_s3_key)
 
-def _create_monitoring_job(model_name, baseline_s3_uri):
+    baseline_s3_uri = f"s3://{settings.aws_bucket}/{baseline_s3_key}"
+    # Regression label: Clarify needs one threshold marking the exclusive lower
+    # bound of "positive" outcomes. The median splits counties evenly.
+    label_threshold = float(baseline_df["dummy_truth"].median())
+
+    return baseline_s3_uri, label_threshold
+
+def _create_monitoring_job(model_name, baseline_s3_uri, label_threshold):
     from time import gmtime, strftime
 
     bucket = settings.aws_bucket
     baseline_prefix = f"{settings.aws_project}/bias-baseline"
     baseline_job_name = f"bias-baseline-{strftime('%Y-%m-%d-%H-%M-%S', gmtime())}"
 
+    # Follows the Clarify container's analysis_config.json schema: facet and
+    # label_values_or_threshold are top-level, and pre_training_bias takes the
+    # metric list. No "predictor" block: pre-training bias never invokes the
+    # model, so the endpoint plays no part in this job.
     analysis_config = {
         "dataset_type": "text/csv",
         "headers": ["dummy_truth"] + FEATURE_NAMES,
         "label": "dummy_truth",
-        "s3_output_path": f"s3://{bucket}/{baseline_prefix}/output",
-        "methods": {
-            "pre_training_bias": {
-                "facet_name": "population",
-                "facet_values_or_threshold": [676599], # Mean population
+        "label_values_or_threshold": [label_threshold],
+        "facet": [
+            {
+                "name_or_index": "population",
+                "value_or_threshold": [676599], # Mean population
             }
-        },
-        "predictor": {
-            "model_name": model_name,
-            "instance_type": "ml.m5.xlarge",
-            "instance_count": 1,
-            "content_type": "text/csv",
-            "accept_type": "text/csv",
-            "probability_threshold": 0.5,
+        ],
+        "methods": {
+            "pre_training_bias": {"methods": "all"},
+            "report": {"name": "report", "title": "Analysis Report"},
         },
     }
+
+    s3.put_object(
+        Bucket=bucket,
+        Key=f"{baseline_prefix}/analysis_config.json",
+        Body=json.dumps(analysis_config).encode("utf-8"),
+    )
 
     sagemaker.create_processing_job(
         ProcessingJobName=baseline_job_name,
         AppSpecification={
-            "ImageUri": "763104351884.dkr.ecr.us-east-2.amazonaws.com/sagemaker-clarify-processing:latest"
+            # The Clarify registry account is region-specific; 211330385671 is
+            # us-east-2 (and the published tag is 1.0, there is no latest).
+            "ImageUri": "211330385671.dkr.ecr.us-east-2.amazonaws.com/sagemaker-clarify-processing:1.0"
         },
         RoleArn=role_arn,
         ProcessingInputs=[
@@ -157,7 +170,7 @@ def _create_monitoring_job(model_name, baseline_s3_uri):
                 "InputName": "analysis_config",
                 "S3Input": {
                     "S3Uri": f"s3://{bucket}/{baseline_prefix}/analysis_config.json",
-                    "LocalPath": "/opt/ml/processing/input/analysis_config",
+                    "LocalPath": "/opt/ml/processing/input/config",
                     "S3DataType": "S3Prefix",
                     "S3InputMode": "File",
                 },
@@ -208,7 +221,7 @@ def main(model_name) -> int:
     console.rule("[bold]Sending traffic for capture")
     console.print(f"Please wait", end="")
     data = pd.read_csv(DATA_PATH, header=None)
-    record_count_to_send = max(200, len(data))
+    record_count_to_send = min(200, len(data))
 
     for index in range(record_count_to_send):
         if index % 10 == 0:
@@ -220,12 +233,12 @@ def main(model_name) -> int:
 
     # ------ Use simple heuristic to get dummy truth ------
     console.rule("[bold]Makeing dummy baseline to monitor against")
-    baseline_uri = _make_dummy_ground_truth()
+    baseline_uri, label_threshold = _make_dummy_ground_truth()
     console.print(f"Done\nBaseline uploaded: {baseline_uri}\n")
 
     # ------ Create Monitoring Job------
     console.rule("[bold]Creating and starting monitoring job")
-    _create_monitoring_job(model_name, baseline_uri)
+    _create_monitoring_job(model_name, baseline_uri, label_threshold)
     console.print(f"Monitoring job created.\nAll Set!")
 
     return 0
